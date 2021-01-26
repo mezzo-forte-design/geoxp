@@ -1,6 +1,8 @@
 import {Howl, Howler} from 'howler';
 import {Device} from './utils.js';
 
+import { store } from './store';
+
 // Howler configuration
 const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
 Howler.usingWebAudio = USE_WEBAUDIO;
