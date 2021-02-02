@@ -64,7 +64,7 @@ export default class AudioManager {
   * @param config - Config options for init
   */
   reload(config) {
-    this.clear();
+    this.unload();
     this._init(config);
   }
 

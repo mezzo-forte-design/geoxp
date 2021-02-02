@@ -1,6 +1,6 @@
 import GeoXp from '../src/index';
 
-const geoXp = new GeoXp({
+const config = {
     geo: { 
         position: [{
             _id: 'pos1',
@@ -43,7 +43,9 @@ const geoXp = new GeoXp({
             after: 'spot1'
         }]
     }
-});
+}
+
+const geoXp = new GeoXp(config);
 
 window.geoXp = geoXp;
 
@@ -73,4 +75,8 @@ document.getElementById('pos-out-button').addEventListener('click', e => {
 
 document.getElementById('test-button').addEventListener('click', e => {
     geoXp.audio.test();
+});
+
+document.getElementById('reset-button').addEventListener('click', e => {
+    geoXp.reload(config);
 });

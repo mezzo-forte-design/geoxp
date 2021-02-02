@@ -56,6 +56,9 @@ export default class GeoManager {
     this.position;
 
     // Listens for GPS position
+    if(this._GEO_WATCH) {
+      navigator.geolocation.clearWatch(this._GEO_WATCH);
+    }
     this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
   }
 
@@ -66,6 +69,11 @@ export default class GeoManager {
   }
 
   _geoSuccess(pos) {
+
+    if (!pos) {
+      console.error('[GeoManager._geoSuccess] - position missing or incorrect format');
+      return;
+    }
 
     // Notify new position
     this.position = pos;
