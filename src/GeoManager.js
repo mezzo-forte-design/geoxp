@@ -11,6 +11,11 @@ if (typeof(Number.prototype.toRad) === "undefined") {
 export default class GeoManager {
   constructor(config) {
 
+    // bind listeners
+    this._geoSuccess = this._geoSuccess.bind(this);
+    this._geoError = this._geoError.bind(this);
+
+
     this.inside$ = new Subject();
     this.incoming$ = new Subject();
     this.outgoing$ = new Subject();
@@ -18,6 +23,8 @@ export default class GeoManager {
     this.error$ = new Subject();
 
     this._init(config);
+
+    
   }
 
   reload(config) {
