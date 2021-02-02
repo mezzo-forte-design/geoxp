@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Device } from './utils';
 
 /** Converts numeric degrees to radians */
@@ -11,11 +11,23 @@ if (typeof(Number.prototype.toRad) === "undefined") {
 export default class GeoManager {
   constructor(config) {
 
-    this.inside$ = new Observable();
-    this.position$ = new Observable();
-    this.error$ = new Observable();
+    this.inside$ = new Subject();
+    this.incoming$ = new Subject();
+    this.outgoing$ = new Subject();
+    this.position$ = new Subject();
+    this.error$ = new Subject();
 
     this._init(config);
+  }
+
+  reload(config) {
+    this._init(config);
+  }
+
+  unload() {
+    if (this._GEO_WATCH) {
+      navigator.geolocation.clearWatch(this._GEO_WATCH);
+    }
   }
 
   _init(config) {
@@ -28,71 +40,76 @@ export default class GeoManager {
         lon;
         radius;    [m]
         deadband;  [m]
+        fetch;     1 : n ratio of radius for prefetching
       }];
       default: {
         minAccuracy;
         playDistance;
         posDeadband;
+        fetchDistance;
       };
     }
     */
    
     this._config = config;
-    this._inside = [];
+    this.inside = [];
     this.position;
 
     // Listens for GPS position
     this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
   }
 
-  _geoSuccess(position) {
+  refresh() {
+    this.inside.forEach( position => {
+      this.inside$.next(position);
+    });
+  }
+
+  _geoSuccess(pos) {
 
     // Notify new position
-    this.position = position;
-    this.position$.of(position);
+    this.position = pos;
+    this.position$.next(pos);
 
     // exec only if position.coords.accuracy is < a given threshold (to define)
-    if (position.coords.accuracy > options.default.minAccuracy) {
+    if (pos.coords.accuracy > this._config.default.minAccuracy) {
       return;
     }
 
-    this.config.position.forEach((position, index) => {
+    this._config.position.forEach((position) => {
       // calc distance [m]
-      const dist = this._calcGeoDistance(position.coords.longitude, position.coords.latitude, position.lon, position.lat);
+      const dist = this._calcGeoDistance(pos.coords.longitude, pos.coords.latitude, position.lon, position.lat);
 
-      // TODO // prefetch song
-      // if (dist * 1000 <= targetsConfig.fetchDistance) {
-      //   // TODO - this._insideFetchArea(spot);
-      //   // console.log(`Close to ${spot.name}: ${(dist * 1000).toFixed(1)} m`)
-      //   this._log('close', `<span>Close to ${spot.audio}: ${(dist * 1000).toFixed(1)} m</span>`, true);
-      // }
+      // calc rardiuses
+      const inside = (position.radius || this._config.default.playDistance) - (position.deadband || this._config.default.posDeadband);
+      const outside = (position.radius || this._config.default.playDistance) + (position.deadband || this._config.default.posDeadband);
+      const fetch = (position.fetch || this._config.default.fetchDistance) * inside;
 
-      let changed = false;
-
-      // play (check if spot has custom radius, otherwise use general play distance)
-      if (dist <= (position.radius || options.default.playDistance) - (position.deadband || options.default.posDeadband)) {
+      // check distances
+      if (dist <= inside) {
         // inside play area
-        if (!this._inside.includes(position._id)) {
-          this._inside.push(position._id);
-          changed = true;
+        if (!this.inside.includes(position._id)) {
+          this.inside.push(position._id);
+          this.inside$.next(position._id);
         }
 
-      } else if (dist > (position.radius || options.default.playDistance) + (position.deadband || options.default.posDeadband)) {
+      } else if (dist <= fetch) {
+        // inside prefetch area
+        this.incoming$.next(position);
+
+      } else if (dist > outside) {
         // outside play area
-        if (!this._inside.includes(position._id)) {
+        if (this.inside.includes(position._id)) {
           this.inside = this.inside.filter(e => e !== position._id);
-          changed = true;
+          this.outgoing$.next(position._id);
         }
       }
-
-      // if inside changed, notify
-      if (changed) this.inside$.of(this._inside);
     });
   }
 
   _geoError(error) {
     console.error('[GeoManager._geoError] - Geolocation error - Nessuna posizione disponibile');
-    this.error$.of(error.msg);
+    this.error$.next(error.msg);
   }
 
   _calcGeoDistance(lon1, lat1, lon2, lat2) {
