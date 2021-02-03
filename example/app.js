@@ -92,3 +92,7 @@ document.getElementById('test-button').addEventListener('click', e => {
 document.getElementById('reset-button').addEventListener('click', e => {
     geoXp.reload(config);
 });
+
+document.getElementById('unlock-button').addEventListener('click', e => {
+  geoXp.unlock();
+});
