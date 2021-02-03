@@ -2,7 +2,15 @@
 import GeoManager from './GeoManager';
 import AudioManager from './AudioManager';
 import ItineraryManager from './ItineraryManager';
+import Device from './utils/Device';
 
+/**
+ * Creates GeoXp class.
+ * GeoXp manages the MezzoForte Geo Experience
+ * @param config - Config options for init
+ * @returns { Object } - GeoXp instance
+ * @constructor
+ */
 export default class GeoXp {
   constructor(config) {
     /**
@@ -23,31 +31,50 @@ export default class GeoXp {
           playDistance;
           fetchDistance;
         };
-      }
-      audio: [{
-        _id;
+      },
+      audio: {
+        sound: [{
+          _id;
+          label;
+          url;
+        }],
+        default: {
+          test;
+          silence;
+          unlock;
+          visited;
+        }
+      },
+      itinerary: [{
         label;
-        url;
-      }]
-      itinerary: {
-        label;
-        enable;
+        enabled;
         overlap: 
         spot: [{
+          _id;
           position;
           audio;
           after;
         }];
-      };
+      }];
     }
     */
 
     this._config = config;
+
+    // instantiates modules
     this.geo = new GeoManager(config.geo);
     this.audio = new AudioManager(config.audio);
     this.itinerary = new ItineraryManager(config.itinerary);
 
-    // subscribes to inventoryManager requests
+    // exposes static classes
+    this.utils = {
+      device: Device
+    };
+
+
+    //////////////////////////////////////////////
+    // subscribes to InventoryManager requests
+    //////////////////////////////////////////////
     // request for positions refresh
     this.subItineraryRefresh = this.itinerary.geoRefresh$
       .subscribe(() => {
@@ -58,30 +85,34 @@ export default class GeoXp {
 
     // request for audio stop
     this.subItineraryLoad = this.itinerary.audioLoad$
-      .subscribe( spot => {
+      .subscribe( audio => {
         
         // load spot audio
-        this.audio.load(spot.audio, spot._id);
+        this.audio.load(audio);
       });
 
     // request for audio play
     this.subItineraryPlay = this.itinerary.audioPlay$
-      .subscribe( spot => {
+      .subscribe( audio => {
 
         // play spot audio
-        this.audio.play(spot.audio, spot._id);
+        this.audio.play(audio);
       });
     
     // request for audio stop
     this.subItineraryStop = this.itinerary.audioStop$
-    .subscribe( spot => {
+    .subscribe( audio => {
+
+      const fade = 4000; // [s]
 
       // stop spot audio
-      this.audio.stop(spot.audio);
+      this.audio.stop(audio, fade);
     });
     
 
-    // subscribes to geo position updates
+    //////////////////////////////////////////////
+    // subscribes to GeoManager position updates
+    //////////////////////////////////////////////
     // incoming spots
     this.subGeoIncoming = this.geo.incoming$
       .subscribe( position => {
@@ -107,7 +138,9 @@ export default class GeoXp {
       });
     
 
-    // subscribes to audio player updates
+    //////////////////////////////////////////////
+    // subscribes to AudioManager events
+    //////////////////////////////////////////////
     // sound playing
     this.subAudioPlay = this.audio.play$
       .subscribe( audio => {
@@ -125,6 +158,18 @@ export default class GeoXp {
       });
   }
 
+  /**
+  * Unlock geolocation and webaudio APIs
+  */
+  unlock() {
+    this.geo.unlock();
+    this.audio.unlock();
+  }
+
+  /**
+  * Loads a new configuration
+  * @param config - config parameters
+  */
   reload(config) {
     this._config = config;
     this.geo.reload(config.geo);
@@ -132,6 +177,10 @@ export default class GeoXp {
     this.itinerary.reload(config.itinerary);
   }
 
+  /**
+  * Destroys GeoXp instance
+  * @param config - config parameters
+  */
   destroy() {
     this.subItineraryLoad.unsubscribe();
     this.subItineraryPlay.unsubscribe();

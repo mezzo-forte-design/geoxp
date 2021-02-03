@@ -1,20 +1,11 @@
 import {Howl, Howler} from 'howler';
-import {Device} from './utils.js';
+import Device from './utils/Device.js';
+import { Subject } from 'rxjs';
 
 // Howler configuration
 const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
 Howler.usingWebAudio = USE_WEBAUDIO;
 Howler.autoUnlock = true;
-
-// Default sounds
-const AUDIO_TEST_URL = '/audio/test.mp3';
-const SILENCE_SOUND_URL = '/audio/silence.mp3';
-const UNLOCK_FILENAME = '/unlock.mp3';
-const ALREADY_VISITED_FILENAME = '/visited.mp3';
-
-// Languages
-import {audioAssets, langContentArrays} from './config/audioAssets.config.js';
-import { Subject } from 'rxjs';
 
 /**
  * Creates AudioManager class.
@@ -28,16 +19,17 @@ export default class AudioManager {
   constructor(config) {
     /**
     config: {
-      audio: [{
-        _id;
-        label;
-        url;
-        pan;  -1 L .. 0 .. 1 R
-        volume; 0 .. 1
-      }];
+      sound: [{
+        _id,
+        label,
+        url,
+      }],
       default: {
-
-      };
+        test,
+        silence,
+        unlock,
+        visited,
+      }
     }
     */
 
@@ -55,8 +47,19 @@ export default class AudioManager {
     this._config = config;
 
     this.playing = [];
+
+    if(this._buffer) {
+      this._buffer.clear();
+    }
     this._buffer = new Map();
-    //this._AUDIO_URL_PREFIX = `/audio/${options.lang}`;
+  }
+
+  /**
+  * Unlocks web audio API
+  */
+  unlock() {
+    // plays silence
+    this._playSystemSound(`${SILENCE_SOUND_URL}`);
   }
 
   /**
@@ -81,44 +84,43 @@ export default class AudioManager {
   * Plays test system sound.
   */
   test() {
-    this._playSystemSound(`${AUDIO_TEST_URL}`);
+    this._playSystemSound(this._config.default.test);
   }
 
   /**
   * Plays silence.
   */
   silence() {
-    this._playSystemSound(`${SILENCE_SOUND_URL}`);
+    this._playSystemSound(this._config.default.silence);
   }
 
   /**
   * Plays unlock system sound.
   */
   unlock() {
-    this._playSystemSound(`${this._AUDIO_URL_PREFIX}${UNLOCK_FILENAME}`);
+    this._playSystemSound(this._config.default.unlock);
   }
 
   /**
   * Plays already visited system sound.
   */
   visited() {
-    this._playSystemSound(`${this._AUDIO_URL_PREFIX}${ALREADY_VISITED_FILENAME}`);
+    this._playSystemSound(this._config.default.visited);
   }
 
   /**
   * Loads Howler sounds in buffer.
-  * @param id - audio._id to load
-  * @param spot - reference spot
+  * @param id - audio to load
   * @param playWhenReady - (false) play sound when loaded
   */
-  load(id, spot, playWhenReady = false) {
+  load(id, playWhenReady = false) {
 
     if (!id) {
-      console.error('[AudioManager.load] - id not provided. Cannot load');
+      console.error('[AudioManager.load] - audio info not provided. Cannot load');
       return;
     }
 
-    const audio = this._config.find( e => e._id === id);
+    const audio = this._config.sound.find( e => e._id === id);
     if (!audio) {
       console.error('[AudioManager.load] - sound not found. Cannot load');
       return;
@@ -127,8 +129,6 @@ export default class AudioManager {
     // New howler sound
     const sound = {
       playWhenReady,
-      spot,
-      done: false,
       audio: new Howl({
         src    : [audio.url],
         format : 'mp3',
@@ -143,37 +143,36 @@ export default class AudioManager {
 
       //TODO end, stop, differences?
       sound.audio.once('end', () => {
-        this.done$.next({id, spot});
+        this.done$.next(id);
       });
 
       sound.audio.once('stop', () => {
         // when stopped playback notify
-        this.done$.next({id, spot});
+        this.done$.next(id);
       });
 
       sound.audio.once('play', () => {
         // When starting playback notify
-        this.play$.next({id, spot});
+        this.play$.next(id);
       });
 
       // start sound
       if (sound.playWhenReady) {
-        this.play(id, spot);
+        this.play(id);
       }
     });
   }
 
   /**
   * Plays Howler sounds if loaded, else load() then play().
-  * @param id - audio._id to play
-  * @param spot - reference spot
+  * @param id - audio to play
   * @param fade - (0) fadeIn time
   * @param volume - (1) playback volume
   */
-  play(id, spot, fade = 0, volume = 1) {
+  play(id, fade = 0, volume = 1) {
 
     if (!id) {
-      console.error('[AudioManager.play] - id non provided. Cannot play');
+      console.error('[AudioManager.play] - audio info non provided. Cannot play');
       return;
     }
 
@@ -182,7 +181,7 @@ export default class AudioManager {
     if (!sound) {
 
       // load audio and play when ready
-      this.load(id, spot, true);
+      this.load(id, true);
 
     } else {
       // if sounds are ready play(), else playWhenReady
@@ -202,16 +201,17 @@ export default class AudioManager {
 
   /**
   * Stops specific sound
-  * @param id - audio._id to stop
+  * @param id - audio to stop
   * @param fade - (0) fadeOut time
   */
   stop(id, fade = 0) {
 
     if (!id) {
-      console.error('[AudioManager.stop] - id non provided. Cannot stop');
+      console.error('[AudioManager.stop] - audio info non provided. Cannot stop');
       return;
     }
 
+    // finds audio in buffer
     const sound = this._buffer.get(id);
     if (sound) {
       if (sound.audio.playing()) {
@@ -275,25 +275,4 @@ export default class AudioManager {
       })
     });
   }
-
-
-  // _audioUrlByCode(code) {
-  //   const target = audioAssets.find(el => el.key === code);
-  //   if (target) {
-  //     return target.url;
-  //   } else {
-  //     console.warn(`URL not found in audioAssets.config for code: ${code}`);
-  //     return false;
-  //   }
-  // }
-
-  // _getAudioNameByCode(code) {
-  //   const name = this._ui.getTexts().audioTitles[code];
-  //   if (name) {
-  //     return name;
-  //   } else {
-  //     console.warn(`Name not found for code: ${code}`);
-  //     return false;
-  //   }
-  // }
 }

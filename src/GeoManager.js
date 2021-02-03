@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { Device } from './utils';
+import Device from './utils/Device';
 
 /** Converts numeric degrees to radians */
 if (typeof(Number.prototype.toRad) === "undefined") {
@@ -8,54 +8,56 @@ if (typeof(Number.prototype.toRad) === "undefined") {
   };
 }
 
+/**
+ * Creates GeoManager class.
+ * GeoManager is responsible for geoLocalization.
+ * @param config - Config options for init
+ * @returns { Object } - GeoManager instance
+ * @constructor
+ */
 export default class GeoManager {
   constructor(config) {
+    /**
+    config: {
+      position: [{
+        _id,
+        label,
+        lat,
+        lon,
+        radius,    [m]
+        deadband,  [m]
+        fetch     1 : n ratio of radius for prefetching
+      }],
+      default: {
+        minAccuracy,
+        playDistance,
+        posDeadband,
+        fetchDistance
+      }
+    }
+    */
 
     // bind listeners
     this._geoSuccess = this._geoSuccess.bind(this);
     this._geoError = this._geoError.bind(this);
 
-
+    // creates subjects for notification
     this.inside$ = new Subject();
     this.incoming$ = new Subject();
     this.outgoing$ = new Subject();
     this.position$ = new Subject();
     this.error$ = new Subject();
 
+    // inits the instance based on config
     this._init(config);
   }
 
-  reload(config) {
-    this._init(config);
-  }
-
-  unload() {
-    if (this._GEO_WATCH) {
-      navigator.geolocation.clearWatch(this._GEO_WATCH);
-    }
-  }
-
+  /**
+  * Inits AudioManager on provided options
+  * @param config - config parameters
+  */
   _init(config) {
-    /**
-    config: {
-      position: [{
-        _id;
-        label;
-        lat;
-        lon;
-        radius;    [m]
-        deadband;  [m]
-        fetch;     1 : n ratio of radius for prefetching
-      }];
-      default: {
-        minAccuracy;
-        playDistance;
-        posDeadband;
-        fetchDistance;
-      };
-    }
-    */
-   
+  
     this._config = config;
     this.inside = [];
     this.position;
@@ -67,12 +69,46 @@ export default class GeoManager {
     this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
   }
 
+  /**
+  * Loads a new configuration
+  * @param config - config parameters
+  */ 
+  reload(config) {
+    this._init(config);
+  }
+
+  /**
+  * Unloads all object subscriptions
+  */ 
+  unload() {
+
+    this.inside = [];
+    if (this._GEO_WATCH) {
+      navigator.geolocation.clearWatch(this._GEO_WATCH);
+    }
+  }
+
+  /**
+  * Unlocks geolocation API
+  */
+  unlock() {
+    // request for position
+    navigator.geolocation.getCurrentPosition();
+  }
+
+  /**
+  * Send new notification for inside positions
+  */ 
   refresh() {
     this.inside.forEach( position => {
       this.inside$.next(position);
     });
   }
-
+  
+  /**
+  * Checks the status of the spots in relation to current position
+  * @param pos - current position as provided by geolocation API
+  */ 
   _geoSuccess(pos) {
 
     if (!pos) {
@@ -100,6 +136,7 @@ export default class GeoManager {
 
       // check distances
       if (dist <= inside) {
+
         // inside play area
         if (!this.inside.includes(position._id)) {
           this.inside.push(position._id);
@@ -107,10 +144,12 @@ export default class GeoManager {
         }
 
       } else if (dist <= fetch) {
+
         // inside prefetch area
         this.incoming$.next(position);
 
       } else if (dist > outside) {
+
         // outside play area
         if (this.inside.includes(position._id)) {
           this.inside = this.inside.filter(e => e !== position._id);
@@ -120,11 +159,22 @@ export default class GeoManager {
     });
   }
 
+  /**
+  * Geolocation API reports an error retrieving current position
+  * @param error - error as sent from geolocation API
+  */ 
   _geoError(error) {
     console.error('[GeoManager._geoError] - Geolocation error - Nessuna posizione disponibile');
     this.error$.next(error.msg);
   }
 
+  /**
+  * Computes the distance between two coordinates
+  * @param lon1 - longitude of first point
+  * @param lat1 - latitude of first point
+  * @param lon2 - longitude of second point
+  * @param lat2 - latitude of second point
+  */ 
   _calcGeoDistance(lon1, lat1, lon2, lat2) {
     // Radius of the earth in km
     var EARTH_R = 6371;
