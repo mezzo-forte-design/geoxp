@@ -23,8 +23,6 @@ export default class GeoManager {
     this.error$ = new Subject();
 
     this._init(config);
-
-    
   }
 
   reload(config) {
