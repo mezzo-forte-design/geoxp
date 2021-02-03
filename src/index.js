@@ -1,10 +1,10 @@
 
 import GeoManager from './GeoManager';
 import AudioManager from './AudioManager';
+import ItineraryManager from './ItineraryManager';
 
 export default class GeoXp {
   constructor(config) {
-    console.log('hello geoXp');
     /**
     config: {
       geo: {
@@ -45,105 +45,83 @@ export default class GeoXp {
     this._config = config;
     this.geo = new GeoManager(config.geo);
     this.audio = new AudioManager(config.audio);
+    this.itinerary = new ItineraryManager(config.itinerary);
 
-    this.visited = [];
-    this.active = [];
+    // subscribes to inventoryManager requests
+    // request for positions refresh
+    this.subItineraryRefresh = this.itinerary.geoRefresh$
+      .subscribe(() => {
+
+        // resend inside positions
+        this.geo.refresh();
+      });
+
+    // request for audio stop
+    this.subItineraryLoad = this.itinerary.audioLoad$
+      .subscribe( spot => {
+        
+        // load spot audio
+        this.audio.load(spot.audio, spot._id);
+      });
+
+    // request for audio play
+    this.subItineraryPlay = this.itinerary.audioPlay$
+      .subscribe( spot => {
+
+        // play spot audio
+        this.audio.play(spot.audio, spot._id);
+      });
+    
+    // request for audio stop
+    this.subItineraryStop = this.itinerary.audioStop$
+    .subscribe( spot => {
+
+      // stop spot audio
+      this.audio.stop(spot.audio);
+    });
+    
 
     // subscribes to geo position updates
     // incoming spots
     this.subGeoIncoming = this.geo.incoming$
-      .subscribe( incoming => {
-        console.log('uoooooo');
-        // checks if position is on itinerary, then load if needed
-        const spots = this._config.itinerary.spot.filter(e => e.position === inside);
-        spots.forEach( spot => {
-          
-          // preload spot audio
-          this.audio.load(spot.audio, spot._id);
-        });
+      .subscribe( position => {
+
+        // sends to itineraryManager for processing
+        this.itinerary.incoming(position);
       });
     
     // inside spots
     this.subGeoInside = this.geo.inside$
-      .subscribe( inside => { 
+      .subscribe( position => { 
 
-        // checks if position is on itinerary, then play if needed
-        const spots = this._config.itinerary.spot.filter(e => e.position === inside);
-        spots.forEach( spot => {
-    
-          // for each spot linked to position
-          if (!this.visited.includes(spot._id)) {
-    
-            // first time
-            if (!spot.after || this.visited.includes(spot.after)) {
-    
-              // spot order ok
-              if (config.itinerary.overlap || this.active.length == 0) {
-    
-                // overlap ok
-                if (!this.active.includes(spot._id)) {
-                  this.active.push(spot._id);
-                }
-
-                // play audio
-                this.audio.play(spot.audio, spot._id);
-              }
-            }
-            // else {
-            //   // preload audio for previous spot 
-            //   this.audio.load(spot.audio);
-            // }
-          } else {
-            // times after first
-            console.log('already visited!')
-          }
-        });
+        // sends to itineraryManager for processing
+        this.itinerary.inside(position);
       });
-
 
     // outgoing spot
     this.subGeoOutgoing = this.geo.outgoing$
-      .subscribe( outgoing => {
-        // spot outgoing, stops audio
-        const spots = this._config.itinerary.spot.filter(e => e.position === outgoing);
-        spots.forEach( spot => {
+      .subscribe( position => {
 
-          if (this.active.includes(spot._id)) {
-
-            // if spot is active, stop audio and remove
-            this.audio.stop(spot.audio, 5000);
-            this.active = this.active.filter(e => e !== spot._id);
-          }
-        });
+        // sends to itineraryManager for processing
+        this.itinerary.outgoing(position);
       });
+    
 
     // subscribes to audio player updates
     // sound playing
     this.subAudioPlay = this.audio.play$
       .subscribe( audio => {
-        if (audio.spot) {
-          const spot = this._config.itinerary.spot.find(e => e._id === audio.spot);
-          if (!this.visited.includes(spot._id)) {
-            this.visited.push(spot._id);
-          }
-        }
+
+        // sends to itineraryManager for processing
+        this.itinerary.playing(audio);
       });
 
     // sound finished
     this.subAudioDone = this.audio.done$
       .subscribe( audio => {
 
-        if (audio.spot) {
-          const spot = this._config.itinerary.spot.find(e => e._id === audio.spot);
-          if (this.active.includes(spot._id)) {
-
-            // if spot is active, remove
-            this.active = this.active.filter(e => e !== spot._id);
-          }
-        }
-
-        // resend active spots notification
-        this.geo.refresh();
+        // sends to itineraryManager for processing
+        this.itinerary.end(audio);
       });
   }
 
@@ -151,18 +129,22 @@ export default class GeoXp {
     this._config = config;
     this.geo.reload(config.geo);
     this.audio.reload(config.audio);
-
-    this.visited = [];
-    this.active = [];
+    this.itinerary.reload(config.itinerary);
   }
 
   destroy() {
+    this.subItineraryLoad.unsubscribe();
+    this.subItineraryPlay.unsubscribe();
+    this.subItineraryStop.unsubscribe();
+    this.subItineraryRefresh.unsubscribe();
     this.subAudioDone.unsubscribe();
     this.subAudioPlay.unsubscribe();
     this.subGeoInside.unsubscribe();
     this.subGeoOutgoing.unsubscribe();
     this.subGeoIncoming.unsubscribe();
+  
     this.geo.unload();
     this.audio.unload();
+    this.itinerary.unload();
   }
 }
