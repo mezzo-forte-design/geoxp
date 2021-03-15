@@ -1,4 +1,5 @@
 
+import { EventEmitter } from 'events';
 import GeoManager from './GeoManager';
 import AudioManager from './AudioManager';
 import ItineraryManager from './ItineraryManager';
@@ -11,7 +12,7 @@ import Device from './utils/Device';
  * @returns { Object } - GeoXp instance
  * @constructor
  */
-export default class GeoXp {
+export default class GeoXp extends EventEmitter {
   constructor(config) {
     /**
     config: {
@@ -46,9 +47,11 @@ export default class GeoXp {
         }
       },
       itinerary: [{
+        _id;
         label;
-        enabled;
-        overlap: 
+        disabled?;
+        overlap?;
+        replay?;
         spot: [{
           _id;
           position;
@@ -58,6 +61,8 @@ export default class GeoXp {
       }];
     }
     */
+
+    super();
 
     this._config = config;
 
@@ -83,36 +88,61 @@ export default class GeoXp {
         this.geo.refresh();
       });
 
-    // request for audio stop
-    this.subItineraryLoad = this.itinerary.audioLoad$
-      .subscribe( audio => {
+    // request for audio preloading
+    this.subItineraryIncoming = this.itinerary.spotIncoming$
+      .subscribe( spot => {
         
         // load spot audio
-        this.audio.load(audio);
+        this.audio.load(spot.audio);
+
+        // emits spot incoming
+        this.emit('incoming', spot);
       });
 
     // request for audio play
-    this.subItineraryPlay = this.itinerary.audioPlay$
-      .subscribe( audio => {
+    this.subItineraryActive = this.itinerary.spotActive$
+      .subscribe( spot => {
 
         // play spot audio
-        this.audio.play(audio);
+        this.audio.play(spot.audio);
+
+        // emits spot active
+        this.emit('active', spot);
+      });
+
+    // alredy visisted spot
+    this.subItineraryVisisted = this.itinerary.spotVisited$
+      .subscribe( spot => {
+
+        // emits spot visided
+        this.emit('visited', spot);
       });
     
     // request for audio stop
-    this.subItineraryStop = this.itinerary.audioStop$
-    .subscribe( audio => {
+    this.subItineraryOutgoing = this.itinerary.spotOutgoing$
+      .subscribe( spot => {
 
-      const fade = 4000; // [s]
+        const fade = 4000; // [s]
 
-      // stop spot audio
-      this.audio.stop(audio, fade);
-    });
+        // stop spot audio
+        this.audio.stop(spot.audio, fade);
+
+        // emits spot outgoing
+        this.emit('outgoing', spot);
+      });
     
 
     //////////////////////////////////////////////
     // subscribes to GeoManager position updates
     //////////////////////////////////////////////
+    // current position
+    this.subGeoPosition = this.geo.position$
+      .subscribe ( position => {
+        
+        // emits current position
+        this.emit('position', position);
+      });
+
     // incoming spots
     this.subGeoIncoming = this.geo.incoming$
       .subscribe( position => {
@@ -147,6 +177,9 @@ export default class GeoXp {
 
         // sends to itineraryManager for processing
         this.itinerary.playing(audio);
+
+        // emits playing audio
+        this.emit('play', audio);
       });
 
     // sound finished
@@ -155,6 +188,9 @@ export default class GeoXp {
 
         // sends to itineraryManager for processing
         this.itinerary.end(audio);
+
+        // emits ended audio
+        this.emit('end', audio);
       });
   }
 
@@ -164,6 +200,23 @@ export default class GeoXp {
   unlock() {
     this.geo.unlock();
     this.audio.unlock();
+  }
+
+  /**
+  * Returns true if has active spots
+  * @returns { boolean }
+  */
+  hasActiveSpots() {
+    return this.itinerary.hasActiveSpots();
+  }
+
+  /**
+  * Returns spot by id
+  * @param spotId - Id of spot to find
+  * @returns { object } - spot found or null
+  */
+  getSpot(spotId) {
+    return this.itinerary.getSpot(spotId);
   }
 
   /**
@@ -182,12 +235,14 @@ export default class GeoXp {
   * @param config - config parameters
   */
   destroy() {
-    this.subItineraryLoad.unsubscribe();
-    this.subItineraryPlay.unsubscribe();
-    this.subItineraryStop.unsubscribe();
+    this.subItineraryIncoming.unsubscribe();
+    this.subItineraryActive.unsubscribe();
+    this.subItineraryVisisted.unsubscribe();
+    this.subItineraryOutgoing.unsubscribe();
     this.subItineraryRefresh.unsubscribe();
     this.subAudioDone.unsubscribe();
     this.subAudioPlay.unsubscribe();
+    this.subGeoPosition.unsubscribe();
     this.subGeoInside.unsubscribe();
     this.subGeoOutgoing.unsubscribe();
     this.subGeoIncoming.unsubscribe();

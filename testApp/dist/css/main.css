@@ -1,0 +1,269 @@
+/* FONTS */
+@font-face {
+    font-family: 'Messina Sans';
+    src: url('../font/MessinaSans-Bold.woff2') format('woff2'),
+         url('../font/MessinaSans-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Messina Sans';
+    src: url('../font/MessinaSans-Regular.woff2') format('woff2'),
+         url('../font/MessinaSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Messina Sans';
+    src: url('../font/MessinaSans-Light.woff2') format('woff2'),
+         url('../font/MessinaSans-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+:root {
+  --dark: #121212;
+  --main: #A5A093;
+  --light: #F2EFEB;
+  --gray: #707070;
+  --red: #A85751;
+}
+
+html, body {
+  font-family: 'Messina Sans', sans-serif !important;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  /* background-color: var(--gray1);
+  height: 100vh; */
+}
+
+#headerBar {
+  /* background-color: var(--gray1) !important;
+  height: 95px;
+  overflow: hidden; */
+}
+
+.navbar-container {
+  /* display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0;
+  margin: auto; */
+}
+
+h1, h2, h3, h4, h5, p {
+  color: var(--main);
+}
+
+hr {
+  /* border-color: var(--gray4); */
+}
+
+.loading-spinner {
+  width: 80px;
+  height: 80px;
+}
+
+.button {
+  padding: 2rem 1rem;
+  border-radius: 20px;
+  border: 1px solid;
+  cursor: pointer;
+  font-size: 2rem;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.floating-overlay {
+  position: absolute;
+  top: 2rem;
+  left: 1.5rem;
+  bottom: 6rem;
+  right: 1.5rem;
+  overflow: hidden;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: .5;
+}
+
+.floating-button {
+
+}
+
+.weight-100 {
+  font-weight: 100 !important;
+}
+
+.weight-400 {
+  font-weight: 400 !important;
+}
+
+.weight-600 {
+  font-weight: 600 !important;
+}
+
+.bg-dark {
+  background-color: var(--dark) !important;
+}
+
+.bg-light {
+  background-color: var(--light) !important;
+}
+
+.bg-white {
+  background-color: var(--white) !important;
+}
+
+.bg-main {
+  background-color: var(--main) !important;
+}
+
+.bg-transp {
+  background-color: transparent !important;
+}
+
+.color-white {
+  color: white !important;
+}
+
+.color-main {
+  color: var(--main) !important;
+}
+
+.color-light {
+  color: var(--light) !important;
+}
+
+.color-dark {
+  color: var(--dark) !important;
+}
+
+.spinner-border {
+  font-size: 2rem;
+  width: 100px;
+  margin-top: 5rem;
+  height: 100px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.mf-link {
+  color: var(--gray1);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.basic-button {
+  background: transparent;
+  border: 1px solid;
+  padding: .5rem 1rem;
+  font-size: 1.5rem;
+  border-radius: 6px;
+}
+
+.large-button {
+  box-shadow: none;
+  padding: .5rem 3rem;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.dark-button {
+  color: white;
+  background-color: var(--dark);
+  border: 1px solid var(--dark);
+}
+
+.main-button {
+  color: var(--dark);
+  background-color: var(--main);
+  border: 1px solid var(--main);
+}
+
+.light-button {
+  color: var(--dark);
+  background-color: var(--light);
+  border: 1px solid var(--light);
+}
+
+.gray-button {
+  color: var(--dark);
+  background-color: var(--gray);
+  border: 1px solid var(--gray);
+}
+
+#precision {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: .2rem;
+  font-family: monospace;
+  z-index: 100;
+}
+
+/* animations */
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes appear {
+  from {height: 0px;}
+  to {height: 280px;}
+}
+
+/* Standard syntax */
+@keyframes appear {
+  from {height: 0px;}
+  to {height: 280px;}
+}
+
+@keyframes pulse {
+  from: { transform: scale(1); }
+  to { transform: scale(1.2); }
+}
+
+@-webkit-keyframes pulse {
+  from: { transform: scale(1); }
+  to { transform: scale(1.2); }
+}
+
+@-o-keyframes pulse {
+  from: { transform: scale(1); }
+  to { transform: scale(1.2); }
+}
+
+@keyframes fadeIn {
+  from: {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@-webkit-keyframes fadeIn {
+  from: {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@-o-keyframes fadeIn {
+  from: {opacity: 0;}
+  to {opacity: 1;}
+}
+
+.animation-pulse {
+  animation: .9s linear infinite alternate pulse;
+}

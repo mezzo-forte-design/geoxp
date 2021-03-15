@@ -1,0 +1,73 @@
+body {
+  background-image: url('/img/texture.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#intro-floating-overlay {
+  display: none;
+  opacity: 0;
+}
+
+.intro-button {
+  color: var(--dark);
+  background-color: var(--main);
+  border: 1px solid var(--main);
+  box-shadow: none;
+  padding: .5rem 3rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.intro-button.dark {
+  background-color: var(--dark);
+  color: var(--main);
+  border: none;
+  font-weight: 100;
+}
+
+select {
+  background: transparent;
+  color: var(--main);
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 1rem 4rem;
+}
+
+.intro-content {
+  position: relative;
+  height: 100%;
+  display: none;
+  opacity: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.intro-step {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--main);
+  font-size: 1.2rem;
+  padding: 1.5rem 1rem 0;
+}
+
+.intro-step img {
+  width: 40px;
+}
+
+#app-version {
+  position: absolute;
+  bottom: 10px;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--main);
+}
+
+video {
+  width: 80%;
+}

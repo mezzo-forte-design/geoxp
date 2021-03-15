@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (6e3e5246a0, 2020-05-07)"
+   height="59.74358"
+   width="74.13649"
+   sodipodi:docname="noun_Arrow Back_225669.svg"
+   id="svg20"
+   y="0px"
+   x="0px"
+   version="1.1"
+   viewBox="0 0 74.13649 59.74358">
+  <metadata
+     id="metadata26">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>icon-back</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs24" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg20"
+     inkscape:window-maximized="1"
+     inkscape:window-y="27"
+     inkscape:window-x="1987"
+     inkscape:cy="26.763313"
+     inkscape:cx="23.418022"
+     inkscape:zoom="6.0551724"
+     fit-margin-bottom="1"
+     fit-margin-right="1"
+     fit-margin-left="1"
+     fit-margin-top="1"
+     lock-margins="true"
+     showgrid="false"
+     id="namedview22"
+     inkscape:window-height="1025"
+     inkscape:window-width="1853"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <title
+     id="title2">icon-back</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <g
+     style="fill:#a5a093;fill-opacity:1"
+     transform="translate(0.77197105,0.81684211)"
+     id="g14"
+     sketch:type="MSPage"
+     fill-rule="evenodd"
+     fill="none"
+     stroke-width="1"
+     stroke="none">
+    <g
+       style="fill:#a5a093;fill-opacity:1"
+       id="g12"
+       fill="#000000"
+       transform="translate(-63,-459)"
+       sketch:type="MSArtboardGroup">
+      <g
+         style="fill:#a5a093;fill-opacity:1"
+         id="g10"
+         transform="translate(63,459)"
+         sketch:type="MSLayerGroup">
+        <path
+           style="fill:#a5a093;fill-opacity:1"
+           id="path6"
+           sketch:type="MSShapeGroup"
+           d="m 29.299126,57.926737 c -0.688505,0 -1.376242,-0.260237 -1.901842,-0.782237 L 1.0158526,30.943763 c -1.05043155,-1.042474 -1.05043155,-2.734395 0,-3.776868 L 27.397284,0.96615789 c 1.0512,-1.044 2.752484,-1.044 3.803684,0 1.050432,1.04247371 1.050432,2.73439471 0,3.77686841 L 6.7213789,29.054947 31.200968,53.367632 c 1.050432,1.042473 1.050432,2.734394 0,3.776868 -0.5256,0.522 -1.214105,0.782237 -1.901842,0.782237" />
+        <path
+           style="fill:#a5a093;fill-opacity:1"
+           id="path8"
+           sketch:type="MSShapeGroup"
+           d="M 69.675042,31.726 H 2.9176947 c -1.4853579,0 -2.68947365,-1.195868 -2.68947365,-2.671053 0,-1.474421 1.20411575,-2.671052 2.68947365,-2.671052 H 69.675042 c 1.485358,0 2.689474,1.196631 2.689474,2.671052 0,1.475185 -1.204116,2.671053 -2.689474,2.671053" />
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="56" viewBox="0 0 56 56">
+  <defs>
+    <clipPath id="clip-icon_parco">
+      <rect width="56" height="56"/>
+    </clipPath>
+  </defs>
+  <g id="icon_parco" data-name="icon – parco" clip-path="url(#clip-icon_parco)">
+    <g id="Group_2450" data-name="Group 2450" transform="translate(-42.668 -330.668)">
+      <circle id="Ellipse_485" data-name="Ellipse 485" cx="21" cy="21" r="21" transform="translate(49.668 337.668)" fill="#a5a093"/>
+      <g id="Group_2316" data-name="Group 2316" transform="translate(63.483 345.931)">
+        <path id="Path_947" data-name="Path 947" d="M2301.553,2184.166a.706.706,0,0,0-.116.99c.041.05,3.932,5.086,0,10.058a.705.705,0,0,0,.116.99.7.7,0,0,0,.437.152.706.706,0,0,0,.553-.267c4.614-5.836.047-11.749,0-11.808A.706.706,0,0,0,2301.553,2184.166Z" transform="translate(-2301.285 -2177.404)" fill="#121212"/>
+        <path id="Path_948" data-name="Path 948" d="M2342.442,2164.15a.705.705,0,0,0-.157.984c.225.311,5.444,7.7,0,15.19a.7.7,0,1,0,1.139.828c6.054-8.327.062-16.762,0-16.846A.7.7,0,0,0,2342.442,2164.15Z" transform="translate(-2336.957 -2159.947)" fill="#121212"/>
+        <path id="Path_949" data-name="Path 949" d="M2379.26,2132.131a.7.7,0,0,0-.166.982c.083.117,8.2,11.8,0,23.338a.7.7,0,0,0,1.149.816c8.77-12.342.089-24.845,0-24.97A.7.7,0,0,0,2379.26,2132.131Z" transform="translate(-2369.092 -2132)" fill="#121212"/>
+      </g>
+    </g>
+  </g>
+</svg>

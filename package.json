@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "start": "webpack serve --open"
+    "start-example": "webpack serve --content-base example/ --open",
+    "start-testApp": "webpack serve --content-base testApp/ --open"
   },
   "author": "Francesco Cretti, Giuliano Buratti",
   "license": "ISC",

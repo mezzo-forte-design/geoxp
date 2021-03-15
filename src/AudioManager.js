@@ -44,8 +44,21 @@ export default class AudioManager {
   * @param config - sound id information
   */
   _init(config) {
+
+    // sets default if none provided
+    if (!config.default) {
+      config.default = {
+        test: "./audio/test.mp3",
+        silence: "./audio/silence.mp3",
+        unlock: "./audio/unlock.mp3",
+        visited: "./audio/visited.mp3"
+      }
+    }
+
+    // sets config
     this._config = config;
 
+    // init variables
     this.playing = [];
 
     if(this._buffer) {
@@ -128,6 +141,8 @@ export default class AudioManager {
 
     // New howler sound
     const sound = {
+      id,
+      label: audio.label,
       playWhenReady,
       audio: new Howl({
         src    : [audio.url],
@@ -227,6 +242,79 @@ export default class AudioManager {
   }
 
   /**
+  * Gets currently playing sound info
+  * @param id - id of sound info to recover
+  * @returns { duration, seek } - duration and current seek
+  */
+  getCurrentAudioInfo(id) {
+    const sound = this._buffer.get(id);
+    if (sound) {
+
+      const info = {
+        id,
+        label: sound.label,
+        duration: sound.audio.duration(),
+        seek: sound.audio.seek(),
+        playing: sound.audio.playing()
+      }
+
+      return info;
+    } else {
+      console.log('Audio not found, cannot get info');
+    }
+  }
+
+  /**
+  * Sets seek for selected audio
+  * @param id - sound id
+  * @param seek - timestamp to seek [sec]
+  */
+  seek(id, seek) {
+    const sound = this._buffer.get(id);
+    if (sound) {
+
+
+        if(seek) {
+          // Howler seek timestamp [sec]
+          sound.audio.seek(seek);
+        }
+
+        return sound.audio.seek();
+      // } else {
+      //   console.log('Audio not playing, cannot seek');
+      // }
+    }
+    return;
+  }
+
+  /**
+  * Pauses audio
+  * @param id - sound id
+  */
+  pause(id) {
+    const sound = this._buffer.get(id);
+    if (sound) {
+
+      if (sound.audio.playing()) {
+
+        sound.audio.pause();
+
+      } else {
+        console.log('Audio not playing, cannot pause');
+      }
+    }
+    return;
+  }
+
+  /**
+  * Sets the volume for all audios
+  * @param volume - Set volume 0 >> 1
+  */
+  setVolume(volume) {
+    Howler.volume = volume;
+  }
+
+  /**
   * Stops all sounds imediately
   */
   stopAll() {
@@ -258,21 +346,26 @@ export default class AudioManager {
   * @param url - url of sound to play
   */
   _playSystemSound(url) {
-    this._buffer.forEach(e => {
-      if(e) e.audio.volume(.2);
-    })
+    if (!this._systemSoundPlaying) {
+      this._systemSoundPlaying = true;
 
-    const sound = new Howl({
-      src      : [url],
-      format   : 'mp3',
-      html5    : !USE_WEBAUDIO,
-      autoplay : true
-    });
-
-    sound.on('end', () => { 
       this._buffer.forEach(e => {
-        if(e) e.audio.volume(1);
+        if(e) e.audio.volume(.2);
       })
-    });
+  
+      const sound = new Howl({
+        src      : [url],
+        format   : 'mp3',
+        html5    : !USE_WEBAUDIO,
+        autoplay : true
+      });
+  
+      sound.on('end', () => { 
+        this._systemSoundPlaying = false;
+        this._buffer.forEach(e => {
+          if(e) e.audio.volume(1);
+        })
+      });
+    }
   }
 }

@@ -57,8 +57,21 @@ export default class GeoManager {
   * @param config - config parameters
   */
   _init(config) {
+
+    // sets default is nothing provided 
+    if (!config.default) {
+      config.default = {
+        minAccuracy: 100,
+        posDeadband: 10,
+        playDistance: 20,
+        fetchDistance: 1
+      }
+    }
   
+    // sets config
     this._config = config;
+
+    // init variables
     this.inside = [];
     this.position;
 
@@ -93,7 +106,7 @@ export default class GeoManager {
   */
   unlock() {
     // request for position
-    navigator.geolocation.getCurrentPosition();
+    navigator.geolocation.getCurrentPosition(() => {});
   }
 
   /**

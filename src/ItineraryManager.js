@@ -12,9 +12,11 @@ export default class ItineraryManager {
     /**
    config: [{
       label
-      enable
-      overlap: 
+      disabled
+      replay
+      overlap
       spot: [{
+          _id
           position
           audio
           after
@@ -23,9 +25,10 @@ export default class ItineraryManager {
     */
 
     // creates subjects for notification
-    this.audioLoad$ = new Subject();
-    this.audioPlay$ = new Subject();
-    this.audioStop$ = new Subject();
+    this.spotIncoming$ = new Subject();
+    this.spotActive$ = new Subject();
+    this.spotVisited$ = new Subject();
+    this.spotOutgoing$ = new Subject();
     this.geoRefresh$ = new Subject();
 
     // creates itineraries
@@ -56,10 +59,11 @@ export default class ItineraryManager {
 
     // builds all enabled itineraries
     this._config.forEach(cfg => {
-      if (cfg.enabled) {
+      if (!cfg.disabled) {
         const itin = {
           cfg,
           visited: [],
+          inside: [],
           active: []
         };
 
@@ -91,7 +95,7 @@ export default class ItineraryManager {
   enableItinerary(id, enb) { 
     const itinerary = this._itineraries.get(id);
     if (itinerary) {
-      itinerary.cfg.enabled = enb;
+      itinerary.cfg.disabled = !enb;
     }
 
     // reloads itineraries
@@ -106,13 +110,12 @@ export default class ItineraryManager {
 
     // for each enabled itinerary
     this._itineraries.forEach( itinerary => {
-
       // checks if position is on itinerary, then load if needed
       const spots = itinerary.cfg.spot.filter((e) => e.position === position);
       spots.forEach((spot) => {
   
-        // preload spot audio
-        this.audioLoad$.next(spot.audio);
+        // preload spot
+        this.spotIncoming$.next(spot);
       });
     });
   }
@@ -128,11 +131,12 @@ export default class ItineraryManager {
 
       // checks if position is on itinerary, then play if needed
       const spots = itinerary.cfg.spot.filter((e) => e.position === position);
+
       spots.forEach((spot) => {
 
         // for each spot linked to position
-        if (!itinerary.visited.includes(spot._id)) {
-
+        if (itinerary.cfg.replay || !itinerary.visited.includes(spot._id)) {
+          
           // first time
           if (!spot.after || itinerary.visited.includes(spot.after)) {
 
@@ -145,13 +149,27 @@ export default class ItineraryManager {
               }
 
               // play audio
-              this.audioPlay$.next(spot.audio);
+              this.spotActive$.next(spot);
             }
           }
         } else {
 
           // times after first
-          console.log("already visited!");
+          // send notification if user wasn't already inside
+          if (!itinerary.inside.includes(spot._id)) {
+            setTimeout(() => {
+              // waits to see if somthing goes active
+              if (itinerary.active.length == 0) {
+                this.spotVisited$.next(spot);
+              }
+            }, 1000);
+            
+          }
+        }
+
+        // inside spot
+        if (!itinerary.inside.includes(spot._id)) {
+          itinerary.inside.push(spot._id);
         }
       });
     });
@@ -170,12 +188,18 @@ export default class ItineraryManager {
       const spots = itinerary.cfg.spot.filter((e) => e.position === position);
       spots.forEach((spot) => {
 
+        if (itinerary.inside.includes(spot._id)) {
+
+          // if spot is inside, remove
+          itinerary.inside = itinerary.inside.filter((e) => e !== spot._id);
+        }
+
         if (itinerary.active.includes(spot._id)) {
 
           // if spot is active, stop audio and remove
           itinerary.active = itinerary.active.filter((e) => e !== spot._id);
 
-          this.audioStop$.next(spot.audio);
+          this.spotOutgoing$.next(spot);
         }
       });
     });
@@ -196,6 +220,11 @@ export default class ItineraryManager {
       
       const spots = itinerary.cfg.spot.filter((e) => e.audio === id);
       spots.forEach(spot => {
+
+        // mark spot active (if isn't already)
+        if (!itinerary.active.includes(spot._id)) {
+          itinerary.active.push(spot._id)
+        }
 
         // mark spot visited
         if (!itinerary.visited.includes(spot._id)) {
@@ -229,5 +258,34 @@ export default class ItineraryManager {
     // request for positions refresh
     // this is meant for spots concurrency order management
     this.geoRefresh$.next();
+  }
+
+  /**
+  * Checks to see if there are active spots
+  */
+  hasActiveSpots() {
+    let somePlaying = false;
+    this._itineraries.forEach(itinerary => {
+      if(itinerary.active.length > 0){
+        somePlaying = true;
+      }
+    });
+    return somePlaying;
+  }
+
+  /**
+  * Returns spot by id
+  * @param spotId - Id of spot to find
+  * @returns { object } - spot found or null
+  */
+  getSpot(spotId) {
+    let spot = null;
+    this._itineraries.forEach(itinerary => {
+      const found = itinerary.cfg.spot.find(e => e._id.toUpperCase() === spotId.toUpperCase());
+      if (found) {
+        spot = found;
+      }
+    });
+    return spot;
   }
 }
