@@ -132,6 +132,7 @@ export default class ItineraryManager {
       // checks if position is on itinerary, then play if needed
       const spots = itinerary.cfg.spot.filter((e) => e.position === position);
 
+      // evaluates each spot to check if something's to play
       spots.forEach((spot) => {
 
         // for each spot linked to position
@@ -152,21 +153,23 @@ export default class ItineraryManager {
               this.spotActive$.next(spot);
             }
           }
-        } else {
-
-          // times after first
-          // send notification if user wasn't already inside
-          if (!itinerary.inside.includes(spot._id)) {
-            setTimeout(() => {
-              // waits to see if somthing goes active
-              if (itinerary.active.length == 0) {
-                this.spotVisited$.next(spot);
-              }
-            }, 1000);
-            
-          }
         }
+      });
 
+      // reevaluates each spot to check if visited
+      spots.forEach((spot) => {
+        if (!itinerary.cfg.replay && itinerary.visited.includes(spot._id)) {
+          setTimeout(() => {
+            // waits to see if somthing goes active
+            if (itinerary.active.length == 0) {
+              this.spotVisited$.next(spot);
+            }
+          }, 5000);
+        }
+      });
+
+      // reevaluates each spot to check when first inside
+      spots.forEach((spot) => {
         // inside spot
         if (!itinerary.inside.includes(spot._id)) {
           itinerary.inside.push(spot._id);

@@ -94,19 +94,19 @@ export class App {
 
   start() {
     if (!this._started) {
-      // lock screen
-      this._ui.lockScreen();
-      // set automatic lock
-      this._ui.setAutomaticLock();
-      // visibility change
-      this._ui.setVisibilityChangeHandler(e => {
+      // // lock screen
+      // this._ui.lockScreen();
+      // // set automatic lock
+      // this._ui.setAutomaticLock();
+      // // visibility change
+      // this._ui.setVisibilityChangeHandler(e => {
         
-        // page is hidden (app closed, phone locked...)
-        this._geoXp.unlock();
+      //   // page is hidden (app closed, phone locked...)
+      //   this._geoXp.unlock();
 
-      }, e => {
-        // page is shown (app reopened, phone unlocked...), nothing to do
-      });
+      // }, e => {
+      //   // page is shown (app reopened, phone unlocked...), nothing to do
+      // });
 
       // show lock button
       const lockBtn = this._ui.createLockButton();
