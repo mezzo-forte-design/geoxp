@@ -46,7 +46,6 @@ export default class GeoManager {
     this.incoming$ = new Subject();
     this.outgoing$ = new Subject();
     this.position$ = new Subject();
-    this.error$ = new Subject();
 
     // inits the instance based on config
     this._init(config);
@@ -178,7 +177,6 @@ export default class GeoManager {
   */ 
   _geoError(error) {
     console.error('[GeoManager._geoError] - Geolocation error - Nessuna posizione disponibile');
-    this.error$.next(error.msg);
   }
 
   /**
@@ -190,19 +188,19 @@ export default class GeoManager {
   */ 
   _calcGeoDistance(lon1, lat1, lon2, lat2) {
     // Radius of the earth in km
-    var EARTH_R = 6371;
+    const EARTH_R = 6371;
 
     // Javascript functions in radians
-    var dLat = (lat2 - lat1).toRad();
-    var dLon = (lon2 - lon1).toRad();
+    const dLat = (lat2 - lat1).toRad();
+    const dLon = (lon2 - lon1).toRad();
 
     //
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
     //
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     // Distance in m
     const dist = EARTH_R * c * 1000;

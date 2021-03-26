@@ -28,52 +28,50 @@ export class App {
 
     // geoXp events subscription
     // new position update
-    this._geoXp.on('position', position => {
+    this._geoXp.event.on('position', position => {
       this._log('main', `Your position: ${position.coords.latitude}, ${position.coords.longitude}`);
       precision.innerHTML = `GPS precision: ${position.coords.accuracy.toFixed(3)}m`;
     });
 
     // incoming spot (preload audio)
-    this._geoXp.on('incoming', spot => {
+    this._geoXp.event.on('incoming', spot => {
       
     });
 
     // active spot
-    this._geoXp.on('active', spot => {
+    this._geoXp.event.on('active', spot => {
       this._log('spots', `Hai raggiunto lo spot <b>${spot._id}</b>! Play`);
     });
 
     // already visited spot
     // TODO - Così non funziona, gli spot già visitati possono essere più di uno
-    this._geoXp.on('visited', spot => {
+    this._geoXp.event.on('visited', spot => {
 
       console.warn('already visited');
       // show notification (wanna play?)
-      this._ui.modalMessage({
-        type : 'Info',
-        msg  : 'alreadyVisitedSpot'
+      this._ui.modalConfirm({
+        title: 'Spot già visitato',
+        msg: 'Vuoi riascoltarlo?',
+        okCallback: () => {
+          console.log('qui');
+          this._geoXp.replaySpot();
+        }
       });
 
       // after 60 seconds close modal and hide loader
       clearTimeout(this._HIDE_TIMEOUT);
       this._HIDE_TIMEOUT = setTimeout(() => {
-        this._ui.hidePlayingAudio(this._mainContainer, spot.audio);
         this._ui.closeModal();
-      }, 20000);
-
-      // load sound and show player, but don't start
-      this._ui.showPlayingAudio(this._mainContainer, spot.audio);
-      // show main tab
-      this._ui.showMainTab();
+      }, 5000);
     });
 
     // outgoing spot
-    this._geoXp.on('outgoing', spot => {
+    this._geoXp.event.on('outgoing', spot => {
       this._log('spots', `Stai abbandonando lo spot <b>${spot.id}</b>!`);
     });
 
     // audio started
-    this._geoXp.on('play', audio => {
+    this._geoXp.event.on('play', audio => {
       // TODO - implementation of interactive player
       this._ui.showPlayingAudio(this._mainContainer, audio);
       // show main tab
@@ -81,7 +79,7 @@ export class App {
     });
 
     // audio ended
-    this._geoXp.on('end', audioId => {
+    this._geoXp.event.on('end', audioId => {
       if (!this._geoXp.hasActiveSpots()) {
         this._ui.hidePlayingAudio(this._mainContainer, audioId);
         this._ui.resetCodeInput(this._helpContainer);
@@ -185,9 +183,8 @@ export class App {
     const position = config.geo.position.find(e => e._id === posId);
     if(position) {
       if(!out) {
-        // incoming
-        console.log('new position incoming', posId);
 
+        // incoming
         this._geoXp.geo._geoSuccess({
           coords: {
           accuracy: 5,
@@ -199,6 +196,7 @@ export class App {
           }
           });
       } else {
+
           // outgoing
           console.log('new position outgoing', posId);
 

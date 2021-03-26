@@ -153,7 +153,8 @@ export const config = {
     }
   },
 
-  itinerary: [
+  itinerary: {
+    route: [
     {
       _id: "iti1",
       label: "iti1",
@@ -223,5 +224,9 @@ export const config = {
         }
       ]
     }
-  ]
+    ],
+    default: {
+      visitedFilter: 3 // s
+    }
+  }
 }

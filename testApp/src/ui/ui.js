@@ -1,6 +1,6 @@
 // libs
 import Mustache from 'mustache'; // usage: const output = Mustache.render(template, hash);
-import { Notify, Block, Report } from "notiflix";
+import { Notify, Block, Report, Confirm } from "notiflix";
 import Hammer from 'hammerjs';
 import NoSleep from 'nosleep.js';
 import PatternLock from 'patternlock';
@@ -244,6 +244,16 @@ export default class UI {
 
   hideBlockLoader(options) {
     Block.Remove(options.element);
+  }
+
+  modalConfirm(options) {
+    Confirm.Show(
+      options.title,
+      options.msg,
+      'Conferma',
+      'Annulla',
+      options.okCallback
+    );
   }
 
   modalMessage(options) {

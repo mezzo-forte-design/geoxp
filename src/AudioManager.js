@@ -157,16 +157,16 @@ export default class AudioManager {
     sound.audio.once('load', () => {
 
       //TODO end, stop, differences?
-      sound.audio.once('end', () => {
+      sound.audio.on('end', () => {
         this.done$.next(id);
       });
 
-      sound.audio.once('stop', () => {
+      sound.audio.on('stop', () => {
         // when stopped playback notify
         this.done$.next(id);
       });
 
-      sound.audio.once('play', () => {
+      sound.audio.on('play', () => {
         // When starting playback notify
         this.play$.next(id);
       });
@@ -260,7 +260,7 @@ export default class AudioManager {
 
       return info;
     } else {
-      console.log('Audio not found, cannot get info');
+      console.error('[AudioManager.getCurrentAudioInfo] - Audio not found, cannot get info');
     }
   }
 
@@ -272,17 +272,12 @@ export default class AudioManager {
   seek(id, seek) {
     const sound = this._buffer.get(id);
     if (sound) {
+      if(seek) {
+        // Howler seek timestamp [sec]
+        sound.audio.seek(seek);
+      }
 
-
-        if(seek) {
-          // Howler seek timestamp [sec]
-          sound.audio.seek(seek);
-        }
-
-        return sound.audio.seek();
-      // } else {
-      //   console.log('Audio not playing, cannot seek');
-      // }
+      return sound.audio.seek();
     }
     return;
   }
@@ -298,10 +293,9 @@ export default class AudioManager {
       if (sound.audio.playing()) {
 
         sound.audio.pause();
-
-      } else {
-        console.log('Audio not playing, cannot pause');
       }
+    } else {
+      console.error('[AudioManager.pause] - Audio not found, cannot pause');
     }
     return;
   }
