@@ -246,7 +246,7 @@ export default class AudioManager {
   * @param id - id of sound info to recover
   * @returns { duration, seek } - duration and current seek
   */
-  getCurrentAudioInfo(id) {
+  getAudio(id) {
     const sound = this._buffer.get(id);
     if (sound) {
 

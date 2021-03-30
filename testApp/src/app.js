@@ -67,7 +67,7 @@ export class App {
 
     // outgoing spot
     this._geoXp.event.on('outgoing', spot => {
-      this._log('spots', `Stai abbandonando lo spot <b>${spot.id}</b>!`);
+      this._log('spots', `Stai abbandonando lo spot <b>${spot._id}</b>!`);
     });
 
     // audio started

@@ -178,7 +178,7 @@ export default class ItineraryManager {
             if (route.inside.includes(spot._id) && route.active.length == 0) {
               this.spotVisited$.next(spot);
             }
-          }, this._config.default.visitedFilter * 1000);
+          }, this._config.default.visitedFilter);
         }
       });
 

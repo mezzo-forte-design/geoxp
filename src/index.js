@@ -48,6 +48,7 @@ export default class GeoXp {
       },
       itinerary: {
         route: [{
+          _id
           label
           disabled
           replay
@@ -217,6 +218,15 @@ export default class GeoXp {
   }
 
   /**
+  * Enables/disables specific route
+  * @param id - itinerary id to toggle
+  * @param enb - flag for enable/disable
+  */
+  enableRoute(id, enb) { 
+    this.itinerary.enableRoute(id, enb);
+  }
+
+  /**
   * Returns true if has active spots
   * @returns { boolean }
   */
@@ -226,20 +236,20 @@ export default class GeoXp {
 
   /**
   * Returns spot by id
-  * @param spotId - Id of spot to find
+  * @param id - Id of spot to find
   * @returns { object } - spot found or null
   */
-  getSpot(spotId) {
-    return this.itinerary.getSpot(spotId);
+  getSpot(id) {
+    return this.itinerary.getSpot(id);
   }
 
   /**
   * Marks spots as unvisited
   * If no spot id provided, marks all inside spots as unvisited
-  * @param spotId - optional
+  * @param id - optional
   */
-  replaySpot(spotId = null) {
-    this.itinerary.replaySpot(spotId);
+  replaySpot(id = null) {
+    this.itinerary.replaySpot(id);
   }
 
   /**
