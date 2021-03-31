@@ -79,9 +79,9 @@ export class App {
     });
 
     // audio ended
-    this._geoXp.event.on('end', audioId => {
+    this._geoXp.event.on('end', audio => {
       if (!this._geoXp.hasActiveSpots()) {
-        this._ui.hidePlayingAudio(this._mainContainer, audioId);
+        this._ui.hidePlayingAudio(this._mainContainer, audio);
         this._ui.resetCodeInput(this._helpContainer);
   
         // show main tab
@@ -143,24 +143,34 @@ export class App {
 
     const spot = this._geoXp.getSpot(e.code);
 
-    // if url exists and no other spost are playing
-    if (spot && !this._geoXp.hasActiveSpots()) {
-      document.getElementById('confirm-button').classList.add('disabled');
+    if(!spot) {
 
-      this._geoXp.audio.play(spot.audio);
-
-    } else if (this._geoXp.hasActiveSpots()) {
-      this._ui.flashMessage({
-        type : 'Info',
-        msg  : 'alreadyPayingAudio'
-      });
-    } else {
+      // spot not found
       this._ui.flashMessage({
         type : 'Warning',
         msg  : 'invalidAudioCode'
       });
       this._ui.resetCodeInput(this._helpContainer);
+
+      return;
     }
+
+    // if (this._geoXp.hasActiveSpots()) {
+
+    //   // other spots are already active
+    //   this._ui.flashMessage({
+    //     type : 'Info',
+    //     msg  : 'alreadyPayingAudio'
+    //   });
+    //   this._ui.resetCodeInput(this._helpContainer);
+
+    //   return;
+    // }
+
+    // if spot exists and no other spots are playing, force play
+    document.getElementById('confirm-button').classList.add('disabled');
+    this._geoXp.forceSpot(spot._id);
+    this._ui.resetCodeInput(this._helpContainer);
   }
 
   createStartButton(onclick) {

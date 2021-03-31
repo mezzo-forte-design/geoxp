@@ -309,14 +309,14 @@ export default class ItineraryManager {
   /**
   * Marks spots as unvisited
   * If no spot id provided, marks all inside spots as unvisited
-  * @param spotId - optional
+  * @param id - optional
   */
-  replaySpot(spotId = null) {
+  replaySpot(id = null) {
     this._routes.forEach(route => {
-      if (spotId) {
+      if (id) {
 
         // mark specific spot as unvisited
-        if (route.visited.includes(spotId)) {
+        if (route.visited.includes(id)) {
           route.visited = route.visited.filter((e) => e !== spot._id);
         }
       } else {
@@ -328,6 +328,51 @@ export default class ItineraryManager {
 
     // request for positions refresh
     this.geoRefresh$.next();
+  }
+
+  /**
+  * Forces spot activation
+  * Forces other spots deactivation unless overlapping
+  * @param id - spot id
+  * */
+  forceSpot(id) {
+
+    if (!id) {
+      console.error('[ItineraryManager.forceSpot] - spot id not provided, cannot activate');
+      return;
+    }
+
+    this._routes.forEach(route => {
+
+      // checks if spot actually exist in route
+      const spot = route.cfg.spot.find(e => e._id === id);
+      if(spot) {
+
+        // if there are spots active on non overlapping route
+        if (route.active.length > 0 && !route.cfg.overlap) {
+
+          // for each active spot
+          route.active.forEach(active => {
+
+            const toDeactivate = route.cfg.spot.find(e => e._id === active);
+
+            // removes from active spots
+            route.active = route.active.filter(e => e._id !== toDeactivate._id);
+
+            // deactivates spot by outgoing it
+            this.spotOutgoing$.next(toDeactivate);
+          });
+        }
+
+        // adds to active spots
+        if(!route.active.includes(spot._id)) {
+          route.active.push(spot._id);
+        }
+
+        // activates required spot
+        this.spotActive$.next(spot);
+      }
+    });
   }
 
 

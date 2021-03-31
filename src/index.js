@@ -4,6 +4,7 @@ import GeoManager from './GeoManager';
 import AudioManager from './AudioManager';
 import ItineraryManager from './ItineraryManager';
 import Device from './utils/Device';
+import { runInThisContext } from 'vm';
 
 /**
  * Creates GeoXp class.
@@ -250,6 +251,15 @@ export default class GeoXp {
   */
   replaySpot(id = null) {
     this.itinerary.replaySpot(id);
+  }
+
+  /**
+  * Forces spot activation
+  * Forces other spots deactivation unless overlapping
+  * @param id - spot id
+  * */
+  forceSpot(id) {
+    this.itinerary.forceSpot(id);
   }
 
   /**
