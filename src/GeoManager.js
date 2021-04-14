@@ -19,7 +19,7 @@ export default class GeoManager {
   constructor(config) {
     /**
     config: {
-      position: [{
+      positions: [{
         _id,
         label,
         lat,
@@ -137,7 +137,7 @@ export default class GeoManager {
       return;
     }
 
-    this._config.position.forEach((position) => {
+    this._config.positions.forEach((position) => {
       // calc distance [m]
       const dist = this._calcGeoDistance(pos.coords.longitude, pos.coords.latitude, position.lon, position.lat);
 

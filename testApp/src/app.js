@@ -190,7 +190,7 @@ export class App {
   }
 
   simulate(posId, out = false) {
-    const position = config.geo.position.find(e => e._id === posId);
+    const position = config.geo.positions.find(e => e._id === posId);
     if(position) {
       if(!out) {
 
