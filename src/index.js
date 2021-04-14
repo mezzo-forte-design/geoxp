@@ -209,6 +209,14 @@ export default class GeoXp {
   }
 
   /**
+  * Enables / disables internal geolocation updates
+  * @param enabled - enable flag
+  */ 
+  internalGeolocation(enabled) {
+    this.geo.internalGeolocation(enabled);
+  }
+
+  /**
   * Provides external positioning
   * @param position - position data in geolocation api format
   * @returns { boolean }
