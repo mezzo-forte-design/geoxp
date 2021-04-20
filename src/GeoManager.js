@@ -19,7 +19,7 @@ export default class GeoManager {
   constructor(config) {
     /**
     config: {
-      position: [{
+      positions: [{
         _id,
         label,
         lat,
@@ -93,7 +93,6 @@ export default class GeoManager {
   * Unloads all object subscriptions
   */ 
   unload() {
-
     this.inside = [];
     if (this._GEO_WATCH) {
       navigator.geolocation.clearWatch(this._GEO_WATCH);
@@ -116,6 +115,20 @@ export default class GeoManager {
       this.inside$.next(position);
     });
   }
+
+  /**
+  * Enables / disables internal geolocation updates
+  * @param enabled - enable flag
+  */ 
+  internalGeolocation(enabled) {
+    if (enabled) {
+      this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
+    } else {
+      if(this._GEO_WATCH) {
+        navigator.geolocation.clearWatch(this._GEO_WATCH);
+      }
+    }
+  }
   
   /**
   * Checks the status of the spots in relation to current position
@@ -137,7 +150,7 @@ export default class GeoManager {
       return;
     }
 
-    this._config.position.forEach((position) => {
+    this._config.positions.forEach((position) => {
       // calc distance [m]
       const dist = this._calcGeoDistance(pos.coords.longitude, pos.coords.latitude, position.lon, position.lat);
 

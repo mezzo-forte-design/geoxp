@@ -19,7 +19,7 @@ export default class AudioManager {
   constructor(config) {
     /**
     config: {
-      sound: [{
+      sounds: [{
         _id,
         label,
         url,
@@ -133,7 +133,7 @@ export default class AudioManager {
       return;
     }
 
-    const audio = this._config.sound.find( e => e._id === id);
+    const audio = this._config.sounds.find( e => e._id === id);
     if (!audio) {
       console.error('[AudioManager.load] - sound not found. Cannot load');
       return;

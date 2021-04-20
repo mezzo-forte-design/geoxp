@@ -2,9 +2,8 @@
 import { EventEmitter } from 'events';
 import GeoManager from './GeoManager';
 import AudioManager from './AudioManager';
-import ItineraryManager from './ItineraryManager';
+import ExperienceManager from './ExperienceManager';
 import Device from './utils/Device';
-import { runInThisContext } from 'vm';
 
 /**
  * Creates GeoXp class.
@@ -18,7 +17,7 @@ export default class GeoXp {
     /**
     config: {
       geo: {
-        position: [{
+        positions: [{
           _id;
           label;
           lat;
@@ -35,7 +34,7 @@ export default class GeoXp {
         };
       },
       audio: {
-        sound: [{
+        sounds: [{
           _id;
           label;
           url;
@@ -47,14 +46,14 @@ export default class GeoXp {
           visited;
         }
       },
-      itinerary: {
-        route: [{
+      experience: {
+        patterns: [{
           _id
           label
           disabled
           replay
           overlap
-          spot: [{
+          spots: [{
               _id
               position
               audio
@@ -73,7 +72,7 @@ export default class GeoXp {
     // instantiates modules
     this.geo = new GeoManager(config.geo);
     this.audio = new AudioManager(config.audio);
-    this.itinerary = new ItineraryManager(config.itinerary);
+    this.experience = new ExperienceManager(config.experience);
 
     // exposes static classes
     this.utils = {
@@ -88,7 +87,7 @@ export default class GeoXp {
     // subscribes to InventoryManager requests
     //////////////////////////////////////////////
     // request for positions refresh
-    this.subItineraryRefresh = this.itinerary.geoRefresh$
+    this.subExperienceRefresh = this.experience.geoRefresh$
       .subscribe(() => {
 
         // resend inside positions
@@ -96,7 +95,7 @@ export default class GeoXp {
       });
 
     // request for audio preloading
-    this.subItineraryIncoming = this.itinerary.spotIncoming$
+    this.subExperienceIncoming = this.experience.spotIncoming$
       .subscribe( spot => {
         
         // load spot audio
@@ -107,7 +106,7 @@ export default class GeoXp {
       });
 
     // request for audio play
-    this.subItineraryActive = this.itinerary.spotActive$
+    this.subExperienceActive = this.experience.spotActive$
       .subscribe( spot => {
 
         // play spot audio
@@ -118,7 +117,7 @@ export default class GeoXp {
       });
 
     // alredy visisted spot
-    this.subItineraryVisited = this.itinerary.spotVisited$
+    this.subExperienceVisited = this.experience.spotVisited$
       .subscribe( spot => {
 
         // emits spot visided
@@ -126,7 +125,7 @@ export default class GeoXp {
       });
     
     // request for audio stop
-    this.subItineraryOutgoing = this.itinerary.spotOutgoing$
+    this.subExperienceOutgoing = this.experience.spotOutgoing$
       .subscribe( spot => {
 
         const fade = 4000; // [s]
@@ -154,24 +153,24 @@ export default class GeoXp {
     this.subGeoIncoming = this.geo.incoming$
       .subscribe( position => {
 
-        // sends to itineraryManager for processing
-        this.itinerary.incoming(position);
+        // sends to experienceManager for processing
+        this.experience.incoming(position);
       });
     
     // inside spots
     this.subGeoInside = this.geo.inside$
       .subscribe( position => { 
 
-        // sends to itineraryManager for processing
-        this.itinerary.inside(position);
+        // sends to experienceManager for processing
+        this.experience.inside(position);
       });
 
     // outgoing spot
     this.subGeoOutgoing = this.geo.outgoing$
       .subscribe( position => {
 
-        // sends to itineraryManager for processing
-        this.itinerary.outgoing(position);
+        // sends to experienceManager for processing
+        this.experience.outgoing(position);
       });
     
 
@@ -182,8 +181,8 @@ export default class GeoXp {
     this.subAudioPlay = this.audio.play$
       .subscribe( audio => {
 
-        // sends to itineraryManager for processing
-        this.itinerary.playing(audio);
+        // sends to experienceManager for processing
+        this.experience.playing(audio);
 
         // emits playing audio
         this.event.emit('play', audio);
@@ -193,8 +192,8 @@ export default class GeoXp {
     this.subAudioDone = this.audio.done$
       .subscribe( audio => {
 
-        // sends to itineraryManager for processing
-        this.itinerary.end(audio);
+        // sends to experienceManager for processing
+        this.experience.end(audio);
 
         // emits ended audio
         this.event.emit('end', audio);
@@ -210,6 +209,14 @@ export default class GeoXp {
   }
 
   /**
+  * Enables / disables internal geolocation updates
+  * @param enabled - enable flag
+  */ 
+  internalGeolocation(enabled) {
+    this.geo.internalGeolocation(enabled);
+  }
+
+  /**
   * Provides external positioning
   * @param position - position data in geolocation api format
   * @returns { boolean }
@@ -219,12 +226,12 @@ export default class GeoXp {
   }
 
   /**
-  * Enables/disables specific route
-  * @param id - itinerary id to toggle
+  * Enables/disables specific pattern
+  * @param id - pattern id to toggle
   * @param enb - flag for enable/disable
   */
-  enableRoute(id, enb) { 
-    this.itinerary.enableRoute(id, enb);
+  enablePattern(id, enb) { 
+    this.experience.enablePattern(id, enb);
   }
 
   /**
@@ -232,7 +239,7 @@ export default class GeoXp {
   * @returns { boolean }
   */
   hasActiveSpots() {
-    return this.itinerary.hasActiveSpots();
+    return this.experience.hasActiveSpots();
   }
 
   /**
@@ -241,7 +248,7 @@ export default class GeoXp {
   * @returns { object } - spot found or null
   */
   getSpot(id) {
-    return this.itinerary.getSpot(id);
+    return this.experience.getSpot(id);
   }
 
   /**
@@ -250,7 +257,7 @@ export default class GeoXp {
   * @param id - optional
   */
   replaySpot(id = null) {
-    this.itinerary.replaySpot(id);
+    this.experience.replaySpot(id);
   }
 
   /**
@@ -259,7 +266,7 @@ export default class GeoXp {
   * @param id - spot id
   * */
   forceSpot(id) {
-    this.itinerary.forceSpot(id);
+    this.experience.forceSpot(id);
   }
 
   /**
@@ -270,7 +277,7 @@ export default class GeoXp {
     this._config = config;
     this.geo.reload(config.geo);
     this.audio.reload(config.audio);
-    this.itinerary.reload(config.itinerary);
+    this.experience.reload(config.experience);
   }
 
   /**
@@ -278,11 +285,11 @@ export default class GeoXp {
   * @param config - config parameters
   */
   destroy() {
-    this.subItineraryIncoming.unsubscribe();
-    this.subItineraryActive.unsubscribe();
-    this.subItineraryVisited.unsubscribe();
-    this.subItineraryOutgoing.unsubscribe();
-    this.subItineraryRefresh.unsubscribe();
+    this.subExperienceIncoming.unsubscribe();
+    this.subExperienceActive.unsubscribe();
+    this.subExperienceVisited.unsubscribe();
+    this.subExperienceOutgoing.unsubscribe();
+    this.subExperienceRefresh.unsubscribe();
     this.subAudioDone.unsubscribe();
     this.subAudioPlay.unsubscribe();
     this.subGeoPosition.unsubscribe();
@@ -292,6 +299,6 @@ export default class GeoXp {
   
     this.geo.unload();
     this.audio.unload();
-    this.itinerary.unload();
+    this.experience.unload();
   }
 }

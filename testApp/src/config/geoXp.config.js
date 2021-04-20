@@ -1,6 +1,6 @@
 export const config = {
   geo: {
-    position: [
+    positions: [
       {
         lat: 45.0650933,
         lon: 7.6757719,
@@ -83,7 +83,7 @@ export const config = {
   },
 
   audio: {
-    sound: [
+    sounds: [
       {
         _id: "aud1",
         label: "aud1",
@@ -153,14 +153,14 @@ export const config = {
     }
   },
 
-  itinerary: {
-    route: [
+  experience: {
+    patterns: [
     {
       _id: "iti1",
       label: "iti1",
       enabled: true,
       overlap: false,
-      spot: [
+      spots: [
         {
           _id: "sp1",
           position: "pos1",
@@ -224,9 +224,6 @@ export const config = {
         }
       ]
     }
-    ],
-    default: {
-      visitedFilter: 3 // s
-    }
+    ]
   }
 }

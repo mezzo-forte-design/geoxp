@@ -477,7 +477,7 @@ export default class UI {
     header.classList.add('playing');
 
     // gets sound info
-    let sound = this._geoXp.audio.getCurrentAudioInfo(soundId);
+    let sound = this._geoXp.audio.getAudio(soundId);
     if (!sound) {
       console.log('sound not found!');
       return;
@@ -510,7 +510,7 @@ export default class UI {
     // play pause listener
     const playPauseButton = container.querySelector('#interactive-player-container > .play-pause-button');
     playPauseButton.addEventListener('click', e => {
-      sound = this._geoXp.audio.getCurrentAudioInfo(soundId);
+      sound = this._geoXp.audio.getAudio(soundId);
       if (sound.playing) {
         this._geoXp.audio.pause(sound.id);
         bar.stop(true);
@@ -526,7 +526,7 @@ export default class UI {
     const skipButtons = [...container.querySelectorAll('.skip-button')];
     skipButtons.forEach(btn => {
       btn.addEventListener('click', e => {
-        sound = this._geoXp.audio.getCurrentAudioInfo(soundId);
+        sound = this._geoXp.audio.getAudio(soundId);
 
         let newTime = sound.seek + parseInt(e.currentTarget.dataset.skip);
         if (newTime < 0) newTime = 0;
@@ -552,7 +552,7 @@ export default class UI {
     const progressTimer = container.querySelector('#progress-timer');
 
     const updateTimer = () => {
-      sound = this._geoXp.audio.getCurrentAudioInfo(soundId);
+      sound = this._geoXp.audio.getAudio(soundId);
       this._TIMER_ANIMATION = window.requestAnimationFrame(updateTimer);
       progressTimer.innerHTML = this.secToTimer(sound.seek);
     };
