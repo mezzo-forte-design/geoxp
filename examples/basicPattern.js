@@ -37,8 +37,10 @@ const cfg = {
     
     // internal geoXp default values could be overridden appending "default" object to configuration
     default: {
-      playDistance: 30, // meters. Sets default position radius (when none specified)
-      posDeadband: 5 // meters. Sets default position deadband (when none specified)
+      fetchDistance: 1, // same as radius, no prefetch
+      minAccuracy: 10, // meters
+      playDistance: 30, // meters
+      posDeadband: 5 // meters
     }
   },
 
@@ -61,7 +63,15 @@ const cfg = {
         label: "Talking",
         url: "./audio/people_talking.mp3"
       }
-    ]
+    ],
+
+    // internal geoXp default values could be overridden appending "default" object to configuration
+    default: {
+      test: './audio/system/test.mp3', // url for test sound
+      silence: './audio/system/silence.mp3', // url for silence sound
+      visited: './audio/system/visited.mp3', // url for spot already visited sound
+      unlock: './audio/system/unlock.mp3', // url for phone unlock guide
+    }
   },
 
   // step 3: experience pattern configuration
