@@ -60,7 +60,7 @@ export default class GeoManager {
     // sets default is nothing provided 
     if (!config.default) {
       config.default = {
-        minAccuracy: 100,
+        minAccuracy: 10,
         posDeadband: 10,
         playDistance: 20,
         fetchDistance: 1
