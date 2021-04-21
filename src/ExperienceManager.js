@@ -163,8 +163,14 @@ export default class ExperienceManager {
                 pattern.active.push(spot._id);
               }
 
+              // adds pattern info for spot active
+              const active = {
+                spot,
+                overlap: pattern.cfg.overlap
+              }
+
               // play audio
-              this.spotActive$.next(spot);
+              this.spotActive$.next(active);
             }
           }
         }
@@ -281,13 +287,13 @@ export default class ExperienceManager {
   * Checks to see if there are active spots
   */
   hasActiveSpots() {
-    let somePlaying = false;
+    let someActive = false;
     this._patterns.forEach(pattern => {
       if(pattern.active.length > 0){
-        somePlaying = true;
+        someActive = true;
       }
     });
-    return somePlaying;
+    return someActive;
   }
 
   /**
@@ -374,6 +380,5 @@ export default class ExperienceManager {
       }
     });
   }
-
 
 }

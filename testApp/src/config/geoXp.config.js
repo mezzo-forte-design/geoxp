@@ -143,6 +143,16 @@ export const config = {
         _id: "aud12",
         label: "aud12",
         url: "./audio/spot_12.mp3"
+      },
+      {
+        _id: "bg1",
+        label: "background",
+        url: "./audio/people_shouting.mp3"
+      },
+      {
+        _id: "bg2",
+        label: "background",
+        url: "./audio/kids.mp3"
       }
     ],
     default: {
@@ -158,7 +168,6 @@ export const config = {
     {
       _id: "iti1",
       label: "iti1",
-      enabled: true,
       overlap: false,
       spots: [
         {
@@ -221,6 +230,23 @@ export const config = {
           _id: "sp12",
           position: "pos12",
           audio: "aud12"
+        }
+      ]
+    },
+    {
+      _id: "bg",
+      label: "background",
+      overlap: true,
+      spots: [
+        {
+          _id: "bg1",
+          position: "pos1",
+          audio : "bg1"
+        },
+        {
+          _id: "bg2",
+          position: "pos1",
+          audio : "bg2"
         }
       ]
     }

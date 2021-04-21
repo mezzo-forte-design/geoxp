@@ -107,13 +107,13 @@ export default class GeoXp {
 
     // request for audio play
     this.subExperienceActive = this.experience.spotActive$
-      .subscribe( spot => {
+      .subscribe( info => {
 
         // play spot audio
-        this.audio.play(spot.audio);
+        this.audio.play(info.spot.audio, 0, 1, info.overlap);
 
         // emits spot active
-        this.event.emit('active', spot);
+        this.event.emit('active', info.spot);
       });
 
     // alredy visisted spot
@@ -267,6 +267,15 @@ export default class GeoXp {
   * */
   forceSpot(id) {
     this.experience.forceSpot(id);
+  }
+
+  /**
+  * Checks if any sound is playing
+  * @param overlap - if true, exclude overlapping audios
+  * @returns { boolean }
+  * */
+  hasAudioPlaying(overlap = false) {
+    return this.audio.hasAudioPlaying(overlap);
   }
 
   /**

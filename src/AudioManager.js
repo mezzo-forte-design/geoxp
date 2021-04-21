@@ -126,7 +126,7 @@ export default class AudioManager {
   * @param id - audio to load
   * @param playWhenReady - (false) play sound when loaded
   */
-  load(id, playWhenReady = false) {
+  load(id, playWhenReady = false, overlap = false) {
 
     if (!id) {
       console.error('[AudioManager.load] - audio info not provided. Cannot load');
@@ -144,6 +144,7 @@ export default class AudioManager {
       id,
       label: audio.label,
       playWhenReady,
+      overlap,
       audio: new Howl({
         src    : [audio.url],
         format : 'mp3',
@@ -158,22 +159,22 @@ export default class AudioManager {
 
       //TODO end, stop, differences?
       sound.audio.on('end', () => {
-        this.done$.next(id);
+        this.done$.next(sound);
       });
 
       sound.audio.on('stop', () => {
         // when stopped playback notify
-        this.done$.next(id);
+        this.done$.next(sound);
       });
 
       sound.audio.on('play', () => {
         // When starting playback notify
-        this.play$.next(id);
+        this.play$.next(sound);
       });
 
       // start sound
       if (sound.playWhenReady) {
-        this.play(id);
+        this.play(id, 0, 1, sound.overlap);
       }
     });
   }
@@ -184,7 +185,7 @@ export default class AudioManager {
   * @param fade - (0) fadeIn time
   * @param volume - (1) playback volume
   */
-  play(id, fade = 0, volume = 1) {
+  play(id, fade = 0, volume = 1, overlap = false) {
 
     if (!id) {
       console.error('[AudioManager.play] - audio info non provided. Cannot play');
@@ -196,7 +197,7 @@ export default class AudioManager {
     if (!sound) {
 
       // load audio and play when ready
-      this.load(id, true);
+      this.load(id, true, overlap);
 
     } else {
       // if sounds are ready play(), else playWhenReady
@@ -262,6 +263,24 @@ export default class AudioManager {
     } else {
       console.error('[AudioManager.getCurrentAudioInfo] - Audio not found, cannot get info');
     }
+  }
+
+  /**
+  * Checks if any sound is playing
+  * @param overlap - if true, exclude overlapping audios
+  * @returns { boolean }
+  * */
+  hasAudioPlaying(overlap = false) {
+    let atLeastOne = false;
+    this._buffer.forEach(sound => {
+
+      // if playing
+      if (sound.audio.playing() && (!sound.overlap || !overlap)) {
+        atLeastOne = true;
+      }
+    });
+
+    return atLeastOne;
   }
 
   /**

@@ -72,16 +72,20 @@ export class App {
 
     // audio started
     this._geoXp.event.on('play', audio => {
-      // TODO - implementation of interactive player
-      this._ui.showPlayingAudio(this._mainContainer, audio);
-      // show main tab
-      this._ui.showMainTab();
+      console.log('audio',audio);
+      if (!audio.overlap) {
+
+        // load player
+        this._ui.showPlayingAudio(this._mainContainer, audio.id);
+        // show main tab
+        this._ui.showMainTab();
+      }
     });
 
     // audio ended
     this._geoXp.event.on('end', audio => {
-      if (!this._geoXp.hasActiveSpots()) {
-        this._ui.hidePlayingAudio(this._mainContainer, audio);
+      if (!this._geoXp.hasAudioPlaying(true)) {
+        this._ui.hidePlayingAudio(this._mainContainer, audio.id);
         this._ui.resetCodeInput(this._helpContainer);
   
         // show main tab
