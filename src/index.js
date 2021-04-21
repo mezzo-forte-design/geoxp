@@ -128,7 +128,7 @@ export default class GeoXp {
     this.subExperienceOutgoing = this.experience.spotOutgoing$
       .subscribe( spot => {
 
-        const fade = 4000; // [s]
+        const fade = 3000; // [s]
 
         // stop spot audio
         this.audio.stop(spot.audio, fade);
@@ -263,10 +263,17 @@ export default class GeoXp {
   /**
   * Forces spot activation
   * Forces other spots deactivation unless overlapping
+  * Rules are
+  * GPS precision > 100 m
+  * GPS precision <= 100 m & 
   * @param id - spot id
   * */
   forceSpot(id) {
-    this.experience.forceSpot(id);
+    const minAcceptablePrecision = 100;
+
+    if (this.geo.lastPosition && this.geo.lastPosition.coords.accuracy > minAcceptablePrecision) {
+      this.experience.forceSpot(id);
+    }
   }
 
   /**

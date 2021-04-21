@@ -145,6 +145,9 @@ export default class GeoManager {
     this.position = pos;
     this.position$.next(pos);
 
+    // Sets last registered position
+    this.lastPosition = pos;
+
     // exec only if position.coords.accuracy is < a given threshold (to define)
     if (pos.coords.accuracy > this._config.default.minAccuracy) {
       return;
