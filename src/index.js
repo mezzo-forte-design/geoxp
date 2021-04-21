@@ -74,9 +74,6 @@ export default class GeoXp {
     this.audio = new AudioManager(config.audio);
     this.experience = new ExperienceManager(config.experience);
 
-    // sets minimum manual mode precision
-    this.forceSpotMinimumPrecision = 100;
-
     // exposes static classes
     this.utils = {
       device: Device
@@ -164,6 +161,9 @@ export default class GeoXp {
     this.subGeoInside = this.geo.inside$
       .subscribe( position => { 
 
+        // if forced, do not notify position
+        if (this.experience.forced) return;
+
         // sends to experienceManager for processing
         this.experience.inside(position);
       });
@@ -185,7 +185,7 @@ export default class GeoXp {
       .subscribe( audio => {
 
         // sends to experienceManager for processing
-        this.experience.playing(audio);
+        this.experience.playing(audio.id);
 
         // emits playing audio
         this.event.emit('play', audio);
@@ -196,7 +196,12 @@ export default class GeoXp {
       .subscribe( audio => {
 
         // sends to experienceManager for processing
-        this.experience.end(audio);
+        const removeForce = this.experience.end(audio.id);
+
+        // removes forcing
+        if (removeForce) {
+          this.removeForce();
+        }
 
         // emits ended audio
         this.event.emit('end', audio);
@@ -265,29 +270,39 @@ export default class GeoXp {
 
   /**
   * Checks if manual mode is available
+  * @param id - id of spot to force
   * @returns { boolean }
   * */
-  canForceSpot() {
-    if (this.geo.lastPosition && this.geo.lastPosition.coords.accuracy > this.forceSpotMinimumPrecision) {
-      return true;
-    } else return false;
+  canForceSpot(id) {
+
+    // checks if can force current spot based on its position
+    const position = this.experience.getSpot(id).position;
+    return this.geo.canForceSpot(position);
   }
 
   /**
   * Forces spot activation
   * Forces other spots deactivation unless overlapping
   * Rules are
-  * GPS precision > 100 m
-  * GPS precision <= 100 m & 
+  * GPS precision > treshold m
+  * GPS precision <= treshold m & position nearer than threshold
   * @param id - spot id
   * */
   forceSpot(id) {
-    console.log('force',this.geo.lastPosition);
-    if (this.geo.lastPosition && this.geo.lastPosition.coords.accuracy > this.forceSpotMinimumPrecision) {
-      this.experience.forceSpot(id);
-    } else {
-      console.error('[index.forceSpot] - Force is forbidden');
-    }
+
+    // checks if can be forced
+    if (!this.canForceSpot) return;
+
+    // stops internal geolocation
+    this.geo.internalGeolocation(false);
+
+    // forces spot
+    this.experience.forceSpot(id);
+  }
+
+  removeForce() {
+    this.geo.internalGeolocation(true);
+    this.geo.refresh();
   }
 
   /**

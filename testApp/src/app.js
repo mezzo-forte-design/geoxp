@@ -53,7 +53,7 @@ export class App {
         title: 'Spot già visitato',
         msg: 'Vuoi riascoltarlo?',
         okCallback: () => {
-          console.log('qui');
+ 
           this._geoXp.replaySpot();
         }
       });

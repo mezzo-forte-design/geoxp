@@ -66,6 +66,13 @@ export default class GeoManager {
         fetchDistance: 1
       }
     }
+
+    // sets minimum manual mode precision
+    this.FORCE_MIN_ACCURACY = 100; // m
+    this.FORCE_MAX_DISTANCE = 100; // m
+
+    // inits force flag
+    this.forced = null;
   
     // sets config
     this._config = config;
@@ -111,8 +118,9 @@ export default class GeoManager {
   * Send new notification for inside positions
   */ 
   refresh() {
-    this.inside.forEach( position => {
-      this.inside$.next(position);
+    this.inside.forEach( positionId => {
+      const position = this._config.positions.find(e => e._id === positionId);
+      this.inside$.next(position._id);
     });
   }
 
@@ -128,6 +136,42 @@ export default class GeoManager {
         navigator.geolocation.clearWatch(this._GEO_WATCH);
       }
     }
+  }
+
+  /**
+  * Checks if manual mode is available
+  * @param positionId - position of spot to force
+  * @returns { boolean }
+  * */
+  canForceSpot(positionId) {
+    const position = this._config.positions.find(e => e._id === positionId);
+    if (position) {
+
+      // checks last position accuracy
+      if (this.lastPosition.coords.accuracy <= this.FORCE_MIN_ACCURACY) {
+
+        // checks distance
+        if (this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat) < this.FORCE_MAX_DISTANCE) {
+
+          // distance and accuracy checked
+          return true;
+
+        } else {
+
+          // not near enough
+          console.error('[GeoManager.canForcePosition] - Cannot force position, too far');
+        }
+      } else {
+
+        // too accurate
+        console.error('[GeoManager.canForcePosition] - Cannot force position, current position is too accurate');
+      }
+
+    } else {
+      console.error('[GeoManager.canForcePosition] - position id not found');
+    }
+
+    return false;
   }
   
   /**
@@ -192,7 +236,7 @@ export default class GeoManager {
   * @param error - error as sent from geolocation API
   */ 
   _geoError(error) {
-    console.error('[GeoManager._geoError] - Geolocation error - No available position');
+    console.error('[GeoManager._geoError] - Geolocation error', error);
   }
 
   /**

@@ -177,7 +177,7 @@ export const config = {
         },
         {
           _id: "sp2",
-          position: "pos1",
+          position: "pos2",
           audio: "aud2",
           after: "sp1"
         },
