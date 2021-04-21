@@ -74,6 +74,9 @@ export default class GeoXp {
     this.audio = new AudioManager(config.audio);
     this.experience = new ExperienceManager(config.experience);
 
+    // sets minimum manual mode precision
+    this.forceSpotMinimumPrecision = 100;
+
     // exposes static classes
     this.utils = {
       device: Device
@@ -261,6 +264,16 @@ export default class GeoXp {
   }
 
   /**
+  * Checks if manual mode is available
+  * @returns { boolean }
+  * */
+  canForceSpot() {
+    if (this.geo.lastPosition && this.geo.lastPosition.coords.accuracy > this.forceSpotMinimumPrecision) {
+      return true;
+    } else return false;
+  }
+
+  /**
   * Forces spot activation
   * Forces other spots deactivation unless overlapping
   * Rules are
@@ -269,10 +282,11 @@ export default class GeoXp {
   * @param id - spot id
   * */
   forceSpot(id) {
-    const minAcceptablePrecision = 100;
-
-    if (this.geo.lastPosition && this.geo.lastPosition.coords.accuracy > minAcceptablePrecision) {
+    console.log('force',this.geo.lastPosition);
+    if (this.geo.lastPosition && this.geo.lastPosition.coords.accuracy > this.forceSpotMinimumPrecision) {
       this.experience.forceSpot(id);
+    } else {
+      console.error('[index.forceSpot] - Force is forbidden');
     }
   }
 

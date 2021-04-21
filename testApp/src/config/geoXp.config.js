@@ -71,7 +71,7 @@ export const config = {
         lat: 45.066753,
         lon: 7.6811947,
         label: '12 Belvedere - Amendola Frola',
-        _id: 'pos12',
+        _id: 'psx',
       }
     ],
     default: {
@@ -228,7 +228,7 @@ export const config = {
         },
         {
           _id: "sp12",
-          position: "pos12",
+          position: "psx",
           audio: "aud12"
         }
       ]

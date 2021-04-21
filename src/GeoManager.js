@@ -192,7 +192,7 @@ export default class GeoManager {
   * @param error - error as sent from geolocation API
   */ 
   _geoError(error) {
-    console.error('[GeoManager._geoError] - Geolocation error - Nessuna posizione disponibile');
+    console.error('[GeoManager._geoError] - Geolocation error - No available position');
   }
 
   /**
