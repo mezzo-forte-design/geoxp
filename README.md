@@ -291,8 +291,14 @@ geoXp.on('play', audio => { /* ... */ })
 ```
 
 Some audio content just started playing.
-Callback argument is the _id of the audio as in audio configuration.
+Callback argument is an object with the audio information.
 
+```javascript
+audio: {
+	_id: string,
+  // ... TODO ...
+}
+```
 
 ## **Content ended**
 
@@ -301,8 +307,14 @@ geoXp.on('end', audio =>  {})
 ```
 
 Some audio content just ended (either for completion or because it has been stopped).
-Callback argument is the _id of the audio as in audio configuration.
+Callback argument is an object with the audio information.
 
+```javascript
+audio: {
+	_id: string,
+  // ... TODO ...
+}
+```
 
 ## **Core methods**
 ###  **`.unlock()`**
@@ -327,6 +339,9 @@ Position must be passed as [Geolocation API standard position object](https://de
 
 ### **`.hasActiveSpots(): bool`**
 Returns true if there are active spots.
+
+### **`.hasAudioPlaying(overlap: boolean): bool`**
+_TODO_
 
 ### **`.getSpot(id: string): object`**
 Gets spot info, providing it’s id, as object.
