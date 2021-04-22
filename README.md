@@ -93,8 +93,8 @@ User leaves the deadband, spot becomes “outgoing”, the audio content fades o
 
 ### **Patterns**
 A list of spots is called a pattern. Patterns define the overall behavior of its spots.
-Multiple patterns could be active at any time, providing multiple simultaneous experiences (eg: one route defines what speeches to play in certain positions, one route defines background audio effects to play alongside the speeches, using the same positions).
-Patterns are separate entities that don’t talk to each other, spots order and content overlap management are independent between routes.
+Multiple patterns could be active at any time, providing multiple simultaneous experiences (eg: one pattern defines what speeches to play in certain positions, one pattern defines background audio effects to play alongside the speeches, using the same positions).
+Patterns are separate entities that don’t talk to each other, spots order and content overlap management are independent between patterns.
 
 ### **Spots order**
 GeoXP provides limited content queue management. This can be achieved using the spot “after” property.
@@ -103,12 +103,12 @@ If after is defined, geoXp will not reproduce a certain spot content unless the 
 ### **Content replay**
 When content starts playing, a spot becomes “visited”.
 When the user reenters a visited spot, geoXp will not play its content. It will throw a notification instead, to let the user choose what to do.
-This behavior can be overridden using the route “replay” option. In this case, when the user reenters a visited spot, its content replays as usual.
+This behavior can be overridden using the pattern “replay” option. In this case, when the user reenters a visited spot, its content replays as usual.
 Spots could be “unvisited” (actually forcing an immediate replay) using the replaySpot() method.
 
 ### **Content overlap**
 When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior geoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
-This can be overridden using the route “overlap” configuration option.
+This can be overridden using the pattern “overlap” configuration option.
 
 ### **Device key concepts**
 Device is a utility class useful to detect users’ device features, platform type, browser and OS. It’s a static class and is used internally to adjust some modules configurations.
@@ -130,7 +130,7 @@ config: {
 
 Configuration for geolocation (*geo*) is a simple map of positions and parameters for geofencing, configuration for audio is a list of all the audio content available.
 
-Configuration for itinerary is meant to set links between positions and related content.
+Configuration for experience is meant to set links between positions and related content.
 
 Each configuration section has a .default child that stores some module working parameters.
 If no default object is provided, geoXp will use its hardcoded default configuration.
@@ -181,19 +181,19 @@ audio: {
   }
 ```
 
-## **Itinerary configuration**
-Itinerary configuration provides relations between geolocation and content.
+## **Experience configuration**
+Experience configuration provides relations between geolocation and content.
 
 ```javascript
 experience: {
-  patterns: [ // array of routes, each with its spots list and parameters
+  patterns: [ // array of patterns, each with its spots list and parameters
     {
-      _id: string // route unique id
-      label: string // route name or description
-      disabled: bool // route is disabled
+      _id: string // pattern unique id
+      label: string // pattern name or description
+      disabled: bool // pattern is disabled
       replay: bool // spots are automatically replayed
       overlap: bool // content playback can overlap
-      spot: [ // array of route’s spots
+      spot: [ // array of pattern’s spots
         {
           _id: string // spot unique id
           position: // position id as in geo position configuration
@@ -251,7 +251,7 @@ spot: {
 	_id: string,
 	position: string (position _id as in geo configuration)
 	audio: string (audio _id as in audio configuration)
-	after: string (spot _id as in itinerary route configuration)
+	after: string (spot _id as in experience pattern configuration)
 }
 ```
 
@@ -307,9 +307,9 @@ Callback argument is the _id of the audio as in audio configuration.
 ###  **`.unlock()`**
 Unlock method forces geolocation api and howler js activation. This is needed in mobile integration, to avoid browser locking the functionalities when app goes background.
 
-### **`.enableRoute(id: string, enb: bool)`**
-Forces activation / deactivation of a configured route based on the enb bool flag.
-Id is the _id of the route to set as in itinerary configuration.
+### **`.enablePattern(id: string, enb: bool)`**
+Forces activation / deactivation of a configured pattern based on the enb bool flag.
+Id is the _id of the pattern to set as in experience configuration.
 
 ### **`.updateGeolocation(position: object)`**
 Provides external geolocation updates (in case geolocation API isn’t available).
@@ -326,7 +326,7 @@ spot: {
 	_id: string,
 	position: string // (position _id as in geo configuration)
 	audio: string // (audio _id as in audio configuration)
-	after: string // (spot _id as in itinerary route configuration)
+	after: string // (spot _id as in experience pattern configuration)
 }
 ```
 
@@ -410,30 +410,30 @@ The content is made of speeches, in which a guide is explaining historical facts
 
 * This means that content cannot overlap
 
-    `config.itinerary.route[x].overlap = false`
+    `config.experience.patterns[x].overlap = false`
 
 * that user must hear the content just once
 
-    `config.itinerary.route[x].replay = false`
+    `config.experience.patterns[x].replay = false`
 
 
 Now, let’s change application. GeoXp is used to play ambient sounds at certain locations.
 
 * This means that content can overlap
 
-    `config.itinerary.route[x].overlap = true`
+    `config.experience.patterns[x].overlap = true`
 
 * that user must hear the content every time he is in the right location
 
-    `config.itinerary.route[x].replay = true`
+    `config.experience.patterns[x].replay = true`
 
 
 ## Positions overlap
 Unless content overlapping is desired, it’s better to avoid positions overlap when possible.
 
-If two route spots are actually near each other, try setting radiuses in a way that fencing doesn’t overlap (maybe by setting a small radius and a big delta: user has to be close to the position for the content to start, but the content will not stop if he walks away).
+If two pattern spots are actually near each other, try setting radiuses in a way that fencing doesn’t overlap (maybe by setting a small radius and a big delta: user has to be close to the position for the content to start, but the content will not stop if he walks away).
 
-If overlapping isn’t avoidable, make sure to apply filtering with itinerary.default.
+If overlapping isn’t avoidable, make sure to apply filtering with experience.default.
 visitedFilter (usually 5000 or 10000 ms is enough).
 
 ## Mobile integration
