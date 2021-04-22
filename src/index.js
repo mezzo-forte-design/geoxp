@@ -203,8 +203,8 @@ export default class GeoXp {
           this.removeForce();
         }
 
-        // emits ended audio
-        this.event.emit('end', audio);
+        // emits stopped audio
+        this.event.emit('stop', audio);
       });
   }
 

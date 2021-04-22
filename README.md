@@ -310,10 +310,10 @@ audio: {
 ## **Content ended**
 
 ```javascript
-geoXp.on('end', audio =>  {})
+geoXp.on('stop', audio =>  {})
 ```
 
-Some audio content just ended (either for completion or because it has been stopped).
+Some audio content just stopped (either for completion or because it has been stopped).
 Callback argument is an object with the audio information.
 
 ```javascript
