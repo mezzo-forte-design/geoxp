@@ -208,6 +208,7 @@ experience: {
   }
 }
 ```
+> NOTE - patterns are enabled by deafult. See [core methods](#core-methods) to know how to disable or re-enable them
 
 ## **Construction and disposal**
 
@@ -315,9 +316,14 @@ Id is the _id of the pattern to set as in experience configuration.
 Forces re-activation of a configured pattern that has been previously disabled with `disablePattern` method.
 Id is the _id of the pattern to set as in experience configuration.
 
+### **`.internalGeolocation(enabled: boolean)`**
+Enables/disables defalut internal geolocation system ([Geolocation API](https://developer.mozilla.org/it/docs/Web/API/Geolocation)).
+In case you has an external geolocation system you may want to disable this calling `internalGeolocation(false)` and update the position with
+the `updateGeolocation` method.
+
 ### **`.updateGeolocation(position: object)`**
-Provides external geolocation updates (in case geolocation API isn’t available).
-Position must be passed as geolocation API standard position object (https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
+Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).
+Position must be passed as [Geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
 
 ### **`.hasActiveSpots(): bool`**
 Returns true if there are active spots.
@@ -437,15 +443,12 @@ Unless content overlapping is desired, it’s better to avoid positions overlap 
 
 If two pattern spots are actually near each other, try setting radiuses in a way that fencing doesn’t overlap (maybe by setting a small radius and a big delta: user has to be close to the position for the content to start, but the content will not stop if he walks away).
 
-If overlapping isn’t avoidable, make sure to apply filtering with experience.default.
-visitedFilter (usually 5000 or 10000 ms is enough).
+If overlapping isn’t avoidable, make sure to apply filtering with `experience.default.visitedFilter` (usually 5000 or 10000 ms is enough).
 
 ## Mobile integration
-Most mobile browsers will block Howler and geolocation API after some time with no user interaction. Some system to force a periodic unlocking (using the unlock() method) is suggested.
+Most mobile browsers will block Howler and geolocation API after some time with no user interaction. Some system to force a periodic unlocking (using the `unlock()` method) is suggested.
 
 ## Geolocation providers
-Some framework or browser will not support geolocation API, or have better ways to get the device location. It’s possible to use geoXp with external geolocation providers (eg: Ionic Capacitor).
+Some framework or browser will not support geolocation API, or have better ways to get the device location. It’s possible to use geoXp with external geolocation providers (eg: Capacitor or native geolocation systems).
 
-Just pass the position data to the updateGeolocation(position) method as geolocation API standard position object
-
-(https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
+Just disable the default geolocation system using `internalGeolocation(false)` and pass the position data to the `updateGeolocation(position)` method as [geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
