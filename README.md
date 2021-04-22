@@ -231,7 +231,7 @@ Its class `geoXp.event` is responsible for events notification to outside subscr
 ## **Position update**
 
 ```javascript
-geoXp.event.on('position', position => { /* ... */ })
+geoXp.on('position', position => { /* ... */ })
 ```
 
 Position update occurs every time geolocation API receives a new location.
@@ -241,7 +241,7 @@ The new location is provided to the callback as geolocation API standard positio
 ## **Spot incoming**
 
 ```javascript
-geoXp.event.on('incoming', spot => { /* ... */ })
+geoXp.on('incoming', spot => { /* ... */ })
 ```
 
 User entered the prefetch distance of a spot. GeoXp will start related audio pre loading.
@@ -259,7 +259,7 @@ spot: {
 ## **Spot active**
 
 ```javascript
-geoXp.event.on('active', spot => { /* ... */ })
+geoXp.on('active', spot => { /* ... */ })
 ```
 
 A spot is being activated. GeoXp will play the content associated.
@@ -268,7 +268,7 @@ The object provided as callback argument carries all the spot info based on conf
 ## **Spot visited**
 
 ```javascript
-geoXp.event.on('visited', spot => { /* ... */ })
+geoXp.on('visited', spot => { /* ... */ })
 ```
 
 User entered a spot which he already visited before.
@@ -277,7 +277,7 @@ The object provided as callback argument carries all the spot info based on conf
 ## **Spot outgoing**
 
 ```javascript
-geoXp.event.on('outgoing', spot => { /* ... */ })
+geoXp.on('outgoing', spot => { /* ... */ })
 ```
 
 User exited a spot. GeoXp will stop playing related content.
@@ -287,7 +287,7 @@ The object provided as callback argument carries all the spot info based on conf
 ## **Content playing**
 
 ```javascript
-geoXp.event.on('play', audio => { /* ... */ })
+geoXp.on('play', audio => { /* ... */ })
 ```
 
 Some audio content just started playing.
@@ -297,7 +297,7 @@ Callback argument is the _id of the audio as in audio configuration.
 ## **Content ended**
 
 ```javascript
-geoXp.event.on('end', audio =>  {})
+geoXp.on('end', audio =>  {})
 ```
 
 Some audio content just ended (either for completion or because it has been stopped).
