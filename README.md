@@ -13,7 +13,7 @@ It maps audio contents to geographical positions, and automatically reproduces t
 
 It’s meant to be used inside any front-end interface, regardless of the js framework.
 
-It’s made of four modules.
+It’s made of three modules.
 
 * **Geo**
 
@@ -27,9 +27,6 @@ It’s made of four modules.
 
     It’s the real core of the package, defines automatic actions to be done as a consequence of geolocation updates.
 
-* **Device**
-
-    Static class that provides some common features for the hosting device.
 
 ***
 
@@ -109,9 +106,6 @@ Spots could be “unvisited” (actually forcing an immediate replay) using the 
 ### **Content overlap**
 When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior geoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
 This can be overridden using the pattern “overlap” configuration option.
-
-### **Device key concepts**
-Device is a utility class useful to detect users’ device features, platform type, browser and OS. It’s a static class and is used internally to adjust some modules configurations.
 
 # **Usage**
 GeoXp is intended to be used as a singleton instance. It has to be created once the application starts, based on a configuration object.

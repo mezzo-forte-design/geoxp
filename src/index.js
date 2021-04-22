@@ -1,8 +1,12 @@
 
 import { EventEmitter } from 'events';
+
+/* CORE MODULES */
 import GeoManager from './GeoManager';
 import AudioManager from './AudioManager';
 import ExperienceManager from './ExperienceManager';
+
+/* device parser */
 import Device from './utils/Device';
 
 /**
