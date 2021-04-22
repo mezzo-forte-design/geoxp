@@ -132,7 +132,7 @@ const experience = {
 const geoXp = new GeoXp({ geo, audio, experience });
 
 // disables background music
-geoXp.enablePattern('background', false);
+geoXp.disablePattern('background');
 
 // enables background music
-geoXp.enablePattern('background', true);
+geoXp.enablePattern('background');

@@ -307,8 +307,12 @@ Callback argument is the _id of the audio as in audio configuration.
 ###  **`.unlock()`**
 Unlock method forces geolocation api and howler js activation. This is needed in mobile integration, to avoid browser locking the functionalities when app goes background.
 
-### **`.enablePattern(id: string, enb: bool)`**
-Forces activation / deactivation of a configured pattern based on the enb bool flag.
+### **`.disablePattern(id: string)`**
+Forces deactivation of a configured pattern based.
+Id is the _id of the pattern to set as in experience configuration.
+
+### **`.enablePattern(id: string)`**
+Forces re-activation of a configured pattern that has been previously disabled with `disablePattern` method.
 Id is the _id of the pattern to set as in experience configuration.
 
 ### **`.updateGeolocation(position: object)`**

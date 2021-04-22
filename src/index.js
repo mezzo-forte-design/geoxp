@@ -234,12 +234,19 @@ export default class GeoXp {
   }
 
   /**
-  * Enables/disables specific pattern
+  * Enables specific pattern
   * @param id - pattern id to toggle
-  * @param enb - flag for enable/disable
   */
-  enablePattern(id, enb) {
-    this.experience.enablePattern(id, enb);
+  enablePattern(id) {
+    this.experience.enablePattern(id, true);
+  }
+
+  /**
+  * Ddisables specific pattern
+  * @param id - pattern id to toggle
+  */
+  disablePattern(id) {
+    this.experience.enablePattern(id, false);
   }
 
   /**
