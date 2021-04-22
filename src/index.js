@@ -334,7 +334,7 @@ export default class GeoXp {
 
   /**
   * Destroys GeoXp instance
-  * @param config - config parameters
+  * @param config {object} config parameters
   */
   destroy() {
     this.subExperienceIncoming.unsubscribe();
@@ -356,8 +356,8 @@ export default class GeoXp {
 
   /**
    * Event wrapper on
-   * @param eventName string
-   * @param listener function
+   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+   * @param listener {function}
    */
   on(eventName, listener) {
     if (typeof listener !== 'function') {
@@ -370,8 +370,8 @@ export default class GeoXp {
 
   /**
    * Event wrapper once
-   * @param eventName string
-   * @param listener function
+   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+   * @param listener {function}
    */
   once(eventName, listener) {
     if (typeof listener !== 'function') {
@@ -384,8 +384,8 @@ export default class GeoXp {
 
   /**
    * Event wrapper off
-   * @param eventName string
-   * @param listener function
+   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+   * @param listener {function}
    */
   off(eventName, listener) {
     if (typeof listener !== 'function') {
