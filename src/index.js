@@ -346,4 +346,46 @@ export default class GeoXp {
     this.audio.unload();
     this.experience.unload();
   }
+
+  /**
+   * Event wrapper on
+   * @param eventName string
+   * @param listener function
+   */
+  on(eventName, listener) {
+    if (typeof listener !== 'function') {
+      console.error('[GeoXp EventEmitter - on] listener must be a function');
+      return;
+    }
+
+    this.event.on(eventName, listener);
+  }
+
+  /**
+   * Event wrapper once
+   * @param eventName string
+   * @param listener function
+   */
+  once(eventName, listener) {
+    if (typeof listener !== 'function') {
+      console.error('[GeoXp EventEmitter - on] listener must be a function');
+      return;
+    }
+
+    this.event.once(eventName, listener);
+  }
+
+  /**
+   * Event wrapper off
+   * @param eventName string
+   * @param listener function
+   */
+  off(eventName, listener) {
+    if (typeof listener !== 'function') {
+      console.error('[GeoXp EventEmitter - on] listener must be a function');
+      return;
+    }
+
+    this.event.off(eventName, listener);
+  }
 }
