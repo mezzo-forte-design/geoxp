@@ -67,10 +67,10 @@ export default class ExperienceManager {
   /**
   * Builds all enabled patterns
   */
-   _loadPatterns() {
+  _loadPatterns() {
 
     // clears all
-    if(this._patterns) {
+    if (this._patterns) {
       this._patterns.clear();
     }
 
@@ -109,7 +109,7 @@ export default class ExperienceManager {
   * @param id - pattern id to toggle
   * @param enb - flag for enable/disable
   */
-  enablePattern(id, enb) { 
+  enablePattern(id, enb) {
     const pattern = this._patterns.get(id);
     if (pattern) {
       pattern.cfg.disabled = !enb;
@@ -129,11 +129,11 @@ export default class ExperienceManager {
   incoming(position) {
 
     // for each enabled pattern
-    this._patterns.forEach( pattern => {
+    this._patterns.forEach(pattern => {
       // checks if position is on pattern, then load if needed
       const spots = pattern.cfg.spots.filter((e) => e.position === position);
       spots.forEach((spot) => {
-  
+
         // preload spot
         this.spotIncoming$.next(spot);
       });
@@ -147,7 +147,7 @@ export default class ExperienceManager {
   inside(position) {
 
     // for each enabled pattern
-    this._patterns.forEach( pattern => {
+    this._patterns.forEach(pattern => {
 
       // checks if position is on pattern, then play if needed
       const spots = pattern.cfg.spots.filter((e) => e.position === position);
@@ -157,7 +157,7 @@ export default class ExperienceManager {
 
         // for each spot linked to position
         if (pattern.cfg.replay || !pattern.visited.includes(spot._id)) {
-          
+
           // first time
           if (!spot.after || pattern.visited.includes(spot.after)) {
 
@@ -218,7 +218,7 @@ export default class ExperienceManager {
   outgoing(position) {
 
     // for each enabled pattern
-    this._patterns.forEach( pattern => {
+    this._patterns.forEach(pattern => {
 
       // spot outgoing, stops audio
       const spots = pattern.cfg.spots.filter((e) => e.position === position);
@@ -253,7 +253,7 @@ export default class ExperienceManager {
 
     // mark visisted for all spots linked to the audio
     this._patterns.forEach(pattern => {
-      
+
       const spots = pattern.cfg.spots.filter((e) => e.audio === id);
       spots.forEach(spot => {
 
@@ -269,7 +269,7 @@ export default class ExperienceManager {
       });
     });
   }
-   
+
   /**
   * Spot ended (either stopped or finished), remove from active, refresh all inside positions
   * @param id - audio ended
@@ -284,7 +284,7 @@ export default class ExperienceManager {
 
     // removes from active all spots linked to the audio
     this._patterns.forEach(pattern => {
-      
+
       const spots = pattern.cfg.spots.filter((e) => e.audio === id);
       spots.forEach(spot => {
 
@@ -315,7 +315,7 @@ export default class ExperienceManager {
   hasActiveSpots() {
     let someActive = false;
     this._patterns.forEach(pattern => {
-      if(pattern.active.length > 0){
+      if (pattern.active.length > 0) {
         someActive = true;
       }
     });
@@ -378,7 +378,7 @@ export default class ExperienceManager {
 
       // checks if spot actually exist in pattern
       const spot = pattern.cfg.spots.find(e => e._id === id);
-      if(spot) {
+      if (spot) {
 
         // if there are spots active
         if (pattern.active.length > 0) {
@@ -397,7 +397,7 @@ export default class ExperienceManager {
         }
 
         // adds to active spots
-        if(!pattern.active.includes(spot._id)) {
+        if (!pattern.active.includes(spot._id)) {
           pattern.active.push(spot._id);
         }
 
