@@ -39,3 +39,14 @@ document.getElementById('reset-button').addEventListener('click', e => {
 document.getElementById('unlock-button').addEventListener('click', e => {
   geoXp.unlock();
 });
+
+// example of event listeners
+geoXp.on('active', spotData => console.log('[EVENT] - Spot active', spotData));
+
+geoXp.on('outgoing', spotData => console.log('[EVENT] - Spot outgoing', spotData));
+
+geoXp.on('play', audioData =>  console.log('[EVENT] - Play audio', audioData));
+
+geoXp.on('stop', audioData =>  console.log('[EVENT] - Stop audio', audioData));
+
+

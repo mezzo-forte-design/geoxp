@@ -47,7 +47,7 @@ const experience = {
       "label": "pattern1",
       "enabled": true,
       "overlap": false,
-      "spot": [
+      "spots": [
         {
           "_id": "spot1",
           "position": "pos1",
