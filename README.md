@@ -225,7 +225,14 @@ geoXp.destroy();
 
 ## **Events subscription**
 GeoXp is meant to work automatically based on its configuration, so most of the interaction with it is based on events.
-Its class `geoXp.event` is responsible for events notification to outside subscribers, using the `on()` method. The subscription could be done for just one event occurrence with the `once()` method.
+Its event dispatcher (`geoXp.event`) is based on [Node.js EventEmitter](https://nodejs.org/api/events.html) and is responsible for events notification to outside subscribers.
+
+Three main methods are wrappped by the `GeoXp` class:
+* `geoXp.on(eventName, listener)` - adds the `listener` function to the end of the listeners array for the event named `eventName`
+* `geoXp.once(eventName, listener)` - adds a one-time `listener` function for the event named `eventName`
+* `geoXp.off(eventName, listener)` - removes the specified `listener` from the listener array for the event named `eventName`
+
+All other `EventEmitter` properties and methos are accessible through the `event` property of `GeoXp` class.
 
 
 ## **Position update**
