@@ -7,11 +7,11 @@
 ###
 # **Description**
 
-Mezzo Forte GeoXp is a client side, event based js library that manages all the core background features of a typical geolocated audio tour.
+Mezzo Forte GeoXp is a client side, event based js library that manages all the core background features of a geolocated audio tour.
 
-It maps audio contents to geographical positions, and automatically reproduces them based on some configuration rules.
+It maps audio contents to geographical positions, and automatically reproduces them based on configuration rules.
 
-It’s meant to be used inside any front end interface, regardless of the js framework.
+It’s meant to be used inside any front-end interface, regardless of the js framework.
 
 It’s made of four modules.
 
