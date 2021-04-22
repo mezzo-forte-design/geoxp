@@ -45,8 +45,8 @@ geoXp.on('active', spotData => console.log('[EVENT] - Spot active', spotData));
 
 geoXp.on('outgoing', spotData => console.log('[EVENT] - Spot outgoing', spotData));
 
-geoXp.on('play', audioData =>  console.log('[EVENT] - Play audio', audioData));
+geoXp.on('play', audioData => console.log('[EVENT] - Play audio', audioData));
 
-geoXp.on('stop', audioData =>  console.log('[EVENT] - Stop audio', audioData));
+geoXp.on('stop', audioData => console.log('[EVENT] - Stop audio', audioData));
 
 
