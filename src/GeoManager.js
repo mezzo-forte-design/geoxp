@@ -2,8 +2,8 @@ import { Subject } from 'rxjs';
 import Device from './utils/Device';
 
 /** Converts numeric degrees to radians */
-if (typeof(Number.prototype.toRad) === "undefined") {
-  Number.prototype.toRad = function() {
+if (typeof (Number.prototype.toRad) === "undefined") {
+  Number.prototype.toRad = function () {
     return this * Math.PI / 180;
   };
 }
@@ -57,7 +57,7 @@ export default class GeoManager {
   */
   _init(config) {
 
-    // sets default is nothing provided 
+    // sets default is nothing provided
     if (!config.default) {
       config.default = {
         minAccuracy: 10,
@@ -73,7 +73,7 @@ export default class GeoManager {
 
     // inits force flag
     this.forced = null;
-  
+
     // sets config
     this._config = config;
 
@@ -82,23 +82,24 @@ export default class GeoManager {
     this.position;
 
     // Listens for GPS position
-    if(this._GEO_WATCH) {
+    if (this._GEO_WATCH) {
       navigator.geolocation.clearWatch(this._GEO_WATCH);
     }
+
     this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
   }
 
   /**
   * Loads a new configuration
   * @param config - config parameters
-  */ 
+  */
   reload(config) {
     this._init(config);
   }
 
   /**
   * Unloads all object subscriptions
-  */ 
+  */
   unload() {
     this.inside = [];
     if (this._GEO_WATCH) {
@@ -111,14 +112,14 @@ export default class GeoManager {
   */
   unlock() {
     // request for position
-    navigator.geolocation.getCurrentPosition(() => {});
+    navigator.geolocation.getCurrentPosition(() => { });
   }
 
   /**
   * Send new notification for inside positions
-  */ 
+  */
   refresh() {
-    this.inside.forEach( positionId => {
+    this.inside.forEach(positionId => {
       const position = this._config.positions.find(e => e._id === positionId);
       this.inside$.next(position._id);
     });
@@ -127,14 +128,12 @@ export default class GeoManager {
   /**
   * Enables / disables internal geolocation updates
   * @param enabled - enable flag
-  */ 
+  */
   internalGeolocation(enabled) {
     if (enabled) {
       this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
-    } else {
-      if(this._GEO_WATCH) {
-        navigator.geolocation.clearWatch(this._GEO_WATCH);
-      }
+    } else if (this._GEO_WATCH) {
+      navigator.geolocation.clearWatch(this._GEO_WATCH);
     }
   }
 
@@ -173,11 +172,11 @@ export default class GeoManager {
 
     return false;
   }
-  
+
   /**
   * Checks the status of the spots in relation to current position
   * @param pos - current position as provided by geolocation API
-  */ 
+  */
   _geoSuccess(pos) {
 
     if (!pos) {
@@ -234,7 +233,7 @@ export default class GeoManager {
   /**
   * Geolocation API reports an error retrieving current position
   * @param error - error as sent from geolocation API
-  */ 
+  */
   _geoError(error) {
     console.error('[GeoManager._geoError] - Geolocation error', error);
   }
@@ -245,7 +244,7 @@ export default class GeoManager {
   * @param lat1 - latitude of first point
   * @param lon2 - longitude of second point
   * @param lat2 - latitude of second point
-  */ 
+  */
   _calcGeoDistance(lon1, lat1, lon2, lat2) {
     // Radius of the earth in km
     const EARTH_R = 6371;
