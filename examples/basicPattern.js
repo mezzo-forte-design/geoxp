@@ -69,8 +69,7 @@ const audio = {
   default: {
     test: './audio/system/test.mp3', // url for test sound
     silence: './audio/system/silence.mp3', // url for silence sound
-    visited: './audio/system/visited.mp3', // url for spot already visited sound
-    unlock: './audio/system/unlock.mp3', // url for phone unlock guide
+    visited: './audio/system/visited.mp3' // url for spot already visited sound
   }
 };
 
