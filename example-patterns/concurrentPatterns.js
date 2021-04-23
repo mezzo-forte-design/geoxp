@@ -41,27 +41,22 @@ const audio = {
   sounds: [
     {
       id: "aud1",
-      label: "Duck",
       url: "./audio/duck.mp3"
     },
     {
       id: "aud2",
-      label: "Shouting",
       url: "./audio/people_shouting.mp3"
     },
     {
       id: "aud3",
-      label: "Talking",
       url: "./audio/people_talking.mp3"
     },
     {
       id: 'bg1',
-      label: 'Kids playing',
       url: './audio/kids.mp3'
     },
     {
       id: 'bg2',
-      label: 'Factory',
       url: './audio/factory.mp3'
     }
   ]
@@ -80,19 +75,22 @@ const experience = {
         {
           id: "sp1",
           position: "pos1",
-          audio: "aud1"
+          audio: "aud1",
+          label: "Hello Spot 1"
         },
         // second spot is in Piazza Vittorio (pos2), play shouting (aud2)
         {
           id: "sp2",
           position: "pos2",
-          audio: "aud2"
+          audio: "aud2",
+          label: "Hello Spot 2"
         },
         // third spot is at Gran Madre (pos3), play talking (aud3)
         {
           id: "sp3",
           position: "pos3",
-          audio: "aud3"
+          audio: "aud3",
+          label: "Hello Spot 3"
         },
       ]
     },
@@ -109,19 +107,22 @@ const experience = {
         {
           id: 'sp1_bg',
           position: 'pos1',
-          audio: 'bg1'
+          audio: 'bg1',
+          label: "Hello Background Spot 1"
         },
         // second spot is in Piazza Vittorio (pos2), play kids (bg1)
         {
           id: 'sp2_bg',
           position: 'pos2',
-          audio: 'bg1'
+          audio: 'bg1',
+          label: "Hello Background Spot 2"
         },
         // third spot is at Gran Madre (pos3), play factory (bg2)
         {
           id: 'sp3_bg',
           position: 'pos3',
-          audio: 'bg2'
+          audio: 'bg2',
+          label: "Hello Background Spot 3"
         }
       ]
     }

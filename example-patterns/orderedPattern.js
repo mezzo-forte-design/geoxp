@@ -41,17 +41,14 @@ const audio = {
   sounds: [
     {
       id: "aud1",
-      label: "Duck",
       url: "./audio/duck.mp3"
     },
     {
       id: "aud2",
-      label: "Shouting",
       url: "./audio/people_shouting.mp3"
     },
     {
       id: "aud3",
-      label: "Talking",
       url: "./audio/people_talking.mp3"
     }
   ]
@@ -70,7 +67,8 @@ const experience = {
         {
           id: 'sp1',
           position: 'pos1',
-          audio: 'aud1'
+          audio: 'aud1',
+          label: "Hello Spot 1"
         },
         // second spot is in Piazza Vittorio (pos2), play shouting (aud2)
         // its content have to be played only if spot 1 has already been visited
@@ -78,7 +76,8 @@ const experience = {
           id: 'sp2',
           position: 'pos2',
           audio: 'aud2',
-          after: 'sp1' // play content only after "sp1" has been visited
+          after: 'sp1', // play content only after "sp1" has been visited
+          label: "Hello Spot 2"
         },
         // third spot is at Gran Madre (pos3), play talking (aud3)
         // its content have to be played only if spot 2 has already been visited
@@ -86,7 +85,8 @@ const experience = {
           id: 'sp3',
           position: 'pos3',
           audio: 'aud3',
-          after: 'sp2' // play content only after "sp2" has been visited
+          after: 'sp2', // play content only after "sp2" has been visited
+          label: "Hello Spot 3"
         },
       ]
     }

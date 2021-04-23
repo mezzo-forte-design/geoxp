@@ -23,12 +23,10 @@ const audio = {
   "sounds": [
     {
       "id": "aud1",
-      "label": "aud1",
       "url": "./audio/music1.mp3"
     },
     {
       "id": "aud2",
-      "label": "aud2",
       "url": "./audio/music2.mp3"
     }
   ],
@@ -50,13 +48,15 @@ const experience = {
         {
           "id": "spot1",
           "position": "pos1",
-          "audio": "aud1"
+          "audio": "aud1",
+          "label": "Spot 1!!"
         },
         {
           "id": "spot2",
           "position": "pos1",
           "audio": "aud2",
-          "after": "spot1"
+          "after": "spot1",
+          "label": "Spot 2!!"
         }
       ]
     }
