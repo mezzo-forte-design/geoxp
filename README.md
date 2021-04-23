@@ -74,17 +74,26 @@ It’s made of three modules.
 # **Key concepts**
 ## **Geo key concepts**
 ### Position
-_TODO_
+A GeoXp position is a circular area defined by two geographical coordinates (`{lat, lon}`) a radius and a deadband.
+The inner _radius_ defines the **_inside_** position status.
+_radius_ + _deadband_ defines an outer radius that serves hysteresis purposes to avoid abrupt status changes.
+
+### Geolocation providers
+GeoXp default geolocation provider is the Web [Geolocation API](https://developer.mozilla.org/it/docs/Web/API/Geolocation).
+Some framework or browser will not support Geolocation API, or have better ways to get the device location. It’s possible to use geoXp with external geolocation providers (eg: Capacitor or native geolocation systems).
+
+### Minimum accuracy
+Every geographical data, coming from the geolocation system, that does not fulfill accuracy requrements will be ignored.
 
 
 ## **Audio key concepts**
 ### Audio content
-_TODO_
+An audio content can be any audio file, reachable through and URL. GeoXp audio player is based on [Howler.js](https://howlerjs.com/) (see [here](https://github.com/goldfire/howler.js#format-recommendations) for suggested formats).
 
 
 ## **Experience key concepts**
 ### **Spots**
-A GeoXp spot is the core entity of an experience and represents a relation between a position and an audio content. For example, if you want the user to listen the file audio_1.mp3 in the position position_A, it will be necessary to create a new spot that associate the audio_1 content to the position_A geographical coordinates (in the [**Usage**](#usage) section we describe in detail how to make this configuration).
+A GeoXp spot is the core entity of an experience and represents a relation between a position and an audio content. For example, if you want the user to listen the file `audio_1.mp3` in the position `position_A`, it will be necessary to create a new spot that associate the `audio_1` content to the `position_A `geographical coordinates (in the [**Usage**](#usage) section we describe in detail how to make this configuration).
 
 This is to say, more than one spot can be linked to a certain position, the same audio content can be linked to multiple positions.
 
@@ -116,6 +125,10 @@ Spots could be “unvisited” (actually forcing an immediate replay) using the 
 ### **Content overlap**
 When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior geoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
 This can be overridden using the pattern “overlap” configuration option.
+
+### **Force a spot**
+Forcing a spot activation is possible only when provided location accuracy is over the threshold of 100 meters.
+In that case automatic management will be too risky, so the spots can be mually activated by the user.
 
 # **Usage**
 GeoXp is intended to be used as a singleton instance. It has to be created once the application starts, based on a configuration object.
@@ -246,7 +259,7 @@ geoXp.on('position', position => { /* ... */ })
 ```
 
 Position update occurs every time geolocation API receives a new location.
-The new location is provided to the callback as geolocation API standard position object (https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
+The new location is provided to the callback as [Geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
 
 
 ### **Spot incoming**
@@ -260,10 +273,10 @@ The object provided as callback argument carries all the spot info based on conf
 
 ```javascript
 spot: {
-	_id: string,
-	position: string (position _id as in geo configuration)
-	audio: string (audio _id as in audio configuration)
-	after: string (spot _id as in experience pattern configuration)
+	id: string,
+	position: string (position id as in geo configuration)
+	audio: string (audio id as in audio configuration)
+	after: string (spot id as in experience pattern configuration)
 }
 ```
 
@@ -306,15 +319,18 @@ Callback argument is an object with the audio information.
 
 ```javascript
 audio: {
-	_id: string,
-  // ... TODO ...
+	id: string,
+  label: string,
+  overlap: boolean,
+  playWhenReady: boolean,
+  audio: Howler
 }
 ```
 
 ### **Content ended**
 
 ```javascript
-geoXp.on('stop', audio =>  {})
+geoXp.on('stop', audio =>  { /* ... */ })
 ```
 
 Some audio content just stopped (either for completion or because it has been stopped).
@@ -322,8 +338,11 @@ Callback argument is an object with the audio information.
 
 ```javascript
 audio: {
-	_id: string,
-  // ... TODO ...
+	id: string,
+  label: string,
+  overlap: boolean,
+  playWhenReady: boolean,
+  audio: Howler
 }
 ```
 
@@ -334,11 +353,11 @@ Unlock method forces geolocation api and howler js activation. This is needed in
 
 ### **`.disablePattern(id: string)`**
 Forces deactivation of a configured pattern based.
-Id is the _id of the pattern to set as in experience configuration.
+Id is the id of the pattern to set as in experience configuration.
 
 ### **`.enablePattern(id: string)`**
 Forces re-activation of a configured pattern that has been previously disabled with `disablePattern` method.
-Id is the _id of the pattern to set as in experience configuration.
+Id is the id of the pattern to set as in experience configuration.
 
 ### **`.internalGeolocation(enabled: boolean)`**
 Enables/disables defalut internal geolocation system ([Geolocation API](https://developer.mozilla.org/it/docs/Web/API/Geolocation)).
@@ -348,6 +367,13 @@ the `updateGeolocation` method.
 ### **`.updateGeolocation(position: object)`**
 Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).
 Position must be passed as [Geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
+
+### **`.forceSpot(spotId: string)`**
+
+
+
+### **`.canForceSpot(spotId: string)`**
+
 
 ### **`.hasActiveSpots(): bool`**
 Returns true if there are active spots.
@@ -360,10 +386,10 @@ Gets spot info, providing it’s id, as object.
 
 ```javascript
 spot: {
-	_id: string,
-	position: string // (position _id as in geo configuration)
-	audio: string // (audio _id as in audio configuration)
-	after: string // (spot _id as in experience pattern configuration)
+	id: string,
+	position: string // (position id as in geo configuration)
+	audio: string // (audio id as in audio configuration)
+	after: string // (spot id as in experience pattern configuration)
 }
 ```
 
@@ -378,6 +404,7 @@ Reloads geoXp instance with a new configuration. Every configuration change need
 
 ### **`.destroy()`**
 Destroys geoXp instance and all of its subscriptions.
+
 
 ## **`Audio interaction`**
 GeoXp manages all audio content on its own. However, it’s possible to interact with it when needed (eg: showing audio current seek, playing / pausing audio, etc.).
@@ -473,9 +500,6 @@ If two pattern spots are actually near each other, try setting radiuses in a way
 If overlapping isn’t avoidable, make sure to apply filtering with `experience.default.visitedFilter` (usually 5000 or 10000 ms is enough).
 
 ## Mobile integration
-Most mobile browsers will block Howler and geolocation API after some time with no user interaction. Some system to force a periodic unlocking (using the `unlock()` method) is suggested.
+Most mobile browsers will block Howler and Geolocation API after some time with no user interaction. Some system to force a periodic unlocking (using the `unlock()` method) is suggested.
 
-## Geolocation providers
-Some framework or browser will not support geolocation API, or have better ways to get the device location. It’s possible to use geoXp with external geolocation providers (eg: Capacitor or native geolocation systems).
 
-Just disable the default geolocation system using `internalGeolocation(false)` and pass the position data to the `updateGeolocation(position)` method as [geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
