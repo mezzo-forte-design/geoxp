@@ -10,7 +10,7 @@ import GeoXp from 'mezzoforte-geoXp';
 const geo = {
   positions: [
     {
-      _id: "pos1",
+      id: "pos1",
       label: "Torino - Piazza Castello",
       lat: 45.0711383,
       lon: 7.685391,
@@ -18,14 +18,14 @@ const geo = {
       deadband: 40 // meters
     },
     {
-      _id: 'pos2',
+      id: 'pos2',
       label: 'Torino - Piazza Vittorio Veneto',
       lat: 45.0651445,
       lon: 7.6929964
       // if no geoFencing parameters are set, this position will use default values
     },
     {
-      _id: 'pos3',
+      id: 'pos3',
       label: 'Torino - Gran Madre',
       lat: 45.062657,
       lon: 7.6972366,
@@ -49,17 +49,17 @@ const geo = {
 const audio = {
   sounds: [
     {
-      _id: "aud1",
+      id: "aud1",
       label: "Duck",
       url: "./audio/duck.mp3"
     },
     {
-      _id: "aud2",
+      id: "aud2",
       label: "Shouting",
       url: "./audio/people_shouting.mp3"
     },
     {
-      _id: "aud3",
+      id: "aud3",
       label: "Talking",
       url: "./audio/people_talking.mp3"
     }
@@ -80,24 +80,24 @@ const experience = {
   patterns: [
     // just one pattern is needed
     {
-      _id: "exp1",
+      id: "exp1",
       label: "Basic, unordered pattern",
       spots: [
         // first spot is in Piazza Castello (pos1), play duck (aud1)
         {
-          _id: "sp1",
+          id: "sp1",
           position: "pos1",
           audio: "aud1"
         },
         // second spot is in Piazza Vittorio (pos2), play shouting (aud2)
         {
-          _id: "sp2",
+          id: "sp2",
           position: "pos2",
           audio: "aud2"
         },
         // third spot is at Gran Madre (pos3), play talking (aud3)
         {
-          _id: "sp3",
+          id: "sp3",
           position: "pos3",
           audio: "aud3"
         },

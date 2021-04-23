@@ -17,7 +17,7 @@ export default class ExperienceManager {
         replay
         overlap
         spots: [{
-            _id
+            id
             position
             audio
             after
@@ -84,7 +84,7 @@ export default class ExperienceManager {
           active: []
         };
 
-        this._patterns.set(cfg._id, pattern);
+        this._patterns.set(cfg.id, pattern);
       }
     });
   }
@@ -156,7 +156,7 @@ export default class ExperienceManager {
       spots.forEach((spot) => {
 
         // for each spot linked to position
-        if (pattern.cfg.replay || !pattern.visited.includes(spot._id)) {
+        if (pattern.cfg.replay || !pattern.visited.includes(spot.id)) {
 
           // first time
           if (!spot.after || pattern.visited.includes(spot.after)) {
@@ -165,8 +165,8 @@ export default class ExperienceManager {
             if (pattern.cfg.overlap || pattern.active.length == 0) {
 
               // overlap ok
-              if (!pattern.active.includes(spot._id)) {
-                pattern.active.push(spot._id);
+              if (!pattern.active.includes(spot.id)) {
+                pattern.active.push(spot.id);
               }
 
               // adds pattern info for spot active
@@ -184,16 +184,16 @@ export default class ExperienceManager {
 
       // reevaluates each spot to check if visited
       spots.forEach((spot) => {
-        if (!pattern.cfg.replay && pattern.visited.includes(spot._id)) {
+        if (!pattern.cfg.replay && pattern.visited.includes(spot.id)) {
 
           // just when spot is first inside
-          if (!pattern.inside.includes(spot._id)) {
+          if (!pattern.inside.includes(spot.id)) {
 
             // waits to see if somthing goes active
             setTimeout(() => {
 
               // still inside and nothing active
-              if (pattern.inside.includes(spot._id) && pattern.active.length == 0) {
+              if (pattern.inside.includes(spot.id) && pattern.active.length == 0) {
                 this.spotVisited$.next(spot);
               }
             }, this._config.default.visitedFilter);
@@ -204,8 +204,8 @@ export default class ExperienceManager {
       // reevaluates each spot to check when first inside
       spots.forEach((spot) => {
         // inside spot
-        if (!pattern.inside.includes(spot._id)) {
-          pattern.inside.push(spot._id);
+        if (!pattern.inside.includes(spot.id)) {
+          pattern.inside.push(spot.id);
         }
       });
     });
@@ -224,16 +224,16 @@ export default class ExperienceManager {
       const spots = pattern.cfg.spots.filter((e) => e.position === position);
       spots.forEach((spot) => {
 
-        if (pattern.inside.includes(spot._id)) {
+        if (pattern.inside.includes(spot.id)) {
 
           // if spot is inside, remove
-          pattern.inside = pattern.inside.filter((e) => e !== spot._id);
+          pattern.inside = pattern.inside.filter((e) => e !== spot.id);
         }
 
-        if (pattern.active.includes(spot._id)) {
+        if (pattern.active.includes(spot.id)) {
 
           // if spot is active, stop audio and remove
-          pattern.active = pattern.active.filter((e) => e !== spot._id);
+          pattern.active = pattern.active.filter((e) => e !== spot.id);
 
           this.spotOutgoing$.next(spot);
         }
@@ -258,13 +258,13 @@ export default class ExperienceManager {
       spots.forEach(spot => {
 
         // mark spot active (if isn't already)
-        if (!pattern.active.includes(spot._id)) {
-          pattern.active.push(spot._id)
+        if (!pattern.active.includes(spot.id)) {
+          pattern.active.push(spot.id)
         }
 
         // mark spot visited
-        if (!pattern.visited.includes(spot._id)) {
-          pattern.visited.push(spot._id)
+        if (!pattern.visited.includes(spot.id)) {
+          pattern.visited.push(spot.id)
         }
       });
     });
@@ -289,10 +289,10 @@ export default class ExperienceManager {
       spots.forEach(spot => {
 
         // remove from active
-        pattern.active = pattern.active.filter((e) => e !== spot._id);
+        pattern.active = pattern.active.filter((e) => e !== spot.id);
 
         // if matches forced spot, remove force
-        if (spot._id === this.forced) {
+        if (spot.id === this.forced) {
           this.forced = null;
           removeForce = true;
         }
@@ -330,7 +330,7 @@ export default class ExperienceManager {
   getSpot(spotId) {
     let spot = null;
     this._patterns.forEach(pattern => {
-      const found = pattern.cfg.spots.find(e => e._id.toUpperCase() === spotId.toUpperCase());
+      const found = pattern.cfg.spots.find(e => e.id.toUpperCase() === spotId.toUpperCase());
       if (found) {
         spot = found;
       }
@@ -349,7 +349,7 @@ export default class ExperienceManager {
 
         // mark specific spot as unvisited
         if (pattern.visited.includes(id)) {
-          pattern.visited = pattern.visited.filter((e) => e !== spot._id);
+          pattern.visited = pattern.visited.filter((e) => e !== spot.id);
         }
       } else {
 
@@ -377,7 +377,7 @@ export default class ExperienceManager {
     this._patterns.forEach(pattern => {
 
       // checks if spot actually exist in pattern
-      const spot = pattern.cfg.spots.find(e => e._id === id);
+      const spot = pattern.cfg.spots.find(e => e.id === id);
       if (spot) {
 
         // if there are spots active
@@ -386,10 +386,10 @@ export default class ExperienceManager {
           // for each active spot
           pattern.active.forEach(active => {
 
-            const toDeactivate = pattern.cfg.spots.find(e => e._id === active);
+            const toDeactivate = pattern.cfg.spots.find(e => e.id === active);
 
             // removes from active spots
-            pattern.active = pattern.active.filter(e => e._id !== toDeactivate._id);
+            pattern.active = pattern.active.filter(e => e.id !== toDeactivate.id);
 
             // deactivates spot by outgoing it
             this.spotOutgoing$.next(toDeactivate);
@@ -397,8 +397,8 @@ export default class ExperienceManager {
         }
 
         // adds to active spots
-        if (!pattern.active.includes(spot._id)) {
-          pattern.active.push(spot._id);
+        if (!pattern.active.includes(spot.id)) {
+          pattern.active.push(spot.id);
         }
 
         // activates required spot
@@ -409,7 +409,7 @@ export default class ExperienceManager {
         this.spotActive$.next(info);
 
         // sets spot forced
-        this.forced = spot._id;
+        this.forced = spot.id;
       }
     });
   }
