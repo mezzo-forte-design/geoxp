@@ -27,8 +27,7 @@ export default class AudioManager {
       default: {
         test,
         silence,
-        unlock,
-        visited,
+        visited
       }
     }
     */
@@ -50,7 +49,6 @@ export default class AudioManager {
       config.default = {
         test: "./audio/test.mp3",
         silence: "./audio/silence.mp3",
-        unlock: "./audio/unlock.mp3",
         visited: "./audio/visited.mp3"
       }
     }
@@ -65,14 +63,6 @@ export default class AudioManager {
       this._buffer.clear();
     }
     this._buffer = new Map();
-  }
-
-  /**
-  * Unlocks web audio API
-  */
-  unlock() {
-    // plays silence
-    this._playSystemSound(`${SILENCE_SOUND_URL}`);
   }
 
   /**
@@ -108,10 +98,10 @@ export default class AudioManager {
   }
 
   /**
-  * Plays unlock system sound.
+  * Unlocks web audio
   */
   unlock() {
-    this._playSystemSound(this._config.default.unlock);
+    this._playSystemSound(this._config.default.silence);
   }
 
   /**
