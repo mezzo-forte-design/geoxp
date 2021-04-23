@@ -60,7 +60,7 @@ typings/
 # next.js build output
 .next
 
-example/bundle.js
+example-app/bundle.js
 
 *.DS_Store
 .vscode

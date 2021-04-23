@@ -33,11 +33,14 @@ It’s made of three modules.
 # **Install**
 `npm install mezzoforte-geoxp`
 
-
 # **Contents**
 * [Key concepts](#key-concepts)
   * [Geo key concepts](#geo-key-concepts)
+    * [Positions](#positions)
+    * [Geolocation providers](#geolocation-providers)
+    * [Minimum accuracy](#minimum-accuracy)
   * [Audio key concepts](#audio-key-concepts)
+    * [Audio content](#audio-content)
   * [Experience key concepts](#experience-key-concepts)
     * [Spots](#spots)
     * [Behavior](#behavior)
@@ -45,6 +48,7 @@ It’s made of three modules.
     * [Spots order](#spots-order)
     * [Content replay](#content-replay)
     * [Content overlap](#content-overlap)
+    * [Force a spot](#force-a-spot)
 
 * [Usage](#usage)
   * [Configuration](#configuration)
@@ -69,26 +73,27 @@ It’s made of three modules.
   * [Mobile integration](#mobile-integration)
   * [Geolocation providers](#geolocation-providers)
 
+* [Examples](#examples)
+
 ***
 
 # **Key concepts**
 ## **Geo key concepts**
-### Position
+### **Positions**
 A GeoXp position is a circular area defined by two geographical coordinates (`{lat, lon}`) a radius and a deadband.
 The inner _radius_ defines the **_inside_** position status.
-_radius_ + _deadband_ defines an outer radius that serves hysteresis purposes to avoid abrupt status changes.
+(_radius_ + _deadband_) defines an outer radius that serves hysteresis purposes to avoid abrupt status changes.
 
-### Geolocation providers
+### **Geolocation providers**
 GeoXp default geolocation provider is the Web [Geolocation API](https://developer.mozilla.org/it/docs/Web/API/Geolocation).
-Some framework or browser will not support Geolocation API, or have better ways to get the device location. It’s possible to use geoXp with external geolocation providers (eg: Capacitor or native geolocation systems).
+Some framework or browser will not support Geolocation API, or have better ways to get the device location. It’s possible to use GeoXp with external geolocation providers (eg: Capacitor or native geolocation systems).
 
-### Minimum accuracy
+### **Minimum accuracy**
 Every geographical data, coming from the geolocation system, that does not fulfill accuracy requrements will be ignored.
 
-
 ## **Audio key concepts**
-### Audio content
-An audio content can be any audio file, reachable through and URL. GeoXp audio player is based on [Howler.js](https://howlerjs.com/) (see [here](https://github.com/goldfire/howler.js#format-recommendations) for suggested formats).
+### **Audio content**
+An audio content can be any audio file, reachable through an URL. GeoXp audio player is based on [Howler.js](https://howlerjs.com/) (see [here](https://github.com/goldfire/howler.js#format-recommendations) for suggested formats).
 
 
 ## **Experience key concepts**
@@ -114,21 +119,26 @@ Patterns are separate entities that don’t talk to each other, spots order and 
 
 ### **Spots order**
 GeoXP provides limited content queue management. This can be achieved using the spot “after” property.
-If after is defined, geoXp will not reproduce a certain spot content unless the after spot has already been played.
+If after is defined, `GeoXp` will not reproduce a certain spot content unless the after spot has already been played.
 
 ### **Content replay**
 When content starts playing, a spot becomes “visited”.
 When the user reenters a visited spot, geoXp will not play its content. It will throw a notification instead, to let the user choose what to do.
 This behavior can be overridden using the pattern “replay” option. In this case, when the user reenters a visited spot, its content replays as usual.
-Spots could be “unvisited” (actually forcing an immediate replay) using the replaySpot() method.
+Spots could be “unvisited” (actually forcing an immediate replay) using the `replaySpot()` method.
 
 ### **Content overlap**
 When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior geoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
 This can be overridden using the pattern “overlap” configuration option.
 
 ### **Force a spot**
-Forcing a spot activation is possible only when provided location accuracy is over the threshold of 100 meters.
-In that case automatic management will be too risky, so the spots can be mually activated by the user.
+Forcing a spot activation is possible only in two cases:
+* provided GPS signal accuracy is over the threshold of 100 meters (in the case of a poor GPS signal)
+* provided GPS accuracy is good and user's position is less than 100m from the position of the target spot (in the case of slow location update time and the user has reached a new spot before an update)
+
+Otherwise, spot activation is automatic.
+
+**IMPORTANT - forcing a spot is a _plan B_ when something is not working properly (bad GPS or slow update time). It will interrupt all automatic experience management, until the forced content is finished. After that, all the experience logic will get back to work.**
 
 # **Usage**
 GeoXp is intended to be used as a singleton instance. It has to be created once the application starts, based on a configuration object.
@@ -319,7 +329,7 @@ Callback argument is an object with the audio information.
 
 ```javascript
 audio: {
-	id: string,
+  id: string,
   label: string,
   overlap: boolean,
   playWhenReady: boolean,
@@ -338,7 +348,7 @@ Callback argument is an object with the audio information.
 
 ```javascript
 audio: {
-	id: string,
+  id: string,
   label: string,
   overlap: boolean,
   playWhenReady: boolean,
@@ -349,6 +359,7 @@ audio: {
 ## **Core methods**
 ###  **`.unlock()`**
 Unlock method forces geolocation api and howler js activation. This is needed in mobile integration, to avoid browser locking the functionalities when app goes background.
+
 **IMPORTANT - call this method within a user action, such as a click listener!**
 
 ### **`.disablePattern(id: string)`**
@@ -368,21 +379,15 @@ the `updateGeolocation` method.
 Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).
 Position must be passed as [Geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
 
-### **`.forceSpot(spotId: string)`**
-
-
-
-### **`.canForceSpot(spotId: string)`**
-
 
 ### **`.hasActiveSpots(): bool`**
 Returns true if there are active spots.
 
 ### **`.hasAudioPlaying(overlap: boolean): bool`**
-_TODO_
+Checks if any sound is playing.
 
 ### **`.getSpot(id: string): object`**
-Gets spot info, providing it’s id, as object.
+Gets spot info as object:
 
 ```javascript
 spot: {
@@ -399,12 +404,17 @@ Marks a visited spot as unvisited, based on its id.
 If no id is provided, all current inside spots are marked as unvisited.
 Marking a spot as unvisited will make its content play again when the user enters its configured location.
 
+### **`.forceSpot(id: string)`**
+If possible, forces a spot activation. See [Foce a spot](#force-a-spot).
+
+### **`.canForceSpot(id: string)`**
+Checks if a spot can be forced.
+
 ### **`.reload(config: object)`**
 Reloads geoXp instance with a new configuration. Every configuration change needs a reload() to be processed.
 
 ### **`.destroy()`**
 Destroys geoXp instance and all of its subscriptions.
-
 
 ## **`Audio interaction`**
 GeoXp manages all audio content on its own. However, it’s possible to interact with it when needed (eg: showing audio current seek, playing / pausing audio, etc.).
@@ -435,7 +445,6 @@ Fade and volume are optional parameters that can be used to customize the playba
 
 Fade represents the duration of the audio fading, in milliseconds.
 Volume is a number from 0 to 1 (full volume).
-
 
 ### **`.audio.stop(id: string, fade: number)`**
 Stops audio based on its id as in audio configuration (if it’s actually playing).
@@ -502,4 +511,9 @@ If overlapping isn’t avoidable, make sure to apply filtering with `experience.
 ## Mobile integration
 Most mobile browsers will block Howler and Geolocation API after some time with no user interaction. Some system to force a periodic unlocking (using the `unlock()` method) is suggested.
 
+***
+
+# Examples
+Some configuration examples, for different kind of patterns, can be found inside the [example-patterns](example-patterns).
+A basic application, with event usage, can be found inside the [example-app](example-app) folder.
 
