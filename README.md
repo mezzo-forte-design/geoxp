@@ -180,7 +180,6 @@ audio: {
   default: {
     test: string // url for test sound
     silence: string // url for silence sound
-    unlock: string // url for unlock sound
     visited: string // url for spot already visited sound
   }
 ```
@@ -331,6 +330,7 @@ audio: {
 ## **Core methods**
 ###  **`.unlock()`**
 Unlock method forces geolocation api and howler js activation. This is needed in mobile integration, to avoid browser locking the functionalities when app goes background.
+**IMPORTANT - call this method within a user action, such as a click listener!**
 
 ### **`.disablePattern(id: string)`**
 Forces deactivation of a configured pattern based.
