@@ -40,7 +40,7 @@ export class App {
 
     // active spot
     this._geoXp.on('active', spot => {
-      this._log('spots', `Hai raggiunto lo spot <b>${spot._id}</b>! Play`);
+      this._log('spots', `Hai raggiunto lo spot <b>${spot.id}</b>! Play`);
     });
 
     // already visited spot
@@ -67,7 +67,7 @@ export class App {
 
     // outgoing spot
     this._geoXp.on('outgoing', spot => {
-      this._log('spots', `Stai abbandonando lo spot <b>${spot._id}</b>!`);
+      this._log('spots', `Stai abbandonando lo spot <b>${spot.id}</b>!`);
     });
 
     // audio started
@@ -173,7 +173,7 @@ export class App {
 
     // if spot exists and no other spots are playing, force play
     document.getElementById('confirm-button').classList.add('disabled');
-    this._geoXp.forceSpot(spot._id);
+    this._geoXp.forceSpot(spot.id);
     this._ui.resetCodeInput(this._helpContainer);
   }
 
@@ -194,7 +194,7 @@ export class App {
   }
 
   simulate(posId, out = false) {
-    const position = config.geo.positions.find(e => e._id === posId);
+    const position = config.geo.positions.find(e => e.id === posId);
     if(position) {
       if(!out) {
 

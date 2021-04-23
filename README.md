@@ -160,7 +160,7 @@ Provides information for geolocation module configuration.
 geo: {
   positions: [
     {
-      _id: string // unique position id
+      id: string // unique position id
       label: string // position name or description
       lat: number // latitude in degrees north
       lon: number // longitude in degrees east
@@ -185,7 +185,7 @@ Provides information for audio module configuration.
 audio: {
   sounds: [ // array of audio contents
     {
-      _id: string // unique content id
+      id: string // unique content id
       label: string // audio name or description
       url: string // content url (local or remote)
     }
@@ -204,14 +204,14 @@ Experience configuration provides relations between geolocation and content.
 experience: {
   patterns: [ // array of patterns, each with its spots list and parameters
     {
-      _id: string // pattern unique id
+      id: string // pattern unique id
       label: string // pattern name or description
       disabled: bool // pattern is disabled
       replay: bool // spots are automatically replayed
       overlap: bool // content playback can overlap
       spot: [ // array of pattern’s spots
         {
-          _id: string // spot unique id
+          id: string // spot unique id
           position: // position id as in geo position configuration
           audio: // audio id as in audio sound configuration
           after: // id of the previous mandatory spot (see “key concepts”, “Spot order”)

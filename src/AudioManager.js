@@ -20,7 +20,7 @@ export default class AudioManager {
     /**
     config: {
       sounds: [{
-        _id,
+        id,
         label,
         url,
       }],
@@ -75,7 +75,7 @@ export default class AudioManager {
   }
 
   /**
-  * Clears the sound buffer 
+  * Clears the sound buffer
   */
   unload() {
     this._buffer.clear();
@@ -123,7 +123,7 @@ export default class AudioManager {
       return;
     }
 
-    const audio = this._config.sounds.find( e => e._id === id);
+    const audio = this._config.sounds.find( e => e.id === id);
     if (!audio) {
       console.error('[AudioManager.load] - sound not found. Cannot load');
       return;
@@ -355,15 +355,15 @@ export default class AudioManager {
       this._buffer.forEach(e => {
         if(e) e.audio.volume(.2);
       })
-  
+
       const sound = new Howl({
         src      : [url],
         format   : 'mp3',
         html5    : !USE_WEBAUDIO,
         autoplay : true
       });
-  
-      sound.on('end', () => { 
+
+      sound.on('end', () => {
         this._systemSoundPlaying = false;
         this._buffer.forEach(e => {
           if(e) e.audio.volume(1);

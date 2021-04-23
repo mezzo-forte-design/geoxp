@@ -2,7 +2,7 @@
 const geo = {
   "positions": [
     {
-      "_id": "pos1",
+      "id": "pos1",
       "label": "pos1",
       "lat": 45.116177,
       "lon": 7.742615,
@@ -22,12 +22,12 @@ const geo = {
 const audio = {
   "sounds": [
     {
-      "_id": "aud1",
+      "id": "aud1",
       "label": "aud1",
       "url": "./audio/music1.mp3"
     },
     {
-      "_id": "aud2",
+      "id": "aud2",
       "label": "aud2",
       "url": "./audio/music2.mp3"
     }
@@ -48,12 +48,12 @@ const experience = {
       "overlap": false,
       "spots": [
         {
-          "_id": "spot1",
+          "id": "spot1",
           "position": "pos1",
           "audio": "aud1"
         },
         {
-          "_id": "spot2",
+          "id": "spot2",
           "position": "pos1",
           "audio": "aud2",
           "after": "spot1"

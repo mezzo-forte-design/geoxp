@@ -22,7 +22,7 @@ export default class GeoXp {
     config: {
       geo: {
         positions: [{
-          _id;
+          id;
           label;
           lat;
           lon;
@@ -39,7 +39,7 @@ export default class GeoXp {
       },
       audio: {
         sounds: [{
-          _id;
+          id;
           label;
           url;
         }],
@@ -52,13 +52,13 @@ export default class GeoXp {
       },
       experience: {
         patterns: [{
-          _id
+          id
           label
           disabled
           replay
           overlap
           spots: [{
-              _id
+              id
               position
               audio
               after

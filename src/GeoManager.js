@@ -20,7 +20,7 @@ export default class GeoManager {
     /**
     config: {
       positions: [{
-        _id,
+        id,
         label,
         lat,
         lon,
@@ -120,8 +120,8 @@ export default class GeoManager {
   */
   refresh() {
     this.inside.forEach(positionId => {
-      const position = this._config.positions.find(e => e._id === positionId);
-      this.inside$.next(position._id);
+      const position = this._config.positions.find(e => e.id === positionId);
+      this.inside$.next(position.id);
     });
   }
 
@@ -143,7 +143,7 @@ export default class GeoManager {
   * @returns { boolean }
   * */
   canForceSpot(positionId) {
-    const position = this._config.positions.find(e => e._id === positionId);
+    const position = this._config.positions.find(e => e.id === positionId);
     if (position) {
 
       // checks last position accuracy
@@ -209,9 +209,9 @@ export default class GeoManager {
       if (dist <= inside) {
 
         // inside play area
-        if (!this.inside.includes(position._id)) {
-          this.inside.push(position._id);
-          this.inside$.next(position._id);
+        if (!this.inside.includes(position.id)) {
+          this.inside.push(position.id);
+          this.inside$.next(position.id);
         }
 
       } else if (dist <= fetch) {
@@ -222,9 +222,9 @@ export default class GeoManager {
       } else if (dist > outside) {
 
         // outside play area
-        if (this.inside.includes(position._id)) {
-          this.inside = this.inside.filter(e => e !== position._id);
-          this.outgoing$.next(position._id);
+        if (this.inside.includes(position.id)) {
+          this.inside = this.inside.filter(e => e !== position.id);
+          this.outgoing$.next(position.id);
         }
       }
     });
