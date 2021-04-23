@@ -28,24 +28,24 @@ export class App {
 
     // geoXp events subscription
     // new position update
-    this._geoXp.event.on('position', position => {
+    this._geoXp.on('position', position => {
       this._log('main', `Your position: ${position.coords.latitude}, ${position.coords.longitude}`);
       precision.innerHTML = `GPS precision: ${position.coords.accuracy.toFixed(3)}m`;
     });
 
     // incoming spot (preload audio)
-    this._geoXp.event.on('incoming', spot => {
-      
+    this._geoXp.on('incoming', spot => {
+
     });
 
     // active spot
-    this._geoXp.event.on('active', spot => {
+    this._geoXp.on('active', spot => {
       this._log('spots', `Hai raggiunto lo spot <b>${spot._id}</b>! Play`);
     });
 
     // already visited spot
     // TODO - Così non funziona, gli spot già visitati possono essere più di uno
-    this._geoXp.event.on('visited', spot => {
+    this._geoXp.on('visited', spot => {
 
       console.warn('already visited');
       // show notification (wanna play?)
@@ -53,7 +53,7 @@ export class App {
         title: 'Spot già visitato',
         msg: 'Vuoi riascoltarlo?',
         okCallback: () => {
- 
+
           this._geoXp.replaySpot();
         }
       });
@@ -66,12 +66,12 @@ export class App {
     });
 
     // outgoing spot
-    this._geoXp.event.on('outgoing', spot => {
+    this._geoXp.on('outgoing', spot => {
       this._log('spots', `Stai abbandonando lo spot <b>${spot._id}</b>!`);
     });
 
     // audio started
-    this._geoXp.event.on('play', audio => {
+    this._geoXp.on('play', audio => {
       console.log('audio',audio);
       if (!audio.overlap) {
 
@@ -83,11 +83,11 @@ export class App {
     });
 
     // audio ended
-    this._geoXp.event.on('end', audio => {
+    this._geoXp.on('end', audio => {
       if (!this._geoXp.hasAudioPlaying(true)) {
         this._ui.hidePlayingAudio(this._mainContainer, audio.id);
         this._ui.resetCodeInput(this._helpContainer);
-  
+
         // show main tab
         this._ui.showMainTab();
       }
@@ -102,7 +102,7 @@ export class App {
       // this._ui.setAutomaticLock();
       // // visibility change
       // this._ui.setVisibilityChangeHandler(e => {
-        
+
       //   // page is hidden (app closed, phone locked...)
       //   this._geoXp.unlock();
 

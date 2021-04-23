@@ -1,8 +1,12 @@
 
 import { EventEmitter } from 'events';
+
+/* CORE MODULES */
 import GeoManager from './GeoManager';
 import AudioManager from './AudioManager';
 import ExperienceManager from './ExperienceManager';
+
+/* device parser */
 import Device from './utils/Device';
 
 /**
@@ -24,7 +28,7 @@ export default class GeoXp {
           lon;
           radius;    [m]
           deadband;  [m]
-          fetch;     (1) 1 : n, ratio of radius for preloading 
+          fetch;     (1) 1 : n, ratio of radius for preloading
         }];
         default: {
           minAccuracy;
@@ -96,8 +100,8 @@ export default class GeoXp {
 
     // request for audio preloading
     this.subExperienceIncoming = this.experience.spotIncoming$
-      .subscribe( spot => {
-        
+      .subscribe(spot => {
+
         // load spot audio
         this.audio.load(spot.audio);
 
@@ -107,7 +111,7 @@ export default class GeoXp {
 
     // request for audio play
     this.subExperienceActive = this.experience.spotActive$
-      .subscribe( info => {
+      .subscribe(info => {
 
         // play spot audio
         this.audio.play(info.spot.audio, 0, 1, info.overlap);
@@ -118,15 +122,15 @@ export default class GeoXp {
 
     // alredy visisted spot
     this.subExperienceVisited = this.experience.spotVisited$
-      .subscribe( spot => {
+      .subscribe(spot => {
 
         // emits spot visided
         this.event.emit('visited', spot);
       });
-    
+
     // request for audio stop
     this.subExperienceOutgoing = this.experience.spotOutgoing$
-      .subscribe( spot => {
+      .subscribe(spot => {
 
         const fade = 3000; // [s]
 
@@ -136,30 +140,30 @@ export default class GeoXp {
         // emits spot outgoing
         this.event.emit('outgoing', spot);
       });
-    
+
 
     //////////////////////////////////////////////
     // subscribes to GeoManager position updates
     //////////////////////////////////////////////
     // current position
     this.subGeoPosition = this.geo.position$
-      .subscribe ( position => {
-        
+      .subscribe(position => {
+
         // emits current position
         this.event.emit('position', position);
       });
 
     // incoming spots
     this.subGeoIncoming = this.geo.incoming$
-      .subscribe( position => {
+      .subscribe(position => {
 
         // sends to experienceManager for processing
         this.experience.incoming(position);
       });
-    
+
     // inside spots
     this.subGeoInside = this.geo.inside$
-      .subscribe( position => { 
+      .subscribe(position => {
 
         // if forced, do not notify position
         if (this.experience.forced) return;
@@ -170,19 +174,19 @@ export default class GeoXp {
 
     // outgoing spot
     this.subGeoOutgoing = this.geo.outgoing$
-      .subscribe( position => {
+      .subscribe(position => {
 
         // sends to experienceManager for processing
         this.experience.outgoing(position);
       });
-    
+
 
     //////////////////////////////////////////////
     // subscribes to AudioManager events
     //////////////////////////////////////////////
     // sound playing
     this.subAudioPlay = this.audio.play$
-      .subscribe( audio => {
+      .subscribe(audio => {
 
         // sends to experienceManager for processing
         this.experience.playing(audio.id);
@@ -193,7 +197,7 @@ export default class GeoXp {
 
     // sound finished
     this.subAudioDone = this.audio.done$
-      .subscribe( audio => {
+      .subscribe(audio => {
 
         // sends to experienceManager for processing
         const removeForce = this.experience.end(audio.id);
@@ -203,8 +207,8 @@ export default class GeoXp {
           this.removeForce();
         }
 
-        // emits ended audio
-        this.event.emit('end', audio);
+        // emits stopped audio
+        this.event.emit('stop', audio);
       });
   }
 
@@ -219,7 +223,7 @@ export default class GeoXp {
   /**
   * Enables / disables internal geolocation updates
   * @param enabled - enable flag
-  */ 
+  */
   internalGeolocation(enabled) {
     this.geo.internalGeolocation(enabled);
   }
@@ -234,12 +238,19 @@ export default class GeoXp {
   }
 
   /**
-  * Enables/disables specific pattern
+  * Enables specific pattern
   * @param id - pattern id to toggle
-  * @param enb - flag for enable/disable
   */
-  enablePattern(id, enb) { 
-    this.experience.enablePattern(id, enb);
+  enablePattern(id) {
+    this.experience.enablePattern(id, true);
+  }
+
+  /**
+  * Ddisables specific pattern
+  * @param id - pattern id to toggle
+  */
+  disablePattern(id) {
+    this.experience.enablePattern(id, false);
   }
 
   /**
@@ -327,7 +338,7 @@ export default class GeoXp {
 
   /**
   * Destroys GeoXp instance
-  * @param config - config parameters
+  * @param config {object} config parameters
   */
   destroy() {
     this.subExperienceIncoming.unsubscribe();
@@ -341,9 +352,51 @@ export default class GeoXp {
     this.subGeoInside.unsubscribe();
     this.subGeoOutgoing.unsubscribe();
     this.subGeoIncoming.unsubscribe();
-  
+
     this.geo.unload();
     this.audio.unload();
     this.experience.unload();
+  }
+
+  /**
+   * Event wrapper on
+   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+   * @param listener {function}
+   */
+  on(eventName, listener) {
+    if (typeof listener !== 'function') {
+      console.error('[GeoXp EventEmitter - on] listener must be a function');
+      return;
+    }
+
+    this.event.on(eventName, listener);
+  }
+
+  /**
+   * Event wrapper once
+   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+   * @param listener {function}
+   */
+  once(eventName, listener) {
+    if (typeof listener !== 'function') {
+      console.error('[GeoXp EventEmitter - on] listener must be a function');
+      return;
+    }
+
+    this.event.once(eventName, listener);
+  }
+
+  /**
+   * Event wrapper off
+   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+   * @param listener {function}
+   */
+  off(eventName, listener) {
+    if (typeof listener !== 'function') {
+      console.error('[GeoXp EventEmitter - on] listener must be a function');
+      return;
+    }
+
+    this.event.off(eventName, listener);
   }
 }

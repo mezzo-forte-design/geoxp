@@ -10,15 +10,31 @@
     "start-example": "webpack serve --content-base example/ --open",
     "start-testApp": "webpack serve --content-base testApp/ --open"
   },
-  "author": "Francesco Cretti, Giuliano Buratti",
-  "license": "ISC",
+  "contributors": [
+    {
+      "name": "Giuliano Buratti",
+      "email": "gburatti.rc@gmail.com"
+    },
+    {
+      "name": "Francesco Cretti",
+      "email": "francesco.cretti@gmail.com"
+    }
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/mezzo-forte/mezzoforte-geoxp.git"
+  },
+  "homepage": "https://gitlab.com/mezzo-forte/mezzoforte-geoxp#README",
+  "bugs": {
+    "url": "https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/issues"
+  },
   "devDependencies": {
     "webpack": "^5.17.0",
     "webpack-cli": "^4.4.0",
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.5.0",
     "bowser": "^2.11.0",
     "howler": "^2.2.1",
     "rxjs": "^6.6.3"
