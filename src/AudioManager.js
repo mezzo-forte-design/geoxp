@@ -244,29 +244,6 @@ export default class AudioManager {
   }
 
   /**
-  * Gets currently playing sound info
-  * @param id - id of sound info to recover
-  * @returns { duration, seek } - duration and current seek
-  */
-  getAudio(id) {
-    const sound = this._buffer.get(id);
-    if (sound) {
-
-      const info = {
-        id,
-        label: sound.label,
-        duration: sound.audio.duration(),
-        seek: sound.audio.seek(),
-        playing: sound.audio.playing()
-      }
-
-      return info;
-    } else {
-      console.error('[AudioManager.getCurrentAudioInfo] - Audio not found, cannot get info');
-    }
-  }
-
-  /**
   * Checks if any sound is playing
   * @param overlap - if true, exclude overlapping audios
   * @returns { boolean }
