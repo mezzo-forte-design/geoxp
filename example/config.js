@@ -35,7 +35,6 @@ const audio = {
   "default": {
     "test": "./audio/system/test.mp3",
     "silence": "./audio/system/silence.mp3",
-    "unclock": "./audio/system/unlock.mp3",
     "visited": "./audio/system/visited.mp3"
   }
 };
