@@ -2,12 +2,12 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './example/app.js',
+  entry: './example-app/app.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'example'),
+    path: path.resolve(__dirname, 'example-app'),
   },
   devServer: {
-    contentBase: './example'
+    contentBase: './example-app'
   }
 };
