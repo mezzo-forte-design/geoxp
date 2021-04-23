@@ -37,27 +37,37 @@ It’s made of three modules.
 # **Contents**
 * [Key concepts](#key-concepts)
   * [Geo key concepts](#geo-key-concepts)
-  * [Audio key concepts](#Audio-key-concepts)
-  * [Experience key concepts](#Experience-key-concepts)
-    * [Spots](#Spots)
-    * [Behavior](#Behavior)
-    * [Patterns](#Patterns)
-    * [Spots order](#Spots-order)
-    * [Content replay](#Content-replay)
-    * [Content overlap](#Content-overlap)
+  * [Audio key concepts](#audio-key-concepts)
+  * [Experience key concepts](#experience-key-concepts)
+    * [Spots](#spots)
+    * [Behavior](#behavior)
+    * [Patterns](#patterns)
+    * [Spots order](#spots-order)
+    * [Content replay](#content-replay)
+    * [Content overlap](#content-overlap)
 
 * [Usage](#usage)
-  * [Configuration](#Configuration)
-  * [Construction and disposal](#Construction-and-disposal)
-  * [Events subscription](#Events-subscription)
+  * [Configuration](#configuration)
+  * [Geo configuration](#geo-configuration)
+  * [Audio configuration](#audio-configuration)
+  * [Experience configuration](#experience-configuration)
+  * [Construction and disposal](#construction-and-disposal)
+  * [Events subscription](#events-subscription)
+    * [Position update](#position-update)
+    * [Spot incoming](#spot-incoming)
+    * [Spot active](#spot-active)
+    * [Spot visited](#spot-visited)
+    * [Spot outgoing](#spot-outgoing)
+    * [Content playing](#content-playing)
+    * [Content ended](#content-ended)
   * [Core methods](#Core-methods)
   * [Audio interaction](#Audio-interaction)
 
 * [Best practices](#best-practices)
-  * [Design configuration for a specific use](#Design-configuration-for-a-specific-use)
-  * [Positions overlap](#Positions-overlap)
-  * [Mobile integration](#Mobile-integration)
-  * [Geolocation providers](#Geolocation-providers)
+  * [Design configuration for a specific use](#design-configuration-for-a-specific-use)
+  * [Positions overlap](#positions-overlap)
+  * [Mobile integration](#mobile-integration)
+  * [Geolocation providers](#geolocation-providers)
 
 ***
 
@@ -228,8 +238,9 @@ Three main methods are wrappped by the `GeoXp` class:
 
 All other `EventEmitter` properties and methos are accessible through the `event` property of `GeoXp` class.
 
+Available events are:
 
-## **Position update**
+### **Position update**
 
 ```javascript
 geoXp.on('position', position => { /* ... */ })
@@ -239,7 +250,7 @@ Position update occurs every time geolocation API receives a new location.
 The new location is provided to the callback as geolocation API standard position object (https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
 
 
-## **Spot incoming**
+### **Spot incoming**
 
 ```javascript
 geoXp.on('incoming', spot => { /* ... */ })
@@ -257,7 +268,7 @@ spot: {
 }
 ```
 
-## **Spot active**
+### **Spot active**
 
 ```javascript
 geoXp.on('active', spot => { /* ... */ })
@@ -266,7 +277,7 @@ geoXp.on('active', spot => { /* ... */ })
 A spot is being activated. GeoXp will play the content associated.
 The object provided as callback argument carries all the spot info based on configuration.
 
-## **Spot visited**
+### **Spot visited**
 
 ```javascript
 geoXp.on('visited', spot => { /* ... */ })
@@ -275,7 +286,7 @@ geoXp.on('visited', spot => { /* ... */ })
 User entered a spot which he already visited before.
 The object provided as callback argument carries all the spot info based on configuration.
 
-## **Spot outgoing**
+### **Spot outgoing**
 
 ```javascript
 geoXp.on('outgoing', spot => { /* ... */ })
@@ -285,7 +296,7 @@ User exited a spot. GeoXp will stop playing related content.
 The object provided as callback argument carries all the spot info based on configuration.
 
 
-## **Content playing**
+### **Content playing**
 
 ```javascript
 geoXp.on('play', audio => { /* ... */ })
@@ -301,7 +312,7 @@ audio: {
 }
 ```
 
-## **Content ended**
+### **Content ended**
 
 ```javascript
 geoXp.on('stop', audio =>  {})
