@@ -207,7 +207,7 @@ export default class GeoXp {
         }
 
         // emits stopped audio
-        this.event.emit('end', audio);
+        this.event.emit('stop', audio);
       });
   }
 

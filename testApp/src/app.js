@@ -83,7 +83,7 @@ export class App {
     });
 
     // audio ended
-    this._geoXp.on('end', sound => {
+    this._geoXp.on('stop', sound => {
       if (!this._geoXp.hasAudioPlaying(true)) {
         this._ui.hidePlayingAudio(this._mainContainer, sound);
         this._ui.resetCodeInput(this._helpContainer);
