@@ -99,13 +99,13 @@ export default class GeoXp {
 
     // request for audio preloading
     this.subExperienceIncoming = this.experience.spotIncoming$
-      .subscribe(spot => {
+      .subscribe(info => {
 
         // load spot audio
-        this.audio.load(spot.audio);
+        this.audio.load(info.spot, info.overlap);
 
         // emits spot incoming
-        this.event.emit('incoming', spot);
+        this.event.emit('incoming', info.spot);
       });
 
     // request for audio play
@@ -113,7 +113,7 @@ export default class GeoXp {
       .subscribe(info => {
 
         // play spot audio
-        this.audio.play(info.spot.audio, 0, 1, info.overlap);
+        this.audio.play(info.spot, info.overlap, 0, 1);
 
         // emits spot active
         this.event.emit('active', info.spot);
@@ -134,7 +134,7 @@ export default class GeoXp {
         const fade = 3000; // [s]
 
         // stop spot audio
-        this.audio.stop(spot.audio, fade);
+        this.audio.stop(spot, fade);
 
         // emits spot outgoing
         this.event.emit('outgoing', spot);
@@ -188,7 +188,7 @@ export default class GeoXp {
       .subscribe(audio => {
 
         // sends to experienceManager for processing
-        this.experience.playing(audio.id);
+        this.experience.playing(audio.spot);
 
         // emits playing audio
         this.event.emit('play', audio);
@@ -199,7 +199,7 @@ export default class GeoXp {
       .subscribe(audio => {
 
         // sends to experienceManager for processing
-        const removeForce = this.experience.end(audio.id);
+        const removeForce = this.experience.end(audio.spot);
 
         // removes forcing
         if (removeForce) {
@@ -207,7 +207,7 @@ export default class GeoXp {
         }
 
         // emits stopped audio
-        this.event.emit('stop', audio);
+        this.event.emit('end', audio);
       });
   }
 

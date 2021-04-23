@@ -172,17 +172,20 @@ export const config = {
       spots: [
         {
           id: "sp1",
+          label: "test titolo",
           position: "pos1",
-          audio : "aud1"
+          audio : "aud1",
         },
         {
           id: "sp2",
+          label: "cane cane",
           position: "pos2",
           audio: "aud2",
           after: "sp1"
         },
         {
           id: "sp3",
+          label: "test aaaaa",
           position: "pos3",
           audio: "aud3"
         },
@@ -237,6 +240,7 @@ export const config = {
       id: "bg",
       label: "background",
       overlap: true,
+      replay: true,
       spots: [
         {
           id: "bg1",

@@ -169,14 +169,13 @@ export default class ExperienceManager {
                 pattern.active.push(spot.id);
               }
 
-              // adds pattern info for spot active
-              const active = {
+              const info = {
                 spot,
                 overlap: pattern.cfg.overlap
               }
 
               // play audio
-              this.spotActive$.next(active);
+              this.spotActive$.next(info);
             }
           }
         }
@@ -243,41 +242,42 @@ export default class ExperienceManager {
 
   /**
   * Spot is playing, make it visited
-  * @param id - audio playing
+  * @param spot - spot playing
   */
-  playing(id) {
+  playing(spot) {
 
-    if (!id) {
-      console.error('[ExperienceManager.playing] - audio id missing');
+    if (!spot) {
+      console.error('[ExperienceManager.playing] - spot missing');
     }
 
-    // mark visisted for all spots linked to the audio
+    // marks spot visited
     this._patterns.forEach(pattern => {
 
-      const spots = pattern.cfg.spots.filter((e) => e.audio === id);
-      spots.forEach(spot => {
+      const _spot = pattern.cfg.spots.find(e => e.id === spot.id);
+      if (_spot) {
 
         // mark spot active (if isn't already)
-        if (!pattern.active.includes(spot.id)) {
-          pattern.active.push(spot.id)
+        if (!pattern.active.includes(_spot.id)) {
+          pattern.active.push(_spot.id)
         }
 
         // mark spot visited
-        if (!pattern.visited.includes(spot.id)) {
-          pattern.visited.push(spot.id)
+        if (!pattern.visited.includes(_spot.id)) {
+          pattern.visited.push(_spot.id)
         }
-      });
+      }
+
     });
   }
 
   /**
   * Spot ended (either stopped or finished), remove from active, refresh all inside positions
-  * @param id - audio ended
+  * @param spot - spot ended
   */
-  end(id) {
+  end(spot) {
 
-    if (!id) {
-      console.error('[ExperienceManager.end] - audio id missing');
+    if (!spot) {
+      console.error('[ExperienceManager.end] - spot missing');
     }
 
     let removeForce = false;
@@ -285,18 +285,18 @@ export default class ExperienceManager {
     // removes from active all spots linked to the audio
     this._patterns.forEach(pattern => {
 
-      const spots = pattern.cfg.spots.filter((e) => e.audio === id);
-      spots.forEach(spot => {
+      const _spot = pattern.cfg.spots.find(e => e.id === spot.id);
+      if (_spot) {
 
         // remove from active
-        pattern.active = pattern.active.filter((e) => e !== spot.id);
+        pattern.active = pattern.active.filter((e) => e !== _spot.id);
 
         // if matches forced spot, remove force
-        if (spot.id === this.forced) {
+        if (_spot.id === this.forced) {
           this.forced = null;
           removeForce = true;
         }
-      });
+      }
     });
 
     // request for positions refresh

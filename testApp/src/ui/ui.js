@@ -465,7 +465,7 @@ export default class UI {
 
   }
 
-  showPlayingAudio(container, soundId) {
+  showPlayingAudio(container, sound) {
     // switch to main tab
     const tabButton = document.getElementById('experience-main-tab');
     if (!tabButton.classList.contains('active')) {
@@ -476,17 +476,10 @@ export default class UI {
     const header = container.querySelector('#experience-textured-header');
     header.classList.add('playing');
 
-    // gets sound info
-    let sound = this._geoXp.audio.getAudio(soundId);
-    if (!sound) {
-      console.log('sound not found!');
-      return;
-    }
-
     // show playing progress/interactive player and show spot title
     const player = Mustache.render(templates.interactivePlayer, {
-      audioTitle : sound.label,
-      playing    : sound.playing
+      audioTitle : sound.spot.label,
+      playing    : sound.audio.playing()
     });
 
     header.innerHTML = player;
@@ -498,26 +491,25 @@ export default class UI {
     // start circle progress bar
     const bar = new ProgressBar.Circle(interactivePlayerContainer, {
       strokeWidth: 3,
-      duration: sound.duration * 1000,
+      duration: sound.audio.duration() * 1000,
       color: '#A5A093',
       trailColor: '#403f3f',
       trailWidth: 1,
       svgStyle: null
     });
 
-    if (sound.playing) bar.animate(1.0);
+    if (sound.audio.playing()) bar.animate(1.0);
 
     // play pause listener
     const playPauseButton = container.querySelector('#interactive-player-container > .play-pause-button');
     playPauseButton.addEventListener('click', e => {
-      sound = this._geoXp.audio.getAudio(soundId);
-      if (sound.playing) {
-        this._geoXp.audio.pause(sound.id);
+      if (sound.audio.playing()) {
+        sound.audio.pause();
         bar.stop(true);
         playPauseButton.classList.remove('playing');
       } else {
-        const duration = (sound.duration - sound.seek) * 1000;
-        this._geoXp.audio.play(sound.id);
+        const duration = (sound.audio.duration() - sound.audio.seek()) * 1000;
+        sound.audio.play();
         bar.animate(1.0, { duration });
         playPauseButton.classList.add('playing');
       }
@@ -526,25 +518,24 @@ export default class UI {
     const skipButtons = [...container.querySelectorAll('.skip-button')];
     skipButtons.forEach(btn => {
       btn.addEventListener('click', e => {
-        sound = this._geoXp.audio.getAudio(soundId);
 
-        let newTime = sound.seek + parseInt(e.currentTarget.dataset.skip);
+        let newTime = sound.audio.seek() + parseInt(e.currentTarget.dataset.skip);
         if (newTime < 0) newTime = 0;
-        if (newTime > sound.duration) newTime = sound.duration;
+        if (newTime > sound.audio.duration()) newTime = sound.audio.duration();
 
         // stop animation
         bar.stop(true);
 
         // skip track to seek time
-        this._geoXp.audio.seek(sound.id, newTime);
+        sound.audio.seek(newTime);
 
         // calc and set progress position
-        const progressPosition = newTime / sound.duration;
+        const progressPosition = newTime / sound.audio.duration();
         bar.set(progressPosition);
 
         // calc remaining duration and start aimation
         bar.animate(1.0, {
-          duration: (sound.duration - newTime) * 1000
+          duration: (sound.audio.duration() - newTime) * 1000
         });
       });
     });
@@ -552,9 +543,8 @@ export default class UI {
     const progressTimer = container.querySelector('#progress-timer');
 
     const updateTimer = () => {
-      sound = this._geoXp.audio.getAudio(soundId);
       this._TIMER_ANIMATION = window.requestAnimationFrame(updateTimer);
-      progressTimer.innerHTML = this.secToTimer(sound.seek);
+      progressTimer.innerHTML = this.secToTimer(sound.audio.seek());
     };
 
     updateTimer();
@@ -568,11 +558,11 @@ export default class UI {
     window.cancelAnimationFrame(this._TIMER_ANIMATION);
   }
 
-  hidePlayingAudio(container, code) {
+  hidePlayingAudio(container, sound) {
     const header = container.querySelector('#experience-textured-header');
     header.classList.remove('playing');
 
-    const ellipse = container.querySelector(`#ellipse_${code}`);
+    const ellipse = container.querySelector(`#ellipse_${sound.id}`);
     if (ellipse) {
       ellipse.classList.remove('active');
       ellipse.classList.add('visited');

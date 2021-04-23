@@ -47,7 +47,7 @@ export class App {
     // TODO - Così non funziona, gli spot già visitati possono essere più di uno
     this._geoXp.on('visited', spot => {
 
-      console.warn('already visited');
+      console.warn('already visited', spot);
       // show notification (wanna play?)
       this._ui.modalConfirm({
         title: 'Spot già visitato',
@@ -71,21 +71,21 @@ export class App {
     });
 
     // audio started
-    this._geoXp.on('play', audio => {
-      console.log('audio',audio);
-      if (!audio.overlap) {
+    this._geoXp.on('play', sound => {
+      console.log('audio',sound);
+      if (!sound.overlap) {
 
         // load player
-        this._ui.showPlayingAudio(this._mainContainer, audio.id);
+        this._ui.showPlayingAudio(this._mainContainer, sound);
         // show main tab
         this._ui.showMainTab();
       }
     });
 
     // audio ended
-    this._geoXp.on('end', audio => {
+    this._geoXp.on('end', sound => {
       if (!this._geoXp.hasAudioPlaying(true)) {
-        this._ui.hidePlayingAudio(this._mainContainer, audio.id);
+        this._ui.hidePlayingAudio(this._mainContainer, sound);
         this._ui.resetCodeInput(this._helpContainer);
 
         // show main tab

@@ -113,28 +113,32 @@ export default class AudioManager {
 
   /**
   * Loads Howler sounds in buffer.
-  * @param id - audio to load
+  * @param spot - spot to load
+  * @param overlap - can overlap
   * @param playWhenReady - (false) play sound when loaded
   */
-  load(id, playWhenReady = false, overlap = false) {
+  load(spot, overlap = false, playWhenReady = false) {
 
-    if (!id) {
+    if (!spot.audio) {
       console.error('[AudioManager.load] - audio info not provided. Cannot load');
       return;
     }
 
-    const audio = this._config.sounds.find( e => e.id === id);
+    const audio = this._config.sounds.find( e => e.id === spot.audio);
     if (!audio) {
       console.error('[AudioManager.load] - sound not found. Cannot load');
       return;
     }
 
-    // New howler sound
+    // sets id to spot id + audio id
+    const id = `${spot.id}-${audio.id}`;
+
+    // New 
     const sound = {
       id,
-      label: audio.label,
-      playWhenReady,
+      spot,
       overlap,
+      playWhenReady,
       audio: new Howl({
         src    : [audio.url],
         format : 'mp3',
@@ -164,30 +168,34 @@ export default class AudioManager {
 
       // start sound
       if (sound.playWhenReady) {
-        this.play(id, 0, 1, sound.overlap);
+        this.play(spot, 0, 1);
       }
     });
   }
 
   /**
   * Plays Howler sounds if loaded, else load() then play().
-  * @param id - audio to play
+  * @param spot - spot to play,
+  * @param overlap - overlapped sound,
   * @param fade - (0) fadeIn time
   * @param volume - (1) playback volume
   */
-  play(id, fade = 0, volume = 1, overlap = false) {
+  play(spot, overlap = false, fade = 0, volume = 1) {
 
-    if (!id) {
+    if (!spot.audio) {
       console.error('[AudioManager.play] - audio info non provided. Cannot play');
       return;
     }
+
+    // sets id to spot audio
+    const id = `${spot.id}-${spot.audio}`;
 
     // if audio isn't queued and loaded load()
     const sound = this._buffer.get(id);
     if (!sound) {
 
       // load audio and play when ready
-      this.load(id, true, overlap);
+      this.load(spot, overlap, true);
 
     } else {
       // if sounds are ready play(), else playWhenReady
@@ -207,15 +215,18 @@ export default class AudioManager {
 
   /**
   * Stops specific sound
-  * @param id - audio to stop
+  * @param spot - spot to stop
   * @param fade - (0) fadeOut time
   */
-  stop(id, fade = 0) {
+  stop(spot, fade = 0) {
 
-    if (!id) {
+    if (!spot.audio) {
       console.error('[AudioManager.stop] - audio info non provided. Cannot stop');
       return;
     }
+
+    // sets id to spot audio
+    const id = `${spot.id}-${spot.audio}`;
 
     // finds audio in buffer
     const sound = this._buffer.get(id);
