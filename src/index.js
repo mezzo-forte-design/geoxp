@@ -46,7 +46,6 @@ export default class GeoXp {
         default: {
           test;
           silence;
-          unlock;
           visited;
         }
       },
