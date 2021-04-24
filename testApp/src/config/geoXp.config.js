@@ -14,64 +14,27 @@ export const config = {
         id: 'pos2'
       },
       {
-        lat: 45.0650721,
-        lon: 7.6757804,
-        label: '3 Chiorba - T-Art',
-        id: 'pos3',
-      },
-      {
-        lat: 45.0655841,
+        lat: 45.0651841,
         lon: 7.6764021,
-        label: '4 Lagone - Parini Carige',
-        id: 'pos4'
+        label: '3 Lagone - Parini Carige',
+        id: 'pos3'
       },
       {
         lat: 45.0655831,
         lon: 7.6764011,
-        label: '5 Soffione - Gioia Matteotti',
-        id: 'pos5'
+        label: '4 Soffione - Gioia Matteotti',
+        id: 'pos4'
       },
       {
         lat: 45.0652261,
         lon: 7.6786931,
-        label: '6 Acqua Forte - Matteotti XX Sett',
-        id: 'pos6'
+        label: '5 Acqua Forte - Matteotti XX Sett',
+        id: 'pos5'
       },
       {
-        lat: 45.0654303,
-        lon: 7.6792205,
-        label: '7 Biancana - XX sett Bagel',
-        id: 'pos7'
-      },
-      {
-        lat: 45.0659163,
-        lon: 7.6805334,
-        label: '8 Anfiteatro (50m) - Miagola',
-        id: 'pos8',
-      },
-      {
-        lat: 45.0653235,
-        lon: 7.6814026,
-        label: '9 Flora - Buozzi - Gobetti',
-        id: 'pos9'
-      },
-      {
-        lat: 45.0666286,
-        lon: 7.6831431,
-        label: '10 Panchina - Lagrange Giolitti',
-        id: 'pos10'
-      },
-      {
-        lat: 45.0670136,
-        lon: 7.682433,
-        label: '11 Geologi - S.Carlo',
-        id: 'pos11'
-      },
-      {
-        lat: 45.066753,
-        lon: 7.6811947,
-        label: '12 Belvedere - Amendola Frola',
-        id: 'psx',
+        lat: 44.533592,
+        lon: 7.711379,
+        id: 'posx'
       }
     ],
     default: {
@@ -110,55 +73,19 @@ export const config = {
         url: "./audio/spot_5.mp3"
       },
       {
-        id: "aud6",
-        label: "aud6",
-        url: "./audio/spot_6.mp3"
-      },
-      {
-        id: "aud7",
-        label: "aud7",
-        url: "./audio/spot_7mp3"
-      },
-      {
-        id: "aud8",
-        label: "aud8",
-        url: "./audio/spot_8.mp3"
-      },
-      {
-        id: "aud9",
-        label: "aud9",
-        url: "./audio/spot_9.mp3"
-      },
-      {
-        id: "aud10",
-        label: "aud10",
-        url: "./audio/spot_10.mp3"
-      },
-      {
-        id: "aud11",
-        label: "aud11",
-        url: "./audio/spot_11.mp3"
-      },
-      {
-        id: "aud12",
-        label: "aud12",
-        url: "./audio/spot_12.mp3"
-      },
-      {
         id: "bg1",
-        label: "background",
-        url: "./audio/people_shouting.mp3"
+        label: "bg1",
+        url: "./audio/kids.mp3"
       },
       {
         id: "bg2",
-        label: "background",
-        url: "./audio/kids.mp3"
+        label: "bg2",
+        url: "./audio/people_shouting.mp3"
       }
     ],
     default: {
       test: "./audio/test.mp3",
       silence: "./audio/silence.mp3",
-      unlock: "./audio/unlock.mp3",
       visited: "./audio/visited.mp3"
     }
   },
@@ -172,68 +99,35 @@ export const config = {
       spots: [
         {
           id: "sp1",
-          label: "test titolo",
+          label: "sp1 title",
           position: "pos1",
           audio : "aud1",
         },
         {
           id: "sp2",
-          label: "cane cane",
+          label: "sp2 title",
           position: "pos2",
           audio: "aud2",
           after: "sp1"
         },
         {
           id: "sp3",
-          label: "test aaaaa",
+          label: "sp3 title",
           position: "pos3",
           audio: "aud3"
         },
         {
           id: "sp4",
+          label: "sp4 title",
           position: "pos4",
           audio: "aud4"
         },
         {
           id: "sp5",
-          position: "pos5",
+          label: "sp5 title",
+          position: "pos4",
           audio: "aud5"
         },
-        {
-          id: "sp6",
-          position: "pos6",
-          audio: "aud6"
-        },
-        {
-          id: "sp7",
-          position: "pos7",
-          audio: "aud7"
-        },
-        {
-          id: "sp8",
-          position: "pos8",
-          audio: "aud8"
-        },
-        {
-          id: "sp9",
-          position: "pos9",
-          audio: "aud9"
-        },
-        {
-          id: "sp10",
-          position: "pos10",
-          audio: "aud10"
-        },
-        {
-          id: "sp11",
-          position: "pos11",
-          audio: "aud11"
-        },
-        {
-          id: "sp12",
-          position: "psx",
-          audio: "aud12"
-        }
       ]
     },
     {

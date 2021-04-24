@@ -193,7 +193,7 @@ export class App {
     // }
   }
 
-  simulate(posId, out = false) {
+  simulate(posId, out = false, accuracy = 5) {
     const position = config.geo.positions.find(e => e.id === posId);
     if(position) {
       if(!out) {
@@ -201,7 +201,7 @@ export class App {
         // incoming
         this._geoXp.geo._geoSuccess({
           coords: {
-          accuracy: 5,
+          accuracy,
           altitude: null,
           altitudeAccuracy: null,
           heading: null,
@@ -216,7 +216,7 @@ export class App {
 
           this._geoXp.geo._geoSuccess({
             coords: {
-            accuracy: 5,
+            accuracy,
             altitude: null,
             altitudeAccuracy: null,
             heading: null,

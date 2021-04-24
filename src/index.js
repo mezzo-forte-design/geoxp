@@ -131,7 +131,7 @@ export default class GeoXp {
     this.subExperienceOutgoing = this.experience.spotOutgoing$
       .subscribe(spot => {
 
-        const fade = 3000; // [s]
+        const fade = 5000; // [s]
 
         // stop spot audio
         this.audio.stop(spot, fade);
@@ -301,7 +301,7 @@ export default class GeoXp {
   forceSpot(id) {
 
     // checks if can be forced
-    if (!this.canForceSpot) return;
+    if (!this.canForceSpot(id)) return;
 
     // stops internal geolocation
     this.geo.internalGeolocation(false);
@@ -310,7 +310,11 @@ export default class GeoXp {
     this.experience.forceSpot(id);
   }
 
+  /**
+  * Removes the forced spot activation
+  * */
   removeForce() {
+    this.experience.forced = null;
     this.geo.internalGeolocation(true);
     this.geo.refresh();
   }
