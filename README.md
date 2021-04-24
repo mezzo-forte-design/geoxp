@@ -196,7 +196,6 @@ audio: {
   sounds: [ // array of audio contents
     {
       id: string // unique content id
-      label: string // audio name or description
       url: string // content url (local or remote)
     }
   ],
@@ -225,6 +224,7 @@ experience: {
           position: // position id as in geo position configuration
           audio: // audio id as in audio sound configuration
           after: // id of the previous mandatory spot (see “key concepts”, “Spot order”)
+          label: // spot name or descriptions
         }
       ]
     }
@@ -329,11 +329,17 @@ Callback argument is an object with the audio information.
 
 ```javascript
 audio: {
-  id: string,
-  label: string,
+  id: string, // is the Howler instance audio id. Is composed as spotId-audioId
   overlap: boolean,
   playWhenReady: boolean,
-  audio: Howler
+  spot: { // spot that caused playback
+    id: string, // spot id
+    label: string, // spot label
+    audio: string, // audio id
+    postiion: string, // position id
+    after: string
+  }
+  audio: Howler.Howl // howler instance
 }
 ```
 
@@ -348,11 +354,17 @@ Callback argument is an object with the audio information.
 
 ```javascript
 audio: {
-  id: string,
-  label: string,
+  id: string, // is the Howler instance audio id. Is composed as spotId-audioId
   overlap: boolean,
   playWhenReady: boolean,
-  audio: Howler
+  spot: { // spot that caused playback
+    id: string, // spot id
+    label: string, // spot label
+    audio: string, // audio id
+    postiion: string, // position id
+    after: string
+  }
+  audio: Howler.Howl // howler instance
 }
 ```
 
@@ -378,6 +390,7 @@ the `updateGeolocation` method.
 ### **`.updateGeolocation(position: object)`**
 Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).
 Position must be passed as [Geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
+Can also be used for development purposes, to simulate user location.
 
 
 ### **`.hasActiveSpots(): bool`**
@@ -417,47 +430,9 @@ Reloads geoXp instance with a new configuration. Every configuration change need
 Destroys geoXp instance and all of its subscriptions.
 
 ## **`Audio interaction`**
-GeoXp manages all audio content on its own. However, it’s possible to interact with it when needed (eg: showing audio current seek, playing / pausing audio, etc.).
-
-All methods for audio interaction are available in the audio module.
-
-### **`.audio.getAudio(id: string): object`**
-Gets audio content info based on its id as in audio configuration.
-
-It returns an object containing all audio current state.
-```javascript
-{
-  id, // audio id
-  label, // audio name or description
-  duration, // audio content duration
-  seek, // audio current seek (if playing)
-  playing // audio is currently playing
-}
-```
-
-### **`.audio.load(id: string)`**
-Loads an audio content in buffer without playing it, based on its id as in audio configuration.
-
-### **`.audio.play(id: string, fade: number, volume: number)`**
-Plays audio immediately based on its id as in audio configuration.
-
-Fade and volume are optional parameters that can be used to customize the playback.
-
-Fade represents the duration of the audio fading, in milliseconds.
-Volume is a number from 0 to 1 (full volume).
-
-### **`.audio.stop(id: string, fade: number)`**
-Stops audio based on its id as in audio configuration (if it’s actually playing).
-
-Fade is an optional parameter, representing the duration of the audio fading.
-
-### **`.audio.pause(id: string)`**
-Pauses audio playback based on its id as in audio configuration (if it’s playing).
-
-### **`.audio.seek(id: string, seek: number): number`**
-Gets the current seek of an audio content, based on its id as in audio configuration.
-
-If seek parameter is passed, the current audio seek is set.
+GeoXp manages all audio content on its own.
+However, it’s possible to interact with it when needed (eg: showing audio current seek, playing / pausing audio, etc.).
+In facts, the `audio` property of the `play` and `stop` events is an `Howl` oject (Howler.js instance for audio management) that exposes all methods for audio interaction (pause, play, seek).
 
 ### **`.audio.setVolume(volume: number)`**
 Sets the volume for all audio contents (wether they are playing or not).

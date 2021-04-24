@@ -14,23 +14,20 @@ const cfg = {
 const geoXp = new GeoXp(cfg);
 
 // when audio playback is started
-geoXp.on('play', audioId => {
-
-  // load audio information
-  const audioInfo = geoXp.getAudio(audioId);
+geoXp.on('play', data => {
 
   // pause audio
-  geoXp.audio.pause(audioId);
+  data.audio.pause();
 
-  // play audio with 1000 ms fade in
-  geoXp.audio.play(audioId, 1000);
+  // play audio
+  data.audio.play();
 
-  // stop audio with 1000 ms fade out
-  geoXp.audio.stop(audioId, 1000);
+  // stop audio
+  data.audio.stop();
 
   // seek audio + 10s
-  const newSeek = geoXp.audio.seek(audioId) + 10;
-  geoXp.audio.seek(audioId, newSeek);
+  const newSeek = data.audio.seek() + 10;
+  data.audio.seek(newSeek);
 
   // mute all sounds
   geoXp.audio.muteAll();
@@ -41,6 +38,6 @@ geoXp.on('play', audioId => {
 });
 
 // when audio playback is stopped / ended
-geoXp.on('end', audioId => {
+geoXp.on('end', data => {
   // do something cool...
 });
