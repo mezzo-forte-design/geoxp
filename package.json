@@ -12,12 +12,20 @@
   "contributors": [
     {
       "name": "Giuliano Buratti",
-      "email": "gburatti.rc@gmail.com"
+      "email": "gbcode.it@gmail.com"
     },
     {
       "name": "Francesco Cretti",
       "email": "francesco.cretti@gmail.com"
     }
+  ],
+  "keywords": [
+    "geolocation",
+    "audio",
+    "webaudio",
+    "audio experience",
+    "digital humanities",
+    "mezzo forte"
   ],
   "license": "Apache-2.0",
   "repository": {
