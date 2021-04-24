@@ -71,9 +71,6 @@ export default class GeoManager {
     this.FORCE_MIN_ACCURACY = 100; // m
     this.FORCE_MAX_DISTANCE = 100; // m
 
-    // inits force flag
-    this.forced = null;
-
     // sets config
     this._config = config;
 
@@ -144,30 +141,36 @@ export default class GeoManager {
   * */
   canForceSpot(positionId) {
     const position = this._config.positions.find(e => e.id === positionId);
+
     if (position) {
 
-      // checks last position accuracy
-      if (this.lastPosition.coords.accuracy <= this.FORCE_MIN_ACCURACY) {
+      const accuracy = this.lastPosition.coords.accuracy;
+      const distance = this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat);
+      const spotArea = (position.radius || this._config.default.playDistance) + (position.deadband || this._config.default.posDeadband);
+      // checks for max allowed distance
+      if (distance - accuracy > spotArea) {
+        console.warn('[GeoManager.canForceSpot] - Cannot force spot, too far');
+        return false;
+      }
 
-        // checks distance
-        if (this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat) < this.FORCE_MAX_DISTANCE) {
+      if (accuracy > this.FORCE_MIN_ACCURACY) {
 
-          // distance and accuracy checked
-          return true;
-
-        } else {
-
-          // not near enough
-          console.error('[GeoManager.canForcePosition] - Cannot force position, too far');
-        }
+        // canForce, poor accuracy
+        return true;
       } else {
 
-        // too accurate
-        console.error('[GeoManager.canForcePosition] - Cannot force position, current position is too accurate');
+        if (distance < spotArea) {
+          
+          // can force, near the spot
+          return true;
+        }
+
+        console.warn('[GeoManager.canForceSpot] - Cannot force spot, current position is too accurate');
+        return false;
       }
 
     } else {
-      console.error('[GeoManager.canForcePosition] - position id not found');
+      console.error('[GeoManager.canForceSpot] - position id not found');
     }
 
     return false;
