@@ -30,7 +30,7 @@ It’s made of three modules.
 ***
 
 # **Install**
-`npm install mezzoforte-geoxp`
+`npm install @mezzoforte/geoxp`
 
 # **Contents**
 * [Key concepts](#key-concepts)

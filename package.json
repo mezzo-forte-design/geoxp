@@ -1,5 +1,5 @@
 {
-  "name": "mezzoforte-geoxp",
+  "name": "@mezzoforte/geoxp",
   "version": "1.0.0",
   "description": "Mezzo Forte Geo Experience",
   "main": "/src/index.js",
