@@ -1,7 +1,6 @@
 [<img src="https://mezzoforte.design/img/logo_beige.svg" alt="Mezzo Forte" width="150"/>](https://mezzoforte.design/)
 
 # **Mezzo Forte GeoXp**
-### Manuale V2
 ###### April 2021
 #
 ###
@@ -108,9 +107,9 @@ The event behavior for a GeoXp spot is designed as follows:
 
 <img src="https://mezzoforte.design/img/geoxp-spot.png" alt="GeoXp spot" width="550"/>
 
-User enters the position circle (its active area), spot becomes “inside”, associated audio content is played.
-User leaves the position active area, but he’s still inside the deadband, the audio content is still playing.
-User leaves the deadband, spot becomes “outgoing”, the audio content fades out and stops.
+User enters the position circle (its _inside_ area), spot becomes _active_, associated audio content is played.
+User leaves the position _inside_ area, but he’s still inside the deadband, the audio content is still playing.
+User leaves the deadband, spot becomes _outgoing_, the audio content fades out and stops.
 
 ### **Patterns**
 A list of spots is called a pattern. Patterns define the overall behavior of its spots.
@@ -119,7 +118,7 @@ Patterns are separate entities that don’t talk to each other, spots order and 
 
 ### **Spots order**
 GeoXP provides limited content queue management. This can be achieved using the spot “after” property.
-If after is defined, `GeoXp` will not reproduce a certain spot content unless the after spot has already been played.
+If after is defined, GeoXp will not reproduce a certain spot content unless the after spot has already been played.
 
 ### **Content replay**
 When content starts playing, a spot becomes “visited”.
@@ -128,13 +127,13 @@ This behavior can be overridden using the pattern “replay” option. In this c
 Spots could be “unvisited” (actually forcing an immediate replay) using the `replaySpot()` method.
 
 ### **Content overlap**
-When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior geoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
+When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior GeoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
 This can be overridden using the pattern “overlap” configuration option.
 
 ### **Force a spot**
 Forcing a spot activation is possible only in two cases:
 * provided GPS signal accuracy is over the threshold of 100 meters (in the case of a poor GPS signal)
-* provided GPS accuracy is good and user's position is less than 100m from the position of the target spot (in the case of slow location update time and the user has reached a new spot before an update)
+* provided GPS accuracy is good and user's position is close to the target spot (in the case of slow location update time and the user has reached a new spot before an update)
 
 Otherwise, spot activation is automatic.
 
@@ -160,7 +159,7 @@ Configuration for geolocation (*geo*) is a simple map of positions and parameter
 Configuration for experience is meant to set links between positions and related content.
 
 Each configuration section has a .default child that stores some module working parameters.
-If no default object is provided, geoXp will use its hardcoded default configuration.
+If no default object is provided, GeoXp will use its hardcoded default configuration.
 
 
 ## **Geo configuration**
@@ -230,7 +229,7 @@ experience: {
     }
   ],
   default: {
-    visitedFilter: number // milliseconds before an already visited spot is notified
+    visitedFilter: number // milliseconds after an already visited spot is notified
   }
 }
 ```
@@ -336,7 +335,7 @@ audio: {
     id: string, // spot id
     label: string, // spot label
     audio: string, // audio id
-    postiion: string, // position id
+    postion: string, // position id
     after: string
   }
   audio: Howler.Howl // howler instance
@@ -361,7 +360,7 @@ audio: {
     id: string, // spot id
     label: string, // spot label
     audio: string, // audio id
-    postiion: string, // position id
+    postion: string, // position id
     after: string
   }
   audio: Howler.Howl // howler instance
@@ -375,7 +374,7 @@ Unlock method forces geolocation api and howler js activation. This is needed in
 **IMPORTANT - call this method within a user action, such as a click listener!**
 
 ### **`.disablePattern(id: string)`**
-Forces deactivation of a configured pattern based.
+Forces deactivation of a configured pattern.
 Id is the id of the pattern to set as in experience configuration.
 
 ### **`.enablePattern(id: string)`**
@@ -384,14 +383,12 @@ Id is the id of the pattern to set as in experience configuration.
 
 ### **`.internalGeolocation(enabled: boolean)`**
 Enables/disables defalut internal geolocation system ([Geolocation API](https://developer.mozilla.org/it/docs/Web/API/Geolocation)).
-In case you has an external geolocation system you may want to disable this calling `internalGeolocation(false)` and update the position with
-the `updateGeolocation` method.
+In case you have an external geolocation system, you may want to disable this calling `internalGeolocation(false)` and update the position with the `updateGeolocation` method.
 
 ### **`.updateGeolocation(position: object)`**
 Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).
 Position must be passed as [Geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
 Can also be used for development purposes, to simulate user location.
-
 
 ### **`.hasActiveSpots(): bool`**
 Returns true if there are active spots.
@@ -418,10 +415,13 @@ If no id is provided, all current inside spots are marked as unvisited.
 Marking a spot as unvisited will make its content play again when the user enters its configured location.
 
 ### **`.forceSpot(id: string)`**
-If possible, forces a spot activation. See [Foce a spot](#force-a-spot).
+If possible, forces a spot activation. See [Focre a spot](#force-a-spot).
 
-### **`.canForceSpot(id: string)`**
+### **`.canForceSpot(id: string): boolean`**
 Checks if a spot can be forced.
+
+### **`.removeForce()`**
+If there are foced spots, removes the _forced_ condition and restores the normal automatic experience logic (this will not necessary stop audio playback).
 
 ### **`.reload(config: object)`**
 Reloads geoXp instance with a new configuration. Every configuration change needs a reload() to be processed.
@@ -432,7 +432,7 @@ Destroys geoXp instance and all of its subscriptions.
 ## **`Audio interaction`**
 GeoXp manages all audio content on its own.
 However, it’s possible to interact with it when needed (eg: showing audio current seek, playing / pausing audio, etc.).
-In facts, the `audio` property of the `play` and `stop` events is an `Howl` oject (Howler.js instance for audio management) that exposes all methods for audio interaction (pause, play, seek).
+In facts, the `audio` property of the [`play`](#content-playing) and [`stop`](#content-ended) events is an `Howl` oject (the Howler.js instance for audio management) that exposes all methods for audio interaction (pause, play, seek).
 
 ### **`.audio.setVolume(volume: number)`**
 Sets the volume for all audio contents (wether they are playing or not).
@@ -471,7 +471,7 @@ Now, let’s change application. GeoXp is used to play ambient sounds at certain
 
     `config.experience.patterns[x].overlap = true`
 
-* that user must hear the content every time he is in the right location
+* that user must hear the content every time is in the right location
 
     `config.experience.patterns[x].replay = true`
 
