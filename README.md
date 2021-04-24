@@ -390,6 +390,7 @@ the `updateGeolocation` method.
 ### **`.updateGeolocation(position: object)`**
 Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).
 Position must be passed as [Geolocation API standard position object](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition).
+Can also be used for development purposes, to simulate user location.
 
 
 ### **`.hasActiveSpots(): bool`**
