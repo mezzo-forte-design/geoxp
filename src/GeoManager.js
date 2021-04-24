@@ -147,6 +147,7 @@ export default class GeoManager {
       const accuracy = this.lastPosition.coords.accuracy;
       const distance = this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat);
       const spotArea = (position.radius || this._config.default.playDistance) + (position.deadband || this._config.default.posDeadband);
+      
       // checks for max allowed distance
       if (distance - accuracy > spotArea) {
         console.warn('[GeoManager.canForceSpot] - Cannot force spot, too far');

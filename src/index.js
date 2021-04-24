@@ -310,7 +310,11 @@ export default class GeoXp {
     this.experience.forceSpot(id);
   }
 
+  /**
+  * Removes the forced spot activation
+  * */
   removeForce() {
+    this.experience.forced = null;
     this.geo.internalGeolocation(true);
     this.geo.refresh();
   }
