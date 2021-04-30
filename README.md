@@ -142,6 +142,19 @@ Otherwise, spot activation is automatic.
 # **Usage**
 GeoXp is intended to be used as a singleton instance. It has to be created once the application starts, based on a configuration object.
 
+## **Create a GeoXp instance**
+```javascript
+// import module
+import GeoXp from '@mezzo-forte/geoxp';
+
+// create configuration object
+const config = { /* your configuration here */ };
+
+// create the GeoXp instance
+const geoXp = new GeoXp(config);
+
+```
+
 ## **Configuration**
 GeoXp, once created, works without any external intervention. To provide this high level of automation, it has to be accurately configured according to the desired application.
 The configuration is provided with a json object made of three parts, each carrying the configuration information for one of the internal modules.
