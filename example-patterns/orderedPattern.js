@@ -3,7 +3,7 @@ Here's an example configuration for an ordered pattern.
 Three audios have to be played at three different locations, ordered from 1 to 3.
 */
 
-import GeoXp from 'mezzoforte-geoXp';
+import GeoXp from '@mezzo-forte/geoxp';
 
 // step 1: geo configuration
 // maps all the relevant locations, provides info for geoFencing

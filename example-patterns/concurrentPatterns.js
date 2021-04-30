@@ -3,7 +3,7 @@ Here's an example configuration for two concurrent patterns.
 The first carries the actual content, while the second is used to play background ambient sounds at spots location.
 */
 
-import GeoXp from 'mezzoforte-geoXp';
+import GeoXp from '@mezzo-forte/geoxp';
 
 // step 1: geo configuration
 // maps all the relevant locations, provides info for geoFencing
