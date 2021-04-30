@@ -1,13 +1,14 @@
-
 import { EventEmitter } from 'events';
 
 /* CORE MODULES */
 import GeoManager from './GeoManager';
+
 import AudioManager from './AudioManager';
+
 import ExperienceManager from './ExperienceManager';
 
-/* device parser */
 import Device from './utils/Device';
+
 
 /**
  * Creates GeoXp class.
@@ -16,9 +17,9 @@ import Device from './utils/Device';
  * @returns { Object } - GeoXp instance
  * @constructor
  */
-export default class GeoXp {
-  constructor(config) {
-    /**
+class GeoXp {
+
+  /**
     config: {
       geo: {
         positions: [{
@@ -69,7 +70,7 @@ export default class GeoXp {
       }
     }
     */
-
+  constructor(config) {
     this._config = config;
 
     // instantiates modules
@@ -229,7 +230,7 @@ export default class GeoXp {
 
   /**
   * Provides external positioning
-  * @param position - position data in geolocation api format
+  * @param position {GeolocationPosition} position data in [Geolocation API position format]{@link https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition}
   * @returns { boolean }
   */
   updateGeolocation(position) {
@@ -403,3 +404,5 @@ export default class GeoXp {
     this.event.off(eventName, listener);
   }
 }
+
+export default GeoXp;

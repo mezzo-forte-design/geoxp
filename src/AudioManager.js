@@ -1,5 +1,9 @@
+/** @module AudioManager */
+
 import {Howl, Howler} from 'howler';
+
 import Device from './utils/Device.js';
+
 import { Subject } from 'rxjs';
 
 // Howler configuration
@@ -133,7 +137,7 @@ export default class AudioManager {
     // sets id to spot id + audio id
     const id = `${spot.id}-${audio.id}`;
 
-    // New 
+    // New
     const sound = {
       id,
       spot,

@@ -1,3 +1,5 @@
+/** @module ExperienceManager */
+
 import { Subject } from 'rxjs';
 
 /**
