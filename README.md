@@ -489,6 +489,6 @@ Most mobile browsers will block Howler and Geolocation API after some time with 
 ***
 
 # Examples
-Some configuration examples, for different kind of patterns, can be found inside the [example-patterns](example-patterns).
-A basic application, with event usage, can be found inside the [example-app](example-app) folder.
+Some configuration examples, for different kind of patterns, can be found inside the [example-patterns](https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/tree/master/example-patterns).
+A basic application, with event usage, can be found inside the [example-app](https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/tree/master/example-app) folder.
 
