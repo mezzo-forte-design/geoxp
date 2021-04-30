@@ -13,7 +13,7 @@ document.getElementById('pos-in-button').addEventListener('click', e => {
     }
   };
 
-  geoXp.geo._geoSuccess(position);
+  geoXp.updateGeolocation(position);
 });
 
 document.getElementById('pos-out-button').addEventListener('click', e => {
@@ -25,7 +25,7 @@ document.getElementById('pos-out-button').addEventListener('click', e => {
     }
   };
 
-  geoXp.geo._geoSuccess(position);
+  geoXp.updateGeolocation(position);
 });
 
 document.getElementById('test-button').addEventListener('click', e => {
