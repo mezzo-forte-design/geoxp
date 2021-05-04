@@ -13,9 +13,9 @@ Howler.autoUnlock = true;
 
 /**
  * Creates AudioManager class.
- * AudioManager is responsible for all audio media management.
- * @param config - Config options for init
- * @returns { Object } - AudioManager instance
+ * AudioManager is responsible for all audio media management
+ * @param { Object } config - Audio config options
+ * @returns { Object } Audio manager instance
  * @constructor
  */
 export default class AudioManager {
@@ -44,7 +44,7 @@ export default class AudioManager {
 
   /**
   * Inits AudioManager on provided options
-  * @param config - sound id information
+  * @param { Object } config - Audio config options
   */
   _init(config) {
 
@@ -71,7 +71,7 @@ export default class AudioManager {
 
   /**
   * Resets AudioManager to provided options
-  * @param config - Config options for init
+  * @param { Object } config - Audio config options
   */
   reload(config) {
     this.unload();
@@ -88,14 +88,14 @@ export default class AudioManager {
   }
 
   /**
-  * Plays test system sound.
+  * Plays test system sound
   */
   test() {
     this._playSystemSound(this._config.default.test);
   }
 
   /**
-  * Plays silence.
+  * Plays silence
   */
   silence() {
     this._playSystemSound(this._config.default.silence);
@@ -109,17 +109,17 @@ export default class AudioManager {
   }
 
   /**
-  * Plays already visited system sound.
+  * Plays already visited system sound
   */
   visited() {
     this._playSystemSound(this._config.default.visited);
   }
 
   /**
-  * Loads Howler sounds in buffer.
-  * @param spot - spot to load
-  * @param overlap - can overlap
-  * @param playWhenReady - (false) play sound when loaded
+  * Loads Howler sounds in buffer
+  * @param { Object } spot - spot to load
+  * @param { boolean } overlap - can overlap other sounds
+  * @param { boolean } [playWhenReady = false] - play sound when loaded
   */
   load(spot, overlap = false, playWhenReady = false) {
 
@@ -179,10 +179,10 @@ export default class AudioManager {
 
   /**
   * Plays Howler sounds if loaded, else load() then play().
-  * @param spot - spot to play,
-  * @param overlap - overlapped sound,
-  * @param fade - (0) fadeIn time
-  * @param volume - (1) playback volume
+  * @param { Object } spot - spot to load
+  * @param { boolean } overlap - can overlap other sounds
+  * @param { number } [fade = 0] - fade in time
+  * @param { number } [volume = 1] - playback volume from 0 to 1
   */
   play(spot, overlap = false, fade = 0, volume = 1) {
 
@@ -218,9 +218,9 @@ export default class AudioManager {
   }
 
   /**
-  * Stops specific sound
-  * @param spot - spot to stop
-  * @param fade - (0) fadeOut time
+  * Stops specific spot sound
+  * @param { Object } spot - spot to load
+  * @param { number } [fade = 0] - fade out time
   */
   stop(spot, fade = 0) {
 
@@ -249,8 +249,8 @@ export default class AudioManager {
 
   /**
   * Checks if any sound is playing
-  * @param overlap - if true, exclude overlapping audios
-  * @returns { boolean }
+  * @param { boolean } [overlap = false] - if true, excludes overlapping audios
+  * @returns { boolean } Sound is playing
   * */
   hasAudioPlaying(overlap = false) {
     let atLeastOne = false;
@@ -266,44 +266,8 @@ export default class AudioManager {
   }
 
   /**
-  * Sets seek for selected audio
-  * @param id - sound id
-  * @param seek - timestamp to seek [sec]
-  */
-  seek(id, seek) {
-    const sound = this._buffer.get(id);
-    if (sound) {
-      if(seek) {
-        // Howler seek timestamp [sec]
-        sound.audio.seek(seek);
-      }
-
-      return sound.audio.seek();
-    }
-    return;
-  }
-
-  /**
-  * Pauses audio
-  * @param id - sound id
-  */
-  pause(id) {
-    const sound = this._buffer.get(id);
-    if (sound) {
-
-      if (sound.audio.playing()) {
-
-        sound.audio.pause();
-      }
-    } else {
-      console.error('[AudioManager.pause] - Audio not found, cannot pause');
-    }
-    return;
-  }
-
-  /**
   * Sets the volume for all audios
-  * @param volume - Set volume 0 >> 1
+  * @param { number } volume - Set volume 0 to 1
   */
   setVolume(volume) {
     Howler.volume = volume;
@@ -318,7 +282,7 @@ export default class AudioManager {
 
   /**
   * Mutes all sounds
-  * @param muted - Mute or unmute
+  * @param { boolean } muted - Mute or unmute
   */
   muteAll(muted) {
     Howler.mute(muted);
@@ -326,7 +290,7 @@ export default class AudioManager {
 
   /**
   * Destroys specific sound
-  * @param id - sound id
+  * @param {string} id - id of sound to destroy
   */
   _destroy(id) {
     const sound = this._buffer.get(id);
@@ -338,7 +302,7 @@ export default class AudioManager {
 
   /**
   * Plays system sound
-  * @param url - url of sound to play
+  * @param { string } url - url of sound to play
   */
   _playSystemSound(url) {
     if (!this._systemSoundPlaying) {
