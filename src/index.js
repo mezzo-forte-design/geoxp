@@ -50,7 +50,11 @@ import Device from './utils/Device';
 * @property { boolean } [patterns[].disabled = null] - Pattern is disabled
 * @property { boolean } [patterns[].replay = null] - Pattern spots are replayed by default
 * @property { boolean } [patterns[].overlap = null] - Pattern spots can overlap (more than one can be active at the same time)
-* @property { Spot[] } patterns[].spots - Pattern spots
+* @property { Object[] } patterns[].spots - Pattern spots
+* @property { string } patterns[].spots[].id - Spot id
+* @property { string } patterns[].spots[].position - Spot linked position id
+* @property { string } patterns[].spots[].audio - Spot linked audio id
+* @property { string } [patterns[].spots[].after = null] - Spot can go active only after this spot id has been visited
 * @property { Object } default - Experience default values
 * @property { number } default.visitedFilter - Time before visisted spot is notified for filtering [seconds]
 */
@@ -58,9 +62,31 @@ import Device from './utils/Device';
 /**
 * @typedef {Object} Spot
 * @property { string } id - Spot id
+* @property { string } label - Spot name/desc
 * @property { string } position - Spot linked position id
 * @property { string } audio - Spot linked audio id
-* @property { string } [after = null] - Spot can go active only after this spot id is visited
+* @property { string } [after = null] - Spot can go active only after this spot id has been visited
+*/
+
+/**
+* @typedef {Object} Audio
+* @property { string } id - Audio id
+* @property { boolean } overlap - Audio can overlap with others yet playing
+* @property { boolean } playWhenReady - Audio is to be played immediately when loaded
+* @property { Spot } spot - Spot that owns this audio content
+* @property { Object } audio - Audio instance as [Howler.Howl] {@link https://pub.dev/documentation/howler/latest/howler/Howl-class.html}
+*/
+
+/**
+* play | end event listener 
+* @callback audioListener
+* @param { Audio } audio
+*/
+
+/**
+* incoming | active | visited | ougoing event listener
+* @callback spotListener
+* @param { Spot } spot
 */
 
 
@@ -222,7 +248,9 @@ class GeoXp {
   }
 
   /**
-  * Unlocks geolocation and webaudio APIs
+  * Unlock method forces geolocation api and howler js activation. 
+  * This is needed in mobile integration, to avoid browser locking the functionalities when app goes background
+  * **IMPORTANT - call this method within a user action, such as a click listener!**
   */
   unlock() {
     this.geo.unlock();
@@ -230,7 +258,8 @@ class GeoXp {
   }
 
   /**
-  * Enables / disables internal geolocation updates
+  * Enables/disables defalut internal geolocation system [Geolocation API]{@link https://developer.mozilla.org/it/docs/Web/API/Geolocation}.
+  * In case you have an external geolocation system, you may want to disable this calling `internalGeolocation(false)` and update the position with the `updateGeolocation` method.
   * @param { boolean } enabled - enable or disable
   */
   internalGeolocation(enabled) {
@@ -238,7 +267,8 @@ class GeoXp {
   }
 
   /**
-  * Provides external positioning
+  * Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).
+  * Can also be used for development purposes, to simulate user location
   * @param { Object } position - position data in [Geolocation API position format]{@link https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition}
   */
   updateGeolocation(position) {
@@ -246,7 +276,7 @@ class GeoXp {
   }
 
   /**
-  * Enables specific pattern
+  * Enables a configured experience pattern
   * @param { string } id - pattern id to enable
   */
   enablePattern(id) {
@@ -254,7 +284,7 @@ class GeoXp {
   }
 
   /**
-  * Disables specific pattern
+  * Disables a configured experience pattern
   * @param { string } id - pattern id to disable
   */
   disablePattern(id) {
@@ -272,14 +302,14 @@ class GeoXp {
   /**
   * Returns spot by id
   * @param { string } id - id of spot to find
-  * @returns { Spot | null } - spot found or null
+  * @returns { Spot | null } Spot found or null
   */
   getSpot(id) {
     return this.experience.getSpot(id);
   }
 
   /**
-  * Marks spots as unvisited
+  * Marks spots as unvisited.
   * If no spot id provided, marks all inside spots as unvisited
   * @param { string } [id = null] - id of spot to unvisit
   */
@@ -288,8 +318,8 @@ class GeoXp {
   }
 
   /**
-  * Checks if manual mode is available
-  * Rules are
+  * Checks if manual mode is available.
+  * Rules are:
   * Your gps accuracy is really bad
   * You are not too far away
   * @param { string } id - id of spot to force
@@ -334,7 +364,7 @@ class GeoXp {
   /**
   * Checks if any sound is playing
   * @param { boolean } [overlap = false] - if true, excludes overlapping audios
-  * @returns { boolean }
+  * @returns { boolean } Sounds are playing
   * */
   hasAudioPlaying(overlap = false) {
     return this.audio.hasAudioPlaying(overlap);
@@ -378,7 +408,7 @@ class GeoXp {
   /**
   * Event wrapper on
   * @param { string } eventName - 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
-  * @param { function } listener - listener callback
+  * @param { spotListener | audioListener } listener - listener
   */
   on(eventName, listener) {
     if (typeof listener !== 'function') {
@@ -392,7 +422,7 @@ class GeoXp {
   /**
   * Event wrapper once
   * @param { string } eventName - 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
-  * @param { function } listener - listener callback
+  * @param { spotListener | audioListener } listener - listener
   */
   once(eventName, listener) {
     if (typeof listener !== 'function') {
@@ -406,7 +436,7 @@ class GeoXp {
   /**
   * Event wrapper off
   * @param { string } eventName - 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
-  * @param { function } listener - listener callback
+  * @param { spotListener | audioListener } listener - listener
   */
   off(eventName, listener) {
     if (typeof listener !== 'function') {

@@ -30,8 +30,7 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>GeoXp<span class="signature">(config)</span><span class="type-signature"> &rarr; {Object}</span></h2>
         
-            <div class="class-description">Creates GeoXp class.
-GeoXp manages the MezzoForte Geo Experience</div>
+            <div class="class-description">Creates GeoXp class.GeoXp manages the MezzoForte Geo Experience</div>
         
     
 </header>
@@ -238,7 +237,7 @@ GeoXp manages the MezzoForte Geo Experience</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line81">line 81</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -324,10 +323,7 @@ GeoXp manages the MezzoForte Geo Experience</div>
 
 
 <div class="description">
-    Checks if manual mode is available
-Rules are
-Your gps accuracy is really bad
-You are not too far away
+    Checks if manual mode is available.Rules are:Your gps accuracy is really badYou are not too far away
 </div>
 
 
@@ -420,7 +416,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line298">line 298</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line328">line 328</a>
     </li></ul></dd>
     
 
@@ -530,7 +526,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line360">line 360</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line390">line 390</a>
     </li></ul></dd>
     
 
@@ -574,7 +570,7 @@ You are not too far away
 
 
 <div class="description">
-    Disables specific pattern
+    Disables a configured experience pattern
 </div>
 
 
@@ -667,7 +663,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line260">line 260</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line290">line 290</a>
     </li></ul></dd>
     
 
@@ -711,7 +707,7 @@ You are not too far away
 
 
 <div class="description">
-    Enables specific pattern
+    Enables a configured experience pattern
 </div>
 
 
@@ -804,7 +800,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line252">line 252</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line282">line 282</a>
     </li></ul></dd>
     
 
@@ -848,11 +844,7 @@ You are not too far away
 
 
 <div class="description">
-    Forces spot activation (manual mode)
-Forces other spots deactivation unless overlapping
-Rules are
-Your gps accuracy is really bad
-You are not too far away
+    Forces spot activation (manual mode)Forces other spots deactivation unless overlappingRules areYour gps accuracy is really badYou are not too far away
 </div>
 
 
@@ -945,7 +937,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line313">line 313</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line343">line 343</a>
     </li></ul></dd>
     
 
@@ -1082,7 +1074,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line277">line 277</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line307">line 307</a>
     </li></ul></dd>
     
 
@@ -1111,7 +1103,7 @@ You are not too far away
 
         
 <div class="param-desc">
-    - spot found or null
+    Spot found or null
 </div>
 
 
@@ -1195,7 +1187,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line268">line 268</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line298">line 298</a>
     </li></ul></dd>
     
 
@@ -1374,7 +1366,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line339">line 339</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line369">line 369</a>
     </li></ul></dd>
     
 
@@ -1402,6 +1394,10 @@ You are not too far away
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    Sounds are playing
+</div>
+
 
 
 <dl>
@@ -1436,7 +1432,7 @@ You are not too far away
 
 
 <div class="description">
-    Enables / disables internal geolocation updates
+    Enables/disables defalut internal geolocation system <a href="https://developer.mozilla.org/it/docs/Web/API/Geolocation">Geolocation API</a>.In case you have an external geolocation system, you may want to disable this calling `internalGeolocation(false)` and update the position with the `updateGeolocation` method.
 </div>
 
 
@@ -1529,7 +1525,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line236">line 236</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -1638,7 +1634,10 @@ You are not too far away
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#spotListener">spotListener</a></span>
+|
+
+<span class="param-type"><a href="global.html#audioListener">audioListener</a></span>
 
 
             
@@ -1648,7 +1647,7 @@ You are not too far away
 
             
 
-            <td class="description last">listener callback</td>
+            <td class="description last">listener</td>
         </tr>
 
     
@@ -1689,7 +1688,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line411">line 411</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line441">line 441</a>
     </li></ul></dd>
     
 
@@ -1798,7 +1797,10 @@ You are not too far away
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#spotListener">spotListener</a></span>
+|
+
+<span class="param-type"><a href="global.html#audioListener">audioListener</a></span>
 
 
             
@@ -1808,7 +1810,7 @@ You are not too far away
 
             
 
-            <td class="description last">listener callback</td>
+            <td class="description last">listener</td>
         </tr>
 
     
@@ -1849,7 +1851,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line383">line 383</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line413">line 413</a>
     </li></ul></dd>
     
 
@@ -1958,7 +1960,10 @@ You are not too far away
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type"><a href="global.html#spotListener">spotListener</a></span>
+|
+
+<span class="param-type"><a href="global.html#audioListener">audioListener</a></span>
 
 
             
@@ -1968,7 +1973,7 @@ You are not too far away
 
             
 
-            <td class="description last">listener callback</td>
+            <td class="description last">listener</td>
         </tr>
 
     
@@ -2009,7 +2014,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line397">line 397</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line427">line 427</a>
     </li></ul></dd>
     
 
@@ -2241,7 +2246,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line350">line 350</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line380">line 380</a>
     </li></ul></dd>
     
 
@@ -2329,7 +2334,7 @@ You are not too far away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line328">line 328</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line358">line 358</a>
     </li></ul></dd>
     
 
@@ -2373,8 +2378,7 @@ You are not too far away
 
 
 <div class="description">
-    Marks spots as unvisited
-If no spot id provided, marks all inside spots as unvisited
+    Marks spots as unvisited.If no spot id provided, marks all inside spots as unvisited
 </div>
 
 
@@ -2487,7 +2491,7 @@ If no spot id provided, marks all inside spots as unvisited
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line286">line 286</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line316">line 316</a>
     </li></ul></dd>
     
 
@@ -2531,7 +2535,7 @@ If no spot id provided, marks all inside spots as unvisited
 
 
 <div class="description">
-    Unlocks geolocation and webaudio APIs
+    Unlock method forces geolocation api and howler js activation. This is needed in mobile integration, to avoid browser locking the functionalities when app goes background**IMPORTANT - call this method within a user action, such as a click listener!**
 </div>
 
 
@@ -2575,7 +2579,7 @@ If no spot id provided, marks all inside spots as unvisited
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line227">line 227</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line255">line 255</a>
     </li></ul></dd>
     
 
@@ -2619,7 +2623,7 @@ If no spot id provided, marks all inside spots as unvisited
 
 
 <div class="description">
-    Provides external positioning
+    Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).Can also be used for development purposes, to simulate user location
 </div>
 
 
@@ -2712,7 +2716,7 @@ If no spot id provided, marks all inside spots as unvisited
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line244">line 244</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line274">line 274</a>
     </li></ul></dd>
     
 
@@ -2764,7 +2768,7 @@ If no spot id provided, marks all inside spots as unvisited
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed May 05 2021 10:31:49 GMT+0200 (Ora legale dell’Europa centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed May 05 2021 14:29:15 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

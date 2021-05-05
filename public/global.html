@@ -102,6 +102,218 @@
 
         
                 
+<h4 class="name" id="Audio">Audio</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Audio id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>overlap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Audio can overlap with others yet playing</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>playWhenReady</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Audio is to be played immediately when loaded</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>spot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Spot">Spot</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Spot that owns this audio content</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>audio</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Audio instance as [Howler.Howl] <a href="https://pub.dev/documentation/howler/latest/howler/Howl-class.html">https://pub.dev/documentation/howler/latest/howler/Howl-class.html</a></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line71">line 71</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
 <h4 class="name" id="AudioCfg">AudioCfg</h4>
 
 
@@ -408,6 +620,143 @@
 
             
                 
+
+    
+
+    
+    <h4 class="name" id="audioListener"><span class="type-signature"></span>audioListener<span class="signature">(audio)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    play | end event listener
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>audio</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Audio">Audio</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line80">line 80</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+                
 <h4 class="name" id="ExperienceCfg">ExperienceCfg</h4>
 
 
@@ -642,7 +991,7 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="global.html#Spot">Spot</a>></span>
+<span class="param-type">Array.&lt;Object></span>
 
 
             
@@ -663,6 +1012,142 @@
             
 
             <td class="description last">Pattern spots</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>patterns[].spots[].id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Spot id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>patterns[].spots[].position</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Spot linked position id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>patterns[].spots[].audio</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Spot linked audio id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>patterns[].spots[].after</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">Spot can go active only after this spot id has been visited</td>
         </tr>
 
     
@@ -1305,6 +1790,39 @@
 
         <tr>
             
+                <td class="name"><code>label</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Spot name/desc</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>position</code></td>
             
 
@@ -1401,7 +1919,7 @@
                 </td>
             
 
-            <td class="description last">Spot can go active only after this spot id is visited</td>
+            <td class="description last">Spot can go active only after this spot id has been visited</td>
         </tr>
 
     
@@ -1440,7 +1958,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line58">line 58</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -1450,6 +1968,143 @@
 
     
 </dl>
+
+
+
+
+
+
+            
+                
+
+    
+
+    
+    <h4 class="name" id="spotListener"><span class="type-signature"></span>spotListener<span class="signature">(spot)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    incoming | active | visited | ougoing event listener
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>spot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Spot">Spot</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line86">line 86</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1476,7 +2131,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed May 05 2021 10:31:49 GMT+0200 (Ora legale dell’Europa centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed May 05 2021 14:29:15 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
