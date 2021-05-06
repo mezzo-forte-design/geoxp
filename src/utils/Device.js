@@ -35,7 +35,7 @@ export default class Device {
   static get geolocationOpts() {
     const browser = Bowser.getParser(window.navigator.userAgent);
     const geolocationOpts = {
-      enableHighAccuracy : Boolean(browser.getBrowserName() !== 'Firefox'),
+      enableHighAccuracy : false,
       maximumAge         : 30000,
       timeout            : 27000
     };
