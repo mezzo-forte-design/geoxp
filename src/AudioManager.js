@@ -1,10 +1,15 @@
 /** @module AudioManager */
 
-import {Howl, Howler} from 'howler';
+import { Howl, Howler } from 'howler';
 
 import Device from './utils/Device.js';
 
 import { Subject } from 'rxjs';
+
+// default audio
+import defaultSilenceSound from './audio/silence.mp3';
+import defaultTestSound from './audio/test.mp3';
+import defaultVisitedSound from './audio/visited.mp3';
 
 // Howler configuration
 const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
@@ -50,15 +55,16 @@ export default class AudioManager {
 
     // sets default if none provided
     if (!config.default) {
+      console.warn('[AudioManager] - System sounds URLs not provided - using default silence, test and visited sounds');
       config.default = {
-        test: "./audio/test.mp3",
-        silence: "./audio/silence.mp3",
-        visited: "./audio/visited.mp3"
+        test: defaultTestSound,
+        silence: defaultSilenceSound,
+        visited: defaultVisitedSound
       }
     } else {
-      config.test ? config.test : "./audio/test.mp3";
-      config.silence ? config.silence : "./audio/silence.mp3";
-      config.visited ? config.visited : "./audio/visited.mp3";
+      config.test ? config.test : defaultTestSound;
+      config.silence ? config.silence : defaultSilenceSound;
+      config.visited ? config.visited : defaultVisitedSound;
     }
 
     // sets config
@@ -67,7 +73,7 @@ export default class AudioManager {
     // init variables
     this.playing = [];
 
-    if(this._buffer) {
+    if (this._buffer) {
       this._buffer.clear();
     }
     this._buffer = new Map();
@@ -132,7 +138,7 @@ export default class AudioManager {
       return;
     }
 
-    const audio = this._config.sounds.find( e => e.id === spot.audio);
+    const audio = this._config.sounds.find(e => e.id === spot.audio);
     if (!audio) {
       console.error('[AudioManager.load] - sound not found. Cannot load');
       return;
@@ -148,9 +154,9 @@ export default class AudioManager {
       overlap,
       playWhenReady,
       audio: new Howl({
-        src    : [audio.url],
-        format : 'mp3',
-        html5  : !USE_WEBAUDIO
+        src: [audio.url],
+        format: 'mp3',
+        html5: !USE_WEBAUDIO
       })
     }
 
@@ -313,20 +319,20 @@ export default class AudioManager {
       this._systemSoundPlaying = true;
 
       this._buffer.forEach(e => {
-        if(e) e.audio.volume(.2);
+        if (e) e.audio.volume(.2);
       })
 
       const sound = new Howl({
-        src      : [url],
-        format   : 'mp3',
-        html5    : !USE_WEBAUDIO,
-        autoplay : true
+        src: [url],
+        format: 'mp3',
+        html5: !USE_WEBAUDIO,
+        autoplay: true
       });
 
       sound.on('end', () => {
         this._systemSoundPlaying = false;
         this._buffer.forEach(e => {
-          if(e) e.audio.volume(1);
+          if (e) e.audio.volume(1);
         })
       });
     }
