@@ -55,6 +55,7 @@ import Device from './utils/Device';
 * @property { string } patterns[].spots[].position - Spot linked position id
 * @property { string } patterns[].spots[].audio - Spot linked audio id
 * @property { string } [patterns[].spots[].after = null] - Spot can go active only after this spot id has been visited
+* @property { string } [patterns[].spots[].notAfter = null] - Spot cannot go active after this spot id has been visited
 * @property { Object } default - Experience default values
 * @property { number } default.visitedFilter - Time before visisted spot is notified for filtering [seconds]
 */
@@ -66,6 +67,7 @@ import Device from './utils/Device';
 * @property { string } position - Spot linked position id
 * @property { string } audio - Spot linked audio id
 * @property { string } [after = null] - Spot can go active only after this spot id has been visited
+* @property { string } [notAfter = null] - Spot cannot go active after this spot id has been visited
 */
 
 /**

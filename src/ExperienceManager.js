@@ -23,6 +23,7 @@ export default class ExperienceManager {
             position
             audio
             after
+            notAfter
         }]
       }],
       default: {
@@ -160,15 +161,16 @@ export default class ExperienceManager {
       spots.forEach((spot) => {
 
         // for each spot linked to position
+        // first time
         if (pattern.cfg.replay || !pattern.visited.includes(spot.id)) {
 
-          // first time
-          if (!spot.after || pattern.visited.includes(spot.after)) {
+          // spot order ok
+          if ((!spot.after || pattern.visited.includes(spot.after))
+          && (!spot.notAfter || !pattern.visited.includes(spot.notAfter))) {
 
-            // spot order ok
+            // overlap ok
             if (pattern.cfg.overlap || pattern.active.length == 0) {
 
-              // overlap ok
               if (!pattern.active.includes(spot.id)) {
                 pattern.active.push(spot.id);
               }

@@ -8,6 +8,14 @@ const geo = {
       "lon": 7.742615,
       "radius": 10000,
       "deadband": 20
+    },
+    {
+      "id": "pos2",
+      "label": "pos2",
+      "lat": 45.116177,
+      "lon": 6.742615,
+      "radius": 10000,
+      "deadband": 20
     }
   ],
   "default": {
