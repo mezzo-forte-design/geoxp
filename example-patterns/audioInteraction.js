@@ -3,7 +3,7 @@ Here's an example that details audio interaction.
 For reading easiness, configuration is avoided.
 */
 
-import GeoXp from 'mezzoforte-geoXp';
+import GeoXp from '@mezzo-forte/geoxp';
 
 // just a filler config, it will not work
 const cfg = {

@@ -1,10 +1,12 @@
+/** @module ExperienceManager */
+
 import { Subject } from 'rxjs';
 
 /**
- * Creates ExperienceyManager class.
- * ExperienceManager manages the Experience spots
- * @param config - Config options for init
- * @returns { Object } - ExperienceManager instance
+ * Creates ExperienceManager class.
+ * ExperienceManager provides rules for geolocalized audio playback
+ * @param { Object } config - Experience config options
+ * @returns { Object } ExperienceManager instance
  * @constructor
  */
 export default class ExperienceManager {
@@ -29,6 +31,10 @@ export default class ExperienceManager {
     }
     */
 
+    if (!config) {
+      console.error('[ExperienceManager] - Missing experience config! GeoXp needs an experience object in the configuration file. Check the docs for details');
+    }
+
     // creates subjects for notification
     this.spotIncoming$ = new Subject();
     this.spotActive$ = new Subject();
@@ -45,13 +51,15 @@ export default class ExperienceManager {
 
   /**
   * Inits ExperienceManager on provided options
-  * @param config - config parameters
+  * @param { Object } config - Experience config options
   */
   _init(config) {
     if (!config.default) {
       config.default = {
         visitedFilter: 5000
       }
+    } else {
+      config.visitedFilter ? config.visitedFilter : 5000
     }
 
     // inits force spot
@@ -91,7 +99,7 @@ export default class ExperienceManager {
 
   /**
   * Loads a new config
-  * @param config - config parameters
+  * @param { Object } config - Experience config options
   */
   reload(config) {
     this._init(config);
@@ -106,8 +114,8 @@ export default class ExperienceManager {
 
   /**
   * Enables/disables specific pattern
-  * @param id - pattern id to toggle
-  * @param enb - flag for enable/disable
+  * @param { string } id - pattern id to toggle
+  * @param { boolean } enb - flag for enable/disable
   */
   enablePattern(id, enb) {
     const pattern = this._patterns.get(id);
@@ -124,7 +132,7 @@ export default class ExperienceManager {
 
   /**
   * New incoming position, prefetch audio
-  * @param position - incoming position
+  * @param { string } position - incoming position id
   */
   incoming(position) {
 
@@ -142,7 +150,7 @@ export default class ExperienceManager {
 
   /**
   * New inside position, play audio if needed
-  * @param position - inside positon
+  * @param { string } position - inside positon id
   */
   inside(position) {
 
@@ -212,7 +220,7 @@ export default class ExperienceManager {
 
   /**
   * New outgoing position, stops audio
-  * @param position - outgoing position
+  * @param { string } position - outgoing position
   */
   outgoing(position) {
 
@@ -242,7 +250,7 @@ export default class ExperienceManager {
 
   /**
   * Spot is playing, make it visited
-  * @param spot - spot playing
+  * @param { Object } spot - spot playing
   */
   playing(spot) {
 
@@ -272,7 +280,7 @@ export default class ExperienceManager {
 
   /**
   * Spot ended (either stopped or finished), remove from active, refresh all inside positions
-  * @param spot - spot ended
+  * @param { Object } - spot ended
   */
   end(spot) {
 
@@ -310,7 +318,8 @@ export default class ExperienceManager {
   }
 
   /**
-  * Checks to see if there are active spots
+  * Checks to see if there's any active spots
+  * @returns { boolean } Some spots are active
   */
   hasActiveSpots() {
     let someActive = false;
@@ -323,14 +332,14 @@ export default class ExperienceManager {
   }
 
   /**
-  * Returns spot by id
-  * @param spotId - Id of spot to find
-  * @returns { object } - spot found or null
+  * Gets spot by id
+  * @param { string } id - id of spot to find
+  * @returns { object|null } spot found or null
   */
-  getSpot(spotId) {
+  getSpot(id) {
     let spot = null;
     this._patterns.forEach(pattern => {
-      const found = pattern.cfg.spots.find(e => e.id.toUpperCase() === spotId.toUpperCase());
+      const found = pattern.cfg.spots.find(e => e.id.toUpperCase() === id.toUpperCase());
       if (found) {
         spot = found;
       }
@@ -339,9 +348,9 @@ export default class ExperienceManager {
   }
 
   /**
-  * Marks spots as unvisited
+  * Marks spots as unvisited.
   * If no spot id provided, marks all inside spots as unvisited
-  * @param id - optional
+  * @param { string } [id = null] - id of spot to unvisit
   */
   replaySpot(id = null) {
     this._patterns.forEach(pattern => {
@@ -365,7 +374,7 @@ export default class ExperienceManager {
   /**
   * Forces spot activation
   * Forces other spots deactivation unless overlapping
-  * @param id - spot id
+  * @param { string } id - id of spot to force
   * */
   forceSpot(id) {
 

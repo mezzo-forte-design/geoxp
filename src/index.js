@@ -1,75 +1,111 @@
-
 import { EventEmitter } from 'events';
 
 /* CORE MODULES */
 import GeoManager from './GeoManager';
+
 import AudioManager from './AudioManager';
+
 import ExperienceManager from './ExperienceManager';
 
-/* device parser */
 import Device from './utils/Device';
 
-/**
- * Creates GeoXp class.
- * GeoXp manages the MezzoForte Geo Experience
- * @param config - Config options for init
- * @returns { Object } - GeoXp instance
- * @constructor
- */
-export default class GeoXp {
-  constructor(config) {
-    /**
-    config: {
-      geo: {
-        positions: [{
-          id;
-          label;
-          lat;
-          lon;
-          radius;    [m]
-          deadband;  [m]
-          fetch;     (1) 1 : n, ratio of radius for preloading
-        }];
-        default: {
-          minAccuracy;
-          posDeadband;
-          playDistance;
-          fetchDistance;
-        };
-      },
-      audio: {
-        sounds: [{
-          id;
-          label;
-          url;
-        }],
-        default: {
-          test;
-          silence;
-          visited;
-        }
-      },
-      experience: {
-        patterns: [{
-          id
-          label
-          disabled
-          replay
-          overlap
-          spots: [{
-              id
-              position
-              audio
-              after
-          }]
-        }],
-        default: {
-          visitedFilter [s]
-        }
-      }
-    }
-    */
 
+//////////////////////////////////////////////
+// typedefs for jdoc
+//////////////////////////////////////////////
+
+/**
+* @typedef {Object} GeoCfg
+* @property { Object[] } positions - Geo positions
+* @property { string } positions[].id - Position id
+* @property { string } positions[].label - Position name/desc
+* @property { number } positions[].lat - Position latitude [degrees North]
+* @property { number } positions[].lon - Position longitude [degrees East]
+* @property { number } positions[].radius - Position inner radius [meters]
+* @property { number } positions[].deadband - Position deadband from inner radius [meters]
+* @property { number } positions[].fetch - Radius for content prefetching [rate of radius]
+* @property { Object } default - Geo default values
+* @property { number } default.minAccuracy - Min acceptable accuracy [meters]
+* @property { number } default.posDeadband - Default deadband [meters]
+* @property { number } default.playDistance - Default position radius [meters]
+* @property { number } default.fetchDistance - Default prefetch distance [meters]
+*/
+
+/**
+* @typedef {Object} AudioCfg
+* @property { Object[] } sounds - Audio sounds
+* @property { string } sounds[].id - Sound id
+* @property { string } sounds[].label - Sound name/desc
+* @property { string } sounds[].url - Sound url, local or remote
+* @property { Object } default - Audio default values
+* @property { string } default.test - Test sound url
+* @property { string } default.silence - Silence sound url
+* @property { string } default.visited - Visited spot audio url
+*/
+
+/**
+* @typedef {Object} ExperienceCfg
+* @property { string } patterns[].id - Pattern id
+* @property { string } patterns[].label - Pattern name/desc
+* @property { boolean } [patterns[].disabled = null] - Pattern is disabled
+* @property { boolean } [patterns[].replay = null] - Pattern spots are replayed by default
+* @property { boolean } [patterns[].overlap = null] - Pattern spots can overlap (more than one can be active at the same time)
+* @property { Object[] } patterns[].spots - Pattern spots
+* @property { string } patterns[].spots[].id - Spot id
+* @property { string } patterns[].spots[].position - Spot linked position id
+* @property { string } patterns[].spots[].audio - Spot linked audio id
+* @property { string } [patterns[].spots[].after = null] - Spot can go active only after this spot id has been visited
+* @property { Object } default - Experience default values
+* @property { number } default.visitedFilter - Time before visisted spot is notified for filtering [seconds]
+*/
+
+/**
+* @typedef {Object} Spot
+* @property { string } id - Spot id
+* @property { string } label - Spot name/desc
+* @property { string } position - Spot linked position id
+* @property { string } audio - Spot linked audio id
+* @property { string } [after = null] - Spot can go active only after this spot id has been visited
+*/
+
+/**
+* @typedef {Object} Audio
+* @property { string } id - Audio id
+* @property { boolean } overlap - Audio can overlap with others yet playing
+* @property { boolean } playWhenReady - Audio is to be played immediately when loaded
+* @property { Spot } spot - Spot that owns this audio content
+* @property { Object } audio - Audio instance as [Howler.Howl] {@link https://pub.dev/documentation/howler/latest/howler/Howl-class.html}
+*/
+
+/**
+* play | end event listener 
+* @callback audioListener
+* @param { Audio } audio
+*/
+
+/**
+* incoming | active | visited | ougoing event listener
+* @callback spotListener
+* @param { Spot } spot
+*/
+
+
+//////////////////////////////////////////////
+// geoXp class
+//////////////////////////////////////////////
+
+/**
+* Creates GeoXp class.
+* GeoXp manages the MezzoForte Geo Experience
+* @param { Object } config - Config options
+* @param { GeoCfg } config.geo - Geo config options
+* @param { AudioCfg } config.audio - Audio config options
+* @param { ExperienceCfg } config.experience - Experience config options
+* @returns { Object } GeoXp singleton instance
+* @constructor
+*/
+class GeoXp {
+  constructor(config) {
     this._config = config;
 
     // instantiates modules
@@ -212,7 +248,9 @@ export default class GeoXp {
   }
 
   /**
-  * Unlocks geolocation and webaudio APIs
+  * Unlock method forces geolocation api and howler js activation. 
+  * This is needed in mobile integration, to avoid browser locking the functionalities when app goes background
+  * **IMPORTANT - call this method within a user action, such as a click listener!**
   */
   unlock() {
     this.geo.unlock();
@@ -220,33 +258,34 @@ export default class GeoXp {
   }
 
   /**
-  * Enables / disables internal geolocation updates
-  * @param enabled - enable flag
+  * Enables/disables defalut internal geolocation system [Geolocation API]{@link https://developer.mozilla.org/it/docs/Web/API/Geolocation}.
+  * In case you have an external geolocation system, you may want to disable this calling `internalGeolocation(false)` and update the position with the `updateGeolocation` method.
+  * @param { boolean } enabled - enable or disable
   */
   internalGeolocation(enabled) {
     this.geo.internalGeolocation(enabled);
   }
 
   /**
-  * Provides external positioning
-  * @param position - position data in geolocation api format
-  * @returns { boolean }
+  * Provides external geolocation updates (in case geolocation API isn’t available and/or you want to use an external Geolocation system).
+  * Can also be used for development purposes, to simulate user location
+  * @param { Object } position - position data in [Geolocation API position format]{@link https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition}
   */
   updateGeolocation(position) {
     this.geo._geoSuccess(position);
   }
 
   /**
-  * Enables specific pattern
-  * @param id - pattern id to toggle
+  * Enables a configured experience pattern
+  * @param { string } id - pattern id to enable
   */
   enablePattern(id) {
     this.experience.enablePattern(id, true);
   }
 
   /**
-  * Ddisables specific pattern
-  * @param id - pattern id to toggle
+  * Disables a configured experience pattern
+  * @param { string } id - pattern id to disable
   */
   disablePattern(id) {
     this.experience.enablePattern(id, false);
@@ -254,7 +293,7 @@ export default class GeoXp {
 
   /**
   * Returns true if has active spots
-  * @returns { boolean }
+  * @returns { boolean } Some spots are active
   */
   hasActiveSpots() {
     return this.experience.hasActiveSpots();
@@ -262,26 +301,29 @@ export default class GeoXp {
 
   /**
   * Returns spot by id
-  * @param id - Id of spot to find
-  * @returns { object } - spot found or null
+  * @param { string } id - id of spot to find
+  * @returns { Spot | null } Spot found or null
   */
   getSpot(id) {
     return this.experience.getSpot(id);
   }
 
   /**
-  * Marks spots as unvisited
+  * Marks spots as unvisited.
   * If no spot id provided, marks all inside spots as unvisited
-  * @param id - optional
+  * @param { string } [id = null] - id of spot to unvisit
   */
   replaySpot(id = null) {
     this.experience.replaySpot(id);
   }
 
   /**
-  * Checks if manual mode is available
-  * @param id - id of spot to force
-  * @returns { boolean }
+  * Checks if manual mode is available.
+  * Rules are:
+  * Your gps accuracy is really bad
+  * You are not too far away
+  * @param { string } id - id of spot to force
+  * @returns { boolean } Spot force is available
   * */
   canForceSpot(id) {
 
@@ -291,12 +333,12 @@ export default class GeoXp {
   }
 
   /**
-  * Forces spot activation
+  * Forces spot activation (manual mode)
   * Forces other spots deactivation unless overlapping
   * Rules are
-  * GPS precision > treshold m
-  * GPS precision <= treshold m & position nearer than threshold
-  * @param id - spot id
+  * Your gps accuracy is really bad
+  * You are not too far away
+  * @param { string } id - spot id
   * */
   forceSpot(id) {
 
@@ -321,8 +363,8 @@ export default class GeoXp {
 
   /**
   * Checks if any sound is playing
-  * @param overlap - if true, exclude overlapping audios
-  * @returns { boolean }
+  * @param { boolean } [overlap = false] - if true, excludes overlapping audios
+  * @returns { boolean } Sounds are playing
   * */
   hasAudioPlaying(overlap = false) {
     return this.audio.hasAudioPlaying(overlap);
@@ -330,7 +372,10 @@ export default class GeoXp {
 
   /**
   * Loads a new configuration
-  * @param config - config parameters
+  * @param { Object } config - Config options
+  * @param { GeoCfg } config.geo - Geo config options
+  * @param { AudioCfg } config.audio - Audio config options
+  * @param { ExperienceCfg } config.experience - Experience config options
   */
   reload(config) {
     this._config = config;
@@ -341,7 +386,6 @@ export default class GeoXp {
 
   /**
   * Destroys GeoXp instance
-  * @param config {object} config parameters
   */
   destroy() {
     this.subExperienceIncoming.unsubscribe();
@@ -362,10 +406,10 @@ export default class GeoXp {
   }
 
   /**
-   * Event wrapper on
-   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
-   * @param listener {function}
-   */
+  * Event wrapper on
+  * @param { string } eventName - 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+  * @param { spotListener | audioListener } listener - listener
+  */
   on(eventName, listener) {
     if (typeof listener !== 'function') {
       console.error('[GeoXp EventEmitter - on] listener must be a function');
@@ -376,10 +420,10 @@ export default class GeoXp {
   }
 
   /**
-   * Event wrapper once
-   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
-   * @param listener {function}
-   */
+  * Event wrapper once
+  * @param { string } eventName - 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+  * @param { spotListener | audioListener } listener - listener
+  */
   once(eventName, listener) {
     if (typeof listener !== 'function') {
       console.error('[GeoXp EventEmitter - on] listener must be a function');
@@ -390,10 +434,10 @@ export default class GeoXp {
   }
 
   /**
-   * Event wrapper off
-   * @param eventName {string} 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
-   * @param listener {function}
-   */
+  * Event wrapper off
+  * @param { string } eventName - 'incoming', 'active', 'visited', 'outgoing', 'position', 'play', 'end'
+  * @param { spotListener | audioListener } listener - listener
+  */
   off(eventName, listener) {
     if (typeof listener !== 'function') {
       console.error('[GeoXp EventEmitter - on] listener must be a function');
@@ -403,3 +447,5 @@ export default class GeoXp {
     this.event.off(eventName, listener);
   }
 }
+
+export default GeoXp;

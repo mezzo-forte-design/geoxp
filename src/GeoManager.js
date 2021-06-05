@@ -1,4 +1,7 @@
+/** @module GeoManager */
+
 import { Subject } from 'rxjs';
+
 import Device from './utils/Device';
 
 /** Converts numeric degrees to radians */
@@ -10,9 +13,9 @@ if (typeof (Number.prototype.toRad) === "undefined") {
 
 /**
  * Creates GeoManager class.
- * GeoManager is responsible for geoLocalization.
- * @param config - Config options for init
- * @returns { Object } - GeoManager instance
+ * GeoManager is responsible for geoLocalization
+ * @param config - Geo config options
+ * @returns { Object } GeoManager instance
  * @constructor
  */
 export default class GeoManager {
@@ -37,6 +40,10 @@ export default class GeoManager {
     }
     */
 
+    if (!config) {
+      console.error('[GeoManager] - Missing geo config! GeoXp needs a geo object in the configuration file. Check the docs for details');
+    }
+
     // bind listeners
     this._geoSuccess = this._geoSuccess.bind(this);
     this._geoError = this._geoError.bind(this);
@@ -53,7 +60,7 @@ export default class GeoManager {
 
   /**
   * Inits AudioManager on provided options
-  * @param config - config parameters
+  * @param config - Geo config options
   */
   _init(config) {
 
@@ -65,6 +72,11 @@ export default class GeoManager {
         playDistance: 20,
         fetchDistance: 1
       }
+    } else {
+      config.minAccuracy ? config.minAccuracy : 10;
+      config.posDeadband ? config.posDeadband : 10;
+      config.playDistance ? config.playDistance : 20;
+      config.fetchDistance ? config.fetchDistance : 1;
     }
 
     // sets minimum manual mode precision
@@ -88,7 +100,7 @@ export default class GeoManager {
 
   /**
   * Loads a new configuration
-  * @param config - config parameters
+  * @param config - Geo config options
   */
   reload(config) {
     this._init(config);
@@ -113,7 +125,7 @@ export default class GeoManager {
   }
 
   /**
-  * Send new notification for inside positions
+  * Sends new notification for each inside position
   */
   refresh() {
     this.inside.forEach(positionId => {
@@ -124,7 +136,7 @@ export default class GeoManager {
 
   /**
   * Enables / disables internal geolocation updates
-  * @param enabled - enable flag
+  * @param { boolean } enabled - enable or disable
   */
   internalGeolocation(enabled) {
     if (enabled) {
@@ -136,18 +148,21 @@ export default class GeoManager {
 
   /**
   * Checks if manual mode is available
-  * @param positionId - position of spot to force
-  * @returns { boolean }
+  * Rules are
+  * Your gps accuracy is really bad
+  * You are not too far away
+  * @param { string } id - id for position of spot to force
+  * @returns { boolean } Manual mode is available
   * */
-  canForceSpot(positionId) {
-    const position = this._config.positions.find(e => e.id === positionId);
+  canForceSpot(id) {
+    const position = this._config.positions.find(e => e.id === id);
 
     if (position) {
 
       const accuracy = this.lastPosition.coords.accuracy;
       const distance = this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat);
       const spotArea = (position.radius || this._config.default.playDistance) + (position.deadband || this._config.default.posDeadband);
-      
+
       // checks for max allowed distance
       if (distance - accuracy > spotArea) {
         console.warn('[GeoManager.canForceSpot] - Cannot force spot, too far');
@@ -161,7 +176,7 @@ export default class GeoManager {
       } else {
 
         if (distance < spotArea) {
-          
+
           // can force, near the spot
           return true;
         }
@@ -179,7 +194,7 @@ export default class GeoManager {
 
   /**
   * Checks the status of the spots in relation to current position
-  * @param pos - current position as provided by geolocation API
+  * @param { Object } pos - current position as provided by geolocation API
   */
   _geoSuccess(pos) {
 
@@ -236,7 +251,7 @@ export default class GeoManager {
 
   /**
   * Geolocation API reports an error retrieving current position
-  * @param error - error as sent from geolocation API
+  * @param { Object } error - error as sent from geolocation API
   */
   _geoError(error) {
     console.error('[GeoManager._geoError] - Geolocation error', error);
@@ -244,10 +259,11 @@ export default class GeoManager {
 
   /**
   * Computes the distance between two coordinates
-  * @param lon1 - longitude of first point
-  * @param lat1 - latitude of first point
-  * @param lon2 - longitude of second point
-  * @param lat2 - latitude of second point
+  * @param { number } lon1 - longitude of first coord
+  * @param { number } lat1 - latitude of first coord
+  * @param { number } lon2 - longitude of second coord
+  * @param { number } lat2 - latitude of second coord
+  * @returns { number } distance between coordinates
   */
   _calcGeoDistance(lon1, lat1, lon2, lat2) {
     // Radius of the earth in km

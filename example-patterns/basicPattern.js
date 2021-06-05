@@ -3,7 +3,7 @@ Here's an example configuration for a basic pattern.
 Three audio contents have to be played at three different locations, without any order rule applied.
 */
 
-import GeoXp from 'mezzoforte-geoXp';
+import GeoXp from '@mezzo-forte/geoxp';
 
 // step 1: geo configuration
 // maps all the relevant locations, provides info for geoFencing

@@ -9,5 +9,6 @@ module.exports = {
   },
   devServer: {
     contentBase: './example-app'
-  }
+  },
+  devtool: 'source-map'
 };

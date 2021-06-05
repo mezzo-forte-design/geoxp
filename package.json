@@ -1,13 +1,14 @@
 {
   "name": "@mezzo-forte/geoxp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Mezzo Forte Geo Experience",
   "main": "/src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "start-example": "webpack serve --content-base example-app/ --open"
+    "start-example": "webpack serve --content-base example-app/ --open",
+    "docs": "./node_modules/.bin/jsdoc src/index.js --readme README.md --destination public"
   },
   "contributors": [
     {
@@ -37,6 +38,7 @@
     "url": "https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/issues"
   },
   "devDependencies": {
+    "jsdoc": "^3.6.6",
     "webpack": "^5.17.0",
     "webpack-cli": "^4.4.0",
     "webpack-dev-server": "^3.11.2"
