@@ -41,6 +41,10 @@ export default class AudioManager {
     }
     */
 
+    if (!config) {
+      console.error('[AudioManager] - Missing audio config! GeoXp needs an audio object in the configuration file. Check the docs for details');
+    }
+
     this.play$ = new Subject();
     this.done$ = new Subject();
 
