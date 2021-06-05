@@ -55,6 +55,10 @@ export default class AudioManager {
         silence: "./audio/silence.mp3",
         visited: "./audio/visited.mp3"
       }
+    } else {
+      config.test ? config.test : "./audio/test.mp3";
+      config.silence ? config.silence : "./audio/silence.mp3";
+      config.visited ? config.visited : "./audio/visited.mp3";
     }
 
     // sets config

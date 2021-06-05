@@ -68,6 +68,11 @@ export default class GeoManager {
         playDistance: 20,
         fetchDistance: 1
       }
+    } else {
+      config.minAccuracy ? config.minAccuracy : 10;
+      config.posDeadband ? config.posDeadband : 10;
+      config.playDistance ? config.playDistance : 20;
+      config.fetchDistance ? config.fetchDistance : 1;
     }
 
     // sets minimum manual mode precision

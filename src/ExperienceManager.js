@@ -54,6 +54,8 @@ export default class ExperienceManager {
       config.default = {
         visitedFilter: 5000
       }
+    } else {
+      config.visitedFilter ? config.visitedFilter : 5000
     }
 
     // inits force spot
