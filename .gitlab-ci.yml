@@ -1,0 +1,15 @@
+pages:
+  image: node:12
+  stage: deploy
+  script:
+  - echo Bulding node_modules
+  - npm ci --progress=false
+  - npm run docs
+  - mkdir .public
+  - cp -r * .public
+  - mv .public public
+  artifacts:
+    paths:
+    - public
+  only:
+    - master
