@@ -7,9 +7,9 @@ import Device from './utils/Device.js';
 import { Subject } from 'rxjs';
 
 // default audio
-import defaultSilenceSound from './audio/silence.mp3';
-import defaultTestSound from './audio/test.mp3';
-import defaultVisitedSound from './audio/visited.mp3';
+const defaultSilenceSound = './audio/silence.mp3';
+const defaultTestSound = './audio/test.mp3';
+const defaultVisitedSound = './audio/visited.mp3';
 
 // Howler configuration
 const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
@@ -59,7 +59,7 @@ export default class AudioManager {
 
     // sets default if none provided
     if (!config.default) {
-      console.warn('[AudioManager] - System sounds URLs not provided - using default silence, test and visited sounds');
+      console.warn('[AudioManager] - System sounds URLs not provided -> pointing to default URL (/audio/*.mp3). You can find example audio files in /src/audio folder');
       config.default = {
         test: defaultTestSound,
         silence: defaultSilenceSound,

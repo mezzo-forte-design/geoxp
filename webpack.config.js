@@ -10,18 +10,5 @@ module.exports = {
   devServer: {
     contentBase: './example-app'
   },
-  devtool: 'source-map',
-  module: {
-    rules: [
-      {
-        test: /\.mp3$/,
-        loader: 'file-loader',
-        options: {
-          query: {
-            name: 'static/media/[name].[hash:8].[ext]'
-          }
-        },
-      },
-    ],
-  }
+  devtool: 'source-map'
 };
