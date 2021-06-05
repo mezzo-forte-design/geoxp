@@ -1,7 +1,7 @@
 [<img src="https://mezzoforte.design/img/logo_beige.svg" alt="Mezzo Forte" width="150"/>](https://mezzoforte.design/)
 
 # **Mezzo Forte GeoXp**
-###### April 2021
+###### 2021
 #
 ###
 # **Description**
@@ -11,6 +11,8 @@ Mezzo Forte GeoXp is a client side, event based js library that manages all the 
 It maps audio contents to geographical positions, and automatically reproduces them based on configuration rules.
 
 It’s meant to be used inside any front-end interface, regardless of the js framework.
+
+An API and methods documentation page is available [at this link](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
 
 It’s made of three modules.
 
@@ -54,7 +56,7 @@ It’s made of three modules.
     * [Geo configuration](#geo-configuration)
     * [Audio configuration](#audio-configuration)
     * [Experience configuration](#experience-configuration)
-  * [Construction and disposal](#construction-and-disposal)
+  * [Reload and disposal](#reload-and-disposal)
   * [Events subscription](#events-subscription)
     * [Position update](#position-update)
     * [Spot incoming](#spot-incoming)
@@ -67,6 +69,7 @@ It’s made of three modules.
   * [External geolocation providers](#external-geolocation-providers)
   * [Spots content replay](#spots-content-replay)
   * [Forcing spot activation](#forcing-spot-activation)
+  * [Core methods](#core-methods)
 * [Best practices](#best-practices)
   * [Designing configuration for a specific use](#designing-configuration-for-a-specific-use)
   * [Positions overlap](#positions-overlap)
@@ -133,7 +136,7 @@ This can be overridden using the pattern “overlap” configuration option.
 ### <a name="manual-mode"></a> **Manual mode**
 Sometimes geolocation data could be bad for unpredictable reasons, nerby buildings or trees could block part of the satellites communications, electromagnetic interference by power lines and so on, resulting in poor location accuracy.
 When accuracy is too low, manual spot activation mode becomes available.
-This mode overrides all experience playback rules, so geoXp enables it only for really low accuracy (greater than 100m), and only if user is not too far away from the intended spot playback position.
+This mode overrides all experience playback rules, so geoXp enables it only for really low accuracy (greater than 100m), and only if user is not too far away from the intended spot playback position (in the case of slow location update time and the user has reached a new spot before an update).
 See [Forcing spots activation](#forcing-spots-activation) for details.
 
 **IMPORTANT - forcing a spot is a _plan B_ when something is not working properly (bad GPS or slow update time). It will interrupt all automatic experience management, until the forced content is finished. After that, all the experience logic will get back to work.**
@@ -247,13 +250,13 @@ experience: {
 ```
 > NOTE - patterns are enabled by deafult. See [core methods](#core-methods) to know how to disable or re-enable them
 
-## <a name="construction-and-disposal"></a> **Construction and disposal**
+## <a name="reload-and-disposal"></a> **Reload and disposal**
 
 ```javascript
 // Creates a new geoXp instance
 const geoXp = new GeoXp(config);
 
-// Refreshes geoXp for configuration change
+// Refreshes all geoXp state with the given configuration
 geoXp.reload(config);
 
 // Disposes geoXp object
@@ -413,9 +416,12 @@ If GPS accuracy is low and user isn't too far away from a spot location, the spo
 GeoXp then enters manual mode (internal geolocation updates are stopped, all other audio content is stopped) and activates the desired spot. When the playback is finished (or stopped), geoXp returns to automatic mode and the experience goes on as usual.
 If you want to know if manual mode is available, just call the `canForceSpot(id)` passing the id of the deisired spot. If rules for manual mode are fulfilled, it returns true.
 
+## <a name="core-methods"></a> **Core methods**
+All GeoXp core methods are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
+
 ***
 
-# <a name="best-practices"></a> Best practices
+# <a name="best-practices"></a> **Best practices**
 ## <a name="designing-configuration-for-a-specific-use"></a> Designing configuration for a specific use
 Behavior of geoXp covers a wide variety of applications.
 This broad approach means that, to guarantee the user experience good flow and consistency, some effort needs to be spent on adopting an optimal configuration for the desired result.

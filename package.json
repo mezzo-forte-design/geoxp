@@ -8,7 +8,7 @@
     "build": "webpack",
     "watch": "webpack --watch",
     "start-example": "webpack serve --content-base example-app/ --open",
-    "docs": "jsdoc src/index.js --readme README.md --destination public"
+    "docs": "./node_modules/.bin/jsdoc src/index.js --readme README.md --destination public"
   },
   "contributors": [
     {
