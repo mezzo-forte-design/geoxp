@@ -41,7 +41,9 @@ const audio = {
   "default": {
     "test": "./audio/system/test.mp3",
     "silence": "./audio/system/silence.mp3",
-    "visited": "./audio/system/visited.mp3"
+    "visited": "./audio/system/visited.mp3",
+    "fadeInTime": 10000,
+    "fadeOutTime": 1000
   }
 };
 
@@ -61,9 +63,9 @@ const experience = {
         },
         {
           "id": "spot2",
-          "position": "pos1",
+          "position": "pos2",
           "audio": "aud2",
-          "after": "spot1",
+          "notAfter": "spot1",
           "label": "Spot 2!!"
         }
       ]
