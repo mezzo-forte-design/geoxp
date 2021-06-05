@@ -415,7 +415,7 @@ If you want to know if manual mode is available, just call the `canForceSpot(id)
 
 ***
 
-# <a name="best-practices"></a> Best practices
+# <a name="best-practices"></a> **Best practices**
 ## <a name="designing-configuration-for-a-specific-use"></a> Designing configuration for a specific use
 Behavior of geoXp covers a wide variety of applications.
 This broad approach means that, to guarantee the user experience good flow and consistency, some effort needs to be spent on adopting an optimal configuration for the desired result.
