@@ -41,6 +41,8 @@ import Device from './utils/Device';
 * @property { string } default.test - Test sound url
 * @property { string } default.silence - Silence sound url
 * @property { string } default.visited - Visited spot audio url
+* @property { string } default.fadeInTime - fade time after play [ms] 
+* @property { string } default.fadeOutTime - fade time before stop [ms]
 */
 
 /**
@@ -55,6 +57,7 @@ import Device from './utils/Device';
 * @property { string } patterns[].spots[].position - Spot linked position id
 * @property { string } patterns[].spots[].audio - Spot linked audio id
 * @property { string } [patterns[].spots[].after = null] - Spot can go active only after this spot id has been visited
+* @property { string } [patterns[].spots[].notAfter = null] - Spot cannot go active after this spot id has been visited
 * @property { Object } default - Experience default values
 * @property { number } default.visitedFilter - Time before visisted spot is notified for filtering [seconds]
 */
@@ -66,6 +69,7 @@ import Device from './utils/Device';
 * @property { string } position - Spot linked position id
 * @property { string } audio - Spot linked audio id
 * @property { string } [after = null] - Spot can go active only after this spot id has been visited
+* @property { string } [notAfter = null] - Spot cannot go active after this spot id has been visited
 */
 
 /**
@@ -149,7 +153,7 @@ class GeoXp {
       .subscribe(info => {
 
         // play spot audio
-        this.audio.play(info.spot, info.overlap, 0, 1);
+        this.audio.play(info.spot, info.overlap);
 
         // emits spot active
         this.event.emit('active', info.spot);
@@ -167,10 +171,8 @@ class GeoXp {
     this.subExperienceOutgoing = this.experience.spotOutgoing$
       .subscribe(spot => {
 
-        const fade = 5000; // [s]
-
         // stop spot audio
-        this.audio.stop(spot, fade);
+        this.audio.stop(spot);
 
         // emits spot outgoing
         this.event.emit('outgoing', spot);

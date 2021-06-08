@@ -4,11 +4,23 @@ import { config } from './config';
 
 const geoXp = new GeoXp(config);
 
-document.getElementById('pos-in-button').addEventListener('click', e => {
+document.getElementById('pos1-in-button').addEventListener('click', e => {
   const position = {
     coords: {
       latitude: 45.116177,
       longitude: 7.742615,
+      accuracy: 1
+    }
+  };
+
+  geoXp.updateGeolocation(position);
+});
+
+document.getElementById('pos2-in-button').addEventListener('click', e => {
+  const position = {
+    coords: {
+      latitude: 45.116177,
+      longitude: 6.742615,
       accuracy: 1
     }
   };

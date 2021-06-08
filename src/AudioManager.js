@@ -36,7 +36,9 @@ export default class AudioManager {
       default: {
         test,
         silence,
-        visited
+        visited,
+        fadeInTime,
+        fadeOutTime
       }
     }
     */
@@ -63,12 +65,16 @@ export default class AudioManager {
       config.default = {
         test: defaultTestSound,
         silence: defaultSilenceSound,
-        visited: defaultVisitedSound
+        visited: defaultVisitedSound,
+        fadeInTime: 0,
+        fadeOutTime: 0
       }
     } else {
       config.test ? config.test : defaultTestSound;
       config.silence ? config.silence : defaultSilenceSound;
       config.visited ? config.visited : defaultVisitedSound;
+      config.fadeInTime ? config.fadeInTime : 0;
+      config.fadeOutTime ? config.fadeOutTime : 0;
     }
 
     // sets config
@@ -133,9 +139,10 @@ export default class AudioManager {
   * Loads Howler sounds in buffer
   * @param { Object } spot - spot to load
   * @param { boolean } overlap - can overlap other sounds
+  * @param { number } [fade = null] - fade in time [ms]
   * @param { boolean } [playWhenReady = false] - play sound when loaded
   */
-  load(spot, overlap = false, playWhenReady = false) {
+  load(spot, overlap = false, fade = null, playWhenReady = false) {
 
     if (!spot.audio) {
       console.error('[AudioManager.load] - audio info not provided. Cannot load');
@@ -186,7 +193,8 @@ export default class AudioManager {
 
       // start sound
       if (sound.playWhenReady) {
-        this.play(spot, 0, 1);
+        const fadeTime = fade ? fade : this._config.default.fadeInTime;
+        this.play(spot, overlap, fadeTime);
       }
     });
   }
@@ -195,10 +203,10 @@ export default class AudioManager {
   * Plays Howler sounds if loaded, else load() then play().
   * @param { Object } spot - spot to load
   * @param { boolean } overlap - can overlap other sounds
-  * @param { number } [fade = 0] - fade in time
+  * @param { number } [fade = null] - fade in time [ms]
   * @param { number } [volume = 1] - playback volume from 0 to 1
   */
-  play(spot, overlap = false, fade = 0, volume = 1) {
+  play(spot, overlap = false, fade = null, volume = 1) {
 
     if (!spot.audio) {
       console.error('[AudioManager.play] - audio info non provided. Cannot play');
@@ -213,17 +221,19 @@ export default class AudioManager {
     if (!sound) {
 
       // load audio and play when ready
-      this.load(spot, overlap, true);
+      this.load(spot, overlap, fade, true);
 
     } else {
       // if sounds are ready play(), else playWhenReady
       if (sound.audio.state() === 'loaded') {
         if (!sound.audio.playing()) {
 
+          // play sound
           sound.audio.play();
 
-          // fade
-          if (fade > 0) sound.audio.fade(0, volume, fade);
+          // fade in
+          const fadeTime = fade ? fade : this._config.default.fadeInTime;
+          if (fadeTime > 0) sound.audio.fade(0, volume, fadeTime);
           else sound.audio.volume(volume);
         }
       }
@@ -234,9 +244,9 @@ export default class AudioManager {
   /**
   * Stops specific spot sound
   * @param { Object } spot - spot to load
-  * @param { number } [fade = 0] - fade out time
+  * @param { number } [fade = null] - fade out time [ms]
   */
-  stop(spot, fade = 0) {
+  stop(spot, fade = null) {
 
     if (!spot.audio) {
       console.error('[AudioManager.stop] - audio info non provided. Cannot stop');
@@ -250,13 +260,17 @@ export default class AudioManager {
     const sound = this._buffer.get(id);
     if (sound) {
       if (sound.audio.playing()) {
-        if (fade > 0) {
-          // fade out
-          sound.audio.fade(sound.audio.volume(), 0, fade);
+
+        // fade out then stop
+        const fadeTime = fade ? fade : this._config.default.fadeOutTime;
+        if (fadeTime > 0) {
+          sound.audio.fade(sound.audio.volume(), 0, fadeTime);
           sound.audio.once('fade', () => {
             sound.audio.stop();
           });
+
         } else sound.audio.stop();
+
       } else this._destroy(id);
     }
   }
