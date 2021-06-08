@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * add verbose warnings
 
 ### Fixed
-* ix Geolocation API highAccuracy timeout
+* fix Geolocation API highAccuracy timeout
 
 ### Changed
 * update README
