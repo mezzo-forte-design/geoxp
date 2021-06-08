@@ -61,6 +61,7 @@ typings/
 .next
 
 example-app/bundle.js
+example-app/bundle.js.map
 
 *.DS_Store
 .vscode

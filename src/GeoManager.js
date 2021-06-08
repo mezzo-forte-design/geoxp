@@ -40,6 +40,10 @@ export default class GeoManager {
     }
     */
 
+    if (!config) {
+      console.error('[GeoManager] - Missing geo config! GeoXp needs a geo object in the configuration file. Check the docs for details');
+    }
+
     // bind listeners
     this._geoSuccess = this._geoSuccess.bind(this);
     this._geoError = this._geoError.bind(this);

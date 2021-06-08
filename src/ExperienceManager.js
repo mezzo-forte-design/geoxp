@@ -32,6 +32,10 @@ export default class ExperienceManager {
     }
     */
 
+    if (!config) {
+      console.error('[ExperienceManager] - Missing experience config! GeoXp needs an experience object in the configuration file. Check the docs for details');
+    }
+
     // creates subjects for notification
     this.spotIncoming$ = new Subject();
     this.spotActive$ = new Subject();
