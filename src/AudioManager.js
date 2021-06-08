@@ -63,9 +63,9 @@ export default class AudioManager {
     if (!config.default) {
       console.warn('[AudioManager] - System sounds URLs not provided -> pointing to default URL (/audio/*.mp3). You can find example audio files in /src/audio folder');
       config.default = {
-        test: "./audio/test.mp3",
-        silence: "./audio/silence.mp3",
-        visited: "./audio/visited.mp3",
+        test: defaultTestSound,
+        silence: defaultSilenceSound,
+        visited: defaultVisitedSound,
         fadeInTime: 0,
         fadeOutTime: 0
       }
