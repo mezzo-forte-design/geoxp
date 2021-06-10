@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * notAfter option to spots (prevents a spot to play after another)
 * parametric fade time, configurable by the user
 
+### Changed
+* moved all magic numbers to constants file
+* improved configuration checks and warnings
+
+### Fixed
+* fix missing default config values initalization
+
 ## **v1.1.0** - 2021-06-06
 ### Added
 * include audio files in /src directory
