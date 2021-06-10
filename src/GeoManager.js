@@ -11,6 +11,7 @@ import {
   DEFAULT_FETCH_DISTANCE,
   DEFAULT_FORCE_MIN_ACCURACY
 } from './constants';
+import { isNumber } from './utils/helpers';
 
 /** Converts numeric degrees to radians */
 if (typeof (Number.prototype.toRad) === "undefined") {
@@ -77,10 +78,22 @@ export default class GeoManager {
         fetchDistance: DEFAULT_FETCH_DISTANCE
       }
     } else {
-      config.minAccuracy ? config.minAccuracy : DEFAULT_MIN_ACCURACY;
-      config.posDeadband ? config.posDeadband : DEFAULT_POSITION_DEADBAND;
-      config.playDistance ? config.playDistance : DEFAULT_PLAY_DISTANCE;
-      config.fetchDistance ? config.fetchDistance : DEFAULT_FETCH_DISTANCE;
+      // check if some of the single options are missing
+      config.default.minAccuracy = isNumber(config.default.minAccuracy) ?
+        config.default.minAccuracy :
+        DEFAULT_MIN_ACCURACY;
+
+      config.default.posDeadband = isNumber(config.default.posDeadband) ?
+        config.default.posDeadband :
+        DEFAULT_POSITION_DEADBAND;
+
+      config.default.playDistance = isNumber(config.default.playDistance) ?
+        config.default.playDistance :
+        DEFAULT_PLAY_DISTANCE;
+
+      config.default.fetchDistance = (isNumber(config.default.fetchDistance) && config.default.fetchDistance >= 1) ?
+        config.default.fetchDistance :
+        DEFAULT_FETCH_DISTANCE;
     }
 
     // sets minimum manual mode precision

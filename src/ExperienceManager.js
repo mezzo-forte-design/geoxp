@@ -2,6 +2,8 @@
 
 import { Subject } from 'rxjs';
 
+import { isNumber } from './utils/helpers';
+
 import { DEFAULT_VISITED_FILTER_TIME } from './constants';
 
 /**
@@ -53,12 +55,15 @@ export default class ExperienceManager {
   * @param { Object } config - Experience config options
   */
   _init(config) {
+    // check options
     if (!config.default) {
       config.default = {
         visitedFilter: DEFAULT_VISITED_FILTER_TIME
       }
     } else {
-      config.visitedFilter ? config.visitedFilter : DEFAULT_VISITED_FILTER_TIME
+      config.default.visitedFilter = isNumber(config.default.visitedFilter) ?
+        config.default.visitedFilter :
+        DEFAULT_VISITED_FILTER_TIME;
     }
 
     // inits force spot
@@ -168,7 +173,7 @@ export default class ExperienceManager {
 
           // spot order ok
           if ((!spot.after || pattern.visited.includes(spot.after))
-          && (!spot.notAfter || !pattern.visited.includes(spot.notAfter))) {
+            && (!spot.notAfter || !pattern.visited.includes(spot.notAfter))) {
 
             // overlap ok
             if (pattern.cfg.overlap || pattern.active.length == 0) {

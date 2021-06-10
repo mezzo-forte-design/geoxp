@@ -6,6 +6,8 @@ import { Subject } from 'rxjs';
 
 import Device from './utils/Device.js';
 
+import { isPositiveNumber } from './utils/helpers.js';
+
 import {
   DEFAULT_FADE_IN_TIME,
   DEFAULT_FADE_OUT_TIME
@@ -71,11 +73,17 @@ export default class AudioManager {
         fadeOutTime: DEFAULT_FADE_OUT_TIME
       }
     } else {
-      config.test ? config.test : defaultTestSound;
-      config.silence ? config.silence : defaultSilenceSound;
-      config.visited ? config.visited : defaultVisitedSound;
-      config.fadeInTime ? config.fadeInTime : DEFAULT_FADE_IN_TIME;
-      config.fadeOutTime ? config.fadeOutTime : DEFAULT_FADE_OUT_TIME;
+      config.default.test = config.default.test || defaultTestSound;
+      config.default.silence = config.default.silence || defaultSilenceSound;
+      config.default.visited = config.default.visited || defaultVisitedSound;
+
+      config.default.fadeInTime = isPositiveNumber(config.default.fadeInTime) ?
+        config.default.fadeInTime :
+        DEFAULT_FADE_IN_TIME;
+
+      config.default.fadeOutTime = isPositiveNumber(config.default.fadeOutTime) ?
+        config.default.fadeOutTime :
+        DEFAULT_FADE_OUT_TIME;
     }
 
     // sets config

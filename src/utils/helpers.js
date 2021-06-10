@@ -6,3 +6,7 @@ export const isObjectLike = (value) => {
     !Array.isArray(value)
   );
 };
+
+export const isNumber = value => typeof value == 'number';
+
+export const isPositiveNumber = value => typeof value == 'number' && value >= 0;
