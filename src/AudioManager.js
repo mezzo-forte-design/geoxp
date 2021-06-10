@@ -2,15 +2,14 @@
 
 import { Howl, Howler } from 'howler';
 
-import Device from './utils/Device.js';
-
 import { Subject } from 'rxjs';
+
+import Device from './utils/Device.js';
 
 import {
   DEFAULT_FADE_IN_TIME,
   DEFAULT_FADE_OUT_TIME
 } from './constants';
-
 
 // default audio
 const defaultSilenceSound = './audio/silence.mp3';
@@ -48,10 +47,6 @@ export default class AudioManager {
       }
     }
     */
-
-    if (!config) {
-      console.error('[AudioManager] - Missing audio config! GeoXp needs an audio object in the configuration file. Check the docs for details');
-    }
 
     this.play$ = new Subject();
     this.done$ = new Subject();

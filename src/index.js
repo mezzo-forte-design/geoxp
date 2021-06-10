@@ -7,7 +7,9 @@ import AudioManager from './AudioManager';
 
 import ExperienceManager from './ExperienceManager';
 
+/* UTILS */
 import Device from './utils/Device';
+import { isObjectLike } from './utils/helpers';
 
 
 //////////////////////////////////////////////
@@ -41,7 +43,7 @@ import Device from './utils/Device';
 * @property { string } default.test - Test sound url
 * @property { string } default.silence - Silence sound url
 * @property { string } default.visited - Visited spot audio url
-* @property { string } default.fadeInTime - fade time after play [ms] 
+* @property { string } default.fadeInTime - fade time after play [ms]
 * @property { string } default.fadeOutTime - fade time before stop [ms]
 */
 
@@ -82,7 +84,7 @@ import Device from './utils/Device';
 */
 
 /**
-* play | end event listener 
+* play | end event listener
 * @callback audioListener
 * @param { Audio } audio
 */
@@ -110,6 +112,28 @@ import Device from './utils/Device';
 */
 class GeoXp {
   constructor(config) {
+
+    // checks for config object
+    if (!config || !isObjectLike(config)) {
+      console.error('[GeoXp] - Missing or invalid config object! GeoXp needs a configuration object when creating an instance. Check the docs for details');
+      return;
+    }
+
+    if (!config.experience || !isObjectLike(config.experience)) {
+      console.error('[ExperienceManager] - Missing or invalid experience config! GeoXp needs an experience object in the configuration file. Check the docs for details');
+      return;
+    }
+
+    if (!config.geo || !isObjectLike(config.geo)) {
+      console.error('[GeoManager] - Missing or invalid geo config! GeoXp needs a geo object in the configuration file. Check the docs for details');
+      return;
+    }
+
+    if (!config.audio || !isObjectLike(config.audio)) {
+      console.error('[AudioManager] - Missing or invalid audio config! GeoXp needs an audio object in the configuration file. Check the docs for details');
+      return;
+    }
+
     this._config = config;
 
     // instantiates modules
@@ -250,7 +274,7 @@ class GeoXp {
   }
 
   /**
-  * Unlock method forces geolocation api and howler js activation. 
+  * Unlock method forces geolocation api and howler js activation.
   * This is needed in mobile integration, to avoid browser locking the functionalities when app goes background
   * **IMPORTANT - call this method within a user action, such as a click listener!**
   */
