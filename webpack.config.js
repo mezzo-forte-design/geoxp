@@ -13,8 +13,18 @@ module.exports = {
     }
   },
   devtool: 'source-map',
-  devServer: {
-    contentBase: './example-app'
-  },
-  devtool: 'source-map'
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      }
+    ]
+  }
 };
