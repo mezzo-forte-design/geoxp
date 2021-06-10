@@ -6,6 +6,12 @@ import Device from './utils/Device.js';
 
 import { Subject } from 'rxjs';
 
+import {
+  DEFAULT_FADE_IN_TIME,
+  DEFAULT_FADE_OUT_TIME
+} from './constants';
+
+
 // default audio
 const defaultSilenceSound = './audio/silence.mp3';
 const defaultTestSound = './audio/test.mp3';
@@ -66,15 +72,15 @@ export default class AudioManager {
         test: defaultTestSound,
         silence: defaultSilenceSound,
         visited: defaultVisitedSound,
-        fadeInTime: 0,
-        fadeOutTime: 0
+        fadeInTime: DEFAULT_FADE_IN_TIME,
+        fadeOutTime: DEFAULT_FADE_OUT_TIME
       }
     } else {
       config.test ? config.test : defaultTestSound;
       config.silence ? config.silence : defaultSilenceSound;
       config.visited ? config.visited : defaultVisitedSound;
-      config.fadeInTime ? config.fadeInTime : 0;
-      config.fadeOutTime ? config.fadeOutTime : 0;
+      config.fadeInTime ? config.fadeInTime : DEFAULT_FADE_IN_TIME;
+      config.fadeOutTime ? config.fadeOutTime : DEFAULT_FADE_OUT_TIME;
     }
 
     // sets config

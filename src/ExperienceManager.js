@@ -2,6 +2,8 @@
 
 import { Subject } from 'rxjs';
 
+import { DEFAULT_VISITED_FILTER_TIME } from './constants';
+
 /**
  * Creates ExperienceManager class.
  * ExperienceManager provides rules for geolocalized audio playback
@@ -27,7 +29,7 @@ export default class ExperienceManager {
         }]
       }],
       default: {
-        visitedFilter [s]
+        visitedFilter [ms]
       }
     }
     */
@@ -57,10 +59,10 @@ export default class ExperienceManager {
   _init(config) {
     if (!config.default) {
       config.default = {
-        visitedFilter: 5000
+        visitedFilter: DEFAULT_VISITED_FILTER_TIME
       }
     } else {
-      config.visitedFilter ? config.visitedFilter : 5000
+      config.visitedFilter ? config.visitedFilter : DEFAULT_VISITED_FILTER_TIME
     }
 
     // inits force spot
@@ -424,5 +426,4 @@ export default class ExperienceManager {
       }
     });
   }
-
 }

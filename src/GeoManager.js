@@ -4,6 +4,14 @@ import { Subject } from 'rxjs';
 
 import Device from './utils/Device';
 
+import {
+  DEFAULT_MIN_ACCURACY,
+  DEFAULT_POSITION_DEADBAND,
+  DEFAULT_PLAY_DISTANCE,
+  DEFAULT_FETCH_DISTANCE,
+  DEFAULT_FORCE_MIN_ACCURACY
+} from './constants';
+
 /** Converts numeric degrees to radians */
 if (typeof (Number.prototype.toRad) === "undefined") {
   Number.prototype.toRad = function () {
@@ -67,21 +75,20 @@ export default class GeoManager {
     // sets default is nothing provided
     if (!config.default) {
       config.default = {
-        minAccuracy: 10,
-        posDeadband: 10,
-        playDistance: 20,
-        fetchDistance: 1
+        minAccuracy: DEFAULT_MIN_ACCURACY,
+        posDeadband: DEFAULT_POSITION_DEADBAND,
+        playDistance: DEFAULT_PLAY_DISTANCE,
+        fetchDistance: DEFAULT_FETCH_DISTANCE
       }
     } else {
-      config.minAccuracy ? config.minAccuracy : 10;
-      config.posDeadband ? config.posDeadband : 10;
-      config.playDistance ? config.playDistance : 20;
-      config.fetchDistance ? config.fetchDistance : 1;
+      config.minAccuracy ? config.minAccuracy : DEFAULT_MIN_ACCURACY;
+      config.posDeadband ? config.posDeadband : DEFAULT_POSITION_DEADBAND;
+      config.playDistance ? config.playDistance : DEFAULT_PLAY_DISTANCE;
+      config.fetchDistance ? config.fetchDistance : DEFAULT_FETCH_DISTANCE;
     }
 
     // sets minimum manual mode precision
-    this.FORCE_MIN_ACCURACY = 100; // m
-    this.FORCE_MAX_DISTANCE = 100; // m
+    this.FORCE_MIN_ACCURACY = DEFAULT_FORCE_MIN_ACCURACY;
 
     // sets config
     this._config = config;
