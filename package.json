@@ -2,13 +2,14 @@
   "name": "@mezzo-forte/geoxp",
   "version": "1.2.0-beta.0",
   "description": "Mezzo Forte Geo Experience",
-  "main": "/src/index.js",
+  "main": "/dist/geoxp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "webpack --mode production",
     "watch": "webpack --watch",
-    "start-example": "webpack serve --content-base example-app/ --open",
-    "docs": "./node_modules/.bin/jsdoc src/index.js --readme README.md --destination public"
+    "start-example": "cd example-app && webpack serve --content-base ./ --open",
+    "docs": "./node_modules/.bin/jsdoc src/index.js --readme README.md --destination public",
+    "prepare": "npm run build"
   },
   "contributors": [
     {

@@ -1,12 +1,18 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'development',
-  entry: './example-app/app.js',
+  mode: 'production',
+  entry: './src/index.js',
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'example-app'),
+    filename: 'geoxp.js',
+    path: path.resolve(__dirname, 'dist'),
+    library: {
+      name: 'GeoXp',
+      type: 'umd',
+      export: 'default'
+    }
   },
+  devtool: 'source-map',
   devServer: {
     contentBase: './example-app'
   },
