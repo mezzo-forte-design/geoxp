@@ -24,6 +24,13 @@ module.exports = {
             presets: ['@babel/preset-env']
           }
         }
+      },
+      {
+        test: /\.mp3$/,
+        loader: "url-loader",
+        options: {
+          limit: Infinity // everything
+        }
       }
     ]
   }

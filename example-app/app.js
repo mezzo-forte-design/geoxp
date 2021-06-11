@@ -1,8 +1,10 @@
-import GeoXp from '../src/index';
+import GeoXp from '../dist/geoxp';
 
 import { config } from './config';
 
 const geoXp = new GeoXp(config);
+
+window.geoxp = geoXp;
 
 document.getElementById('pos1-in-button').addEventListener('click', e => {
   const position = {

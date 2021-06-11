@@ -8,10 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * notAfter option to spots (prevents a spot to play after another)
 * parametric fade time, configurable by the user
+* Babel support for dist bundle
+* embed default system sounds (silence, visited and test) in dist bundle
 
 ### Changed
 * moved all magic numbers to constants file
 * improved configuration checks and warnings
+* add UMD dist bundle and build before publishing
+* use lower bitrates for system sounds
 
 ### Fixed
 * fix missing default config values initalization

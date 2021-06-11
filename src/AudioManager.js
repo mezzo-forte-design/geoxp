@@ -14,9 +14,9 @@ import {
 } from './constants';
 
 // default audio
-const defaultSilenceSound = './audio/silence.mp3';
-const defaultTestSound = './audio/test.mp3';
-const defaultVisitedSound = './audio/visited.mp3';
+import defaultSilenceSound from './audio/silence.mp3';
+import defaultTestSound from './audio/test.mp3';
+import defaultVisitedSound from './audio/visited.mp3';
 
 // Howler configuration
 const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
@@ -64,7 +64,9 @@ export default class AudioManager {
 
     // sets default if none provided
     if (!config.default) {
-      console.warn('[AudioManager] - System sounds URLs not provided -> pointing to default URL (/audio/*.mp3). You can find example audio files in /src/audio folder');
+      console.info(
+        '*** [AudioManager] *** System sounds URLs not provided -> Using default sounds. You can find example audio files in /src/audio folder ***'
+      );
       config.default = {
         test: defaultTestSound,
         silence: defaultSilenceSound,
@@ -73,9 +75,22 @@ export default class AudioManager {
         fadeOutTime: DEFAULT_FADE_OUT_TIME
       }
     } else {
-      config.default.test = config.default.test || defaultTestSound;
+
+      if (!config.default.test) {
+        console.info(
+          '*** [AudioManager] *** Test sound URL not provided -> Using default sound ***'
+        );
+        config.default.test = defaultTestSound;
+      }
+
+      if (!config.default.visited) {
+        console.info(
+          '*** [AudioManager] *** Visited spot sound URL not provided -> Using default sound ***'
+        );
+        config.default.visited = defaultVisitedSound;
+      }
+
       config.default.silence = config.default.silence || defaultSilenceSound;
-      config.default.visited = config.default.visited || defaultVisitedSound;
 
       config.default.fadeInTime = isPositiveNumber(config.default.fadeInTime) ?
         config.default.fadeInTime :
