@@ -11,19 +11,19 @@ export const DEFAULT_VISITED_FILTER_TIME = 5000; // ms
  */
 
 // minimum accuracy (in meters) to consider a position update as valid
-export const DEFAULT_MIN_ACCURACY = 10; // meters
+export const DEFAULT_ACCURACY = 10; // meters
 
 // position deadband
-export const DEFAULT_POSITION_DEADBAND = 10; // meters
+export const DEFAULT_DEADBAND = 10; // meters
 
 // position play distance
-export const DEFAULT_PLAY_DISTANCE = 20; // meters
+export const DEFAULT_RADIUS = 20; // meters
 
 // position fetch distance as
-export const DEFAULT_FETCH_DISTANCE = 1; // multiplication coefficient
+export const DEFAULT_FETCH = 1; // multiplication coefficient
 
 // MANUAL MODE - minimum accuracy (in meters) to allow manual mode (force spot)
-export const DEFAULT_FORCE_MIN_ACCURACY = 100; // m
+export const DEFAULT_FORCE_ACCURACY = 100; // m
 
 
 /**
