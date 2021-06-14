@@ -33,7 +33,6 @@ export default class Device {
   * Returns default geolocation options
   */
   static get geolocationOpts() {
-    const browser = Bowser.getParser(window.navigator.userAgent);
     const geolocationOpts = {
       enableHighAccuracy : false,
       maximumAge         : 30000,
