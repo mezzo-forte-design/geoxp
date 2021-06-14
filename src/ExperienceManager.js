@@ -30,7 +30,7 @@ export default class ExperienceManager {
             notAfter
         }]
       }],
-      default: {
+      options: {
         visitedFilter [ms]
       }
     }
@@ -56,14 +56,15 @@ export default class ExperienceManager {
   */
   _init(config) {
     // check options
-    if (!config.default) {
-      config.default = {
+    if (!config.options) {
+      config.options = {
         visitedFilter: DEFAULT_VISITED_FILTER_TIME
       }
     } else {
-      config.default.visitedFilter = isNumber(config.default.visitedFilter) ?
-        config.default.visitedFilter :
+      config.options.visitedFilter = isNumber(config.options.visitedFilter) ?
+        config.options.visitedFilter :
         DEFAULT_VISITED_FILTER_TIME;
+
     }
 
     // inits force spot
@@ -208,7 +209,7 @@ export default class ExperienceManager {
               if (pattern.inside.includes(spot.id) && pattern.active.length == 0) {
                 this.spotVisited$.next(spot);
               }
-            }, this._config.default.visitedFilter);
+            }, this._config.options.visitedFilter);
           }
         }
       });

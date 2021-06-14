@@ -5,11 +5,11 @@ import { Subject } from 'rxjs';
 import Device from './utils/Device';
 
 import {
-  DEFAULT_MIN_ACCURACY,
-  DEFAULT_POSITION_DEADBAND,
-  DEFAULT_PLAY_DISTANCE,
-  DEFAULT_FETCH_DISTANCE,
-  DEFAULT_FORCE_MIN_ACCURACY
+  DEFAULT_ACCURACY,
+  DEFAULT_DEADBAND,
+  DEFAULT_RADIUS,
+  DEFAULT_FETCH,
+  DEFAULT_FORCE_ACCURACY
 } from './constants';
 import { isNumber } from './utils/helpers';
 
@@ -41,10 +41,10 @@ export default class GeoManager {
         fetch     1 : n ratio of radius for prefetching
       }],
       default: {
-        minAccuracy,
-        playDistance,
-        posDeadband,
-        fetchDistance
+        accuracy,
+        defaultRadius,
+        defaultDeadband,
+        defaultFetch
       }
     }
     */
@@ -70,34 +70,34 @@ export default class GeoManager {
   _init(config) {
 
     // sets default is nothing provided
-    if (!config.default) {
-      config.default = {
-        minAccuracy: DEFAULT_MIN_ACCURACY,
-        posDeadband: DEFAULT_POSITION_DEADBAND,
-        playDistance: DEFAULT_PLAY_DISTANCE,
-        fetchDistance: DEFAULT_FETCH_DISTANCE
+    if (!config.options) {
+      config.options = {
+        accuracy: DEFAULT_ACCURACY,
+        defaultDeadband: DEFAULT_DEADBAND,
+        defaultRadius: DEFAULT_RADIUS,
+        defaultFetch: DEFAULT_FETCH
       }
     } else {
       // check if some of the single options are missing
-      config.default.minAccuracy = isNumber(config.default.minAccuracy) ?
-        config.default.minAccuracy :
-        DEFAULT_MIN_ACCURACY;
+      config.options.accuracy = isNumber(config.options.accuracy) ?
+        config.options.accuracy :
+        DEFAULT_ACCURACY;
 
-      config.default.posDeadband = isNumber(config.default.posDeadband) ?
-        config.default.posDeadband :
-        DEFAULT_POSITION_DEADBAND;
+      config.options.defaultDeadband = isNumber(config.options.defaultDeadband) ?
+        config.options.defaultDeadband :
+        DEFAULT_DEADBAND;
 
-      config.default.playDistance = isNumber(config.default.playDistance) ?
-        config.default.playDistance :
-        DEFAULT_PLAY_DISTANCE;
+      config.options.defaultRadius = isNumber(config.options.defaultRadius) ?
+        config.options.defaultRadius :
+        DEFAULT_RADIUS;
 
-      config.default.fetchDistance = (isNumber(config.default.fetchDistance) && config.default.fetchDistance >= 1) ?
-        config.default.fetchDistance :
-        DEFAULT_FETCH_DISTANCE;
+      config.options.defaultFetch = (isNumber(config.options.defaultFetch) && config.options.defaultFetch >= 1) ?
+        config.options.defaultFetch :
+        DEFAULT_FETCH;
     }
 
     // sets minimum manual mode precision
-    this.FORCE_MIN_ACCURACY = DEFAULT_FORCE_MIN_ACCURACY;
+    this.FORCE_ACCURACY = DEFAULT_FORCE_ACCURACY;
 
     // sets config
     this._config = config;
@@ -177,7 +177,7 @@ export default class GeoManager {
 
       const accuracy = this.lastPosition.coords.accuracy;
       const distance = this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat);
-      const spotArea = (position.radius || this._config.default.playDistance) + (position.deadband || this._config.default.posDeadband);
+      const spotArea = (position.radius || this._config.options.defaultRadius) + (position.deadband || this._config.options.defaultDeadband);
 
       // checks for max allowed distance
       if (distance - accuracy > spotArea) {
@@ -185,7 +185,7 @@ export default class GeoManager {
         return false;
       }
 
-      if (accuracy > this.FORCE_MIN_ACCURACY) {
+      if (accuracy > this.FORCE_ACCURACY) {
 
         // canForce, poor accuracy
         return true;
@@ -226,8 +226,8 @@ export default class GeoManager {
     // Sets last registered position
     this.lastPosition = pos;
 
-    // exec only if position.coords.accuracy is < a given threshold (to define)
-    if (pos.coords.accuracy > this._config.default.minAccuracy) {
+    // exec only if position.coords.accuracy is < than accuracy threshold
+    if (pos.coords.accuracy > this._config.options.accuracy) {
       return;
     }
 
@@ -236,9 +236,9 @@ export default class GeoManager {
       const dist = this._calcGeoDistance(pos.coords.longitude, pos.coords.latitude, position.lon, position.lat);
 
       // calc rardiuses
-      const inside = (position.radius || this._config.default.playDistance) - (position.deadband || this._config.default.posDeadband);
-      const outside = (position.radius || this._config.default.playDistance) + (position.deadband || this._config.default.posDeadband);
-      const fetch = (position.fetch || this._config.default.fetchDistance) * inside;
+      const inside = (position.radius || this._config.options.defaultRadius) - (position.deadband || this._config.options.defaultDeadband);
+      const outside = (position.radius || this._config.options.defaultRadius) + (position.deadband || this._config.options.defaultDeadband);
+      const fetch = (position.fetch || this._config.options.defaultFetch) * inside;
 
       // check distances
       if (dist <= inside) {
