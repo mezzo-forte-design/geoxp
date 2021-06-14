@@ -18,11 +18,11 @@ const geo = {
       "deadband": 20
     }
   ],
-  "default": {
-    "minAccuracy": 100,
-    "posDeadband": 10,
-    "playDistance": 20,
-    "fetchDistance": 1
+  "options": {
+    "accuracy": 100,
+    "defaultDeadband": 10,
+    "defaultRadius": 20,
+    "defaultFetch": 1
   }
 };
 
@@ -38,11 +38,11 @@ const audio = {
       "url": "./audio/music2.mp3"
     }
   ],
-  "default": {
+  "options": {
     "test": "./audio/system/test.mp3",
     "silence": "./audio/system/silence.mp3",
     "visited": "./audio/system/visited.mp3",
-    "fadeInTime": 10000,
+    "fadeInTime": 5000,
     "fadeOutTime": 1000
   }
 };
