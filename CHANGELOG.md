@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * improved configuration checks and warnings
 * add UMD dist bundle and build before publishing
 * use lower bitrates for system sounds
+* "default" config object is now "options"
+* geo default object names changed to fit positions properties
+* magic numbers renamed according to default object names
 
 ### Fixed
 * fix missing default config values initalization
