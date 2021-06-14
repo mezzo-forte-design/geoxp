@@ -40,7 +40,7 @@ export default class GeoManager {
         deadband,  [m]
         fetch     1 : n ratio of radius for prefetching
       }],
-      default: {
+      options: {
         accuracy,
         defaultRadius,
         defaultDeadband,

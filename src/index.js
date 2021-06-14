@@ -26,7 +26,7 @@ import { isObjectLike } from './utils/helpers';
 * @property { number } positions[].radius - Position inner radius [meters]
 * @property { number } positions[].deadband - Position deadband from inner radius [meters]
 * @property { number } positions[].fetch - Radius for content prefetching [rate of radius]
-* @property { Object } options - Geo default values
+* @property { Object } options - Geo options
 * @property { number } options.accuracy - Min acceptable accuracy [meters]
 * @property { number } options.defaultDeadband - Default deadband [meters]
 * @property { number } options.defaultRadius - Default position radius [meters]
@@ -39,7 +39,7 @@ import { isObjectLike } from './utils/helpers';
 * @property { string } sounds[].id - Sound id
 * @property { string } sounds[].label - Sound name/desc
 * @property { string } sounds[].url - Sound url, local or remote
-* @property { Object } options - Audio default values
+* @property { Object } options - Audio options
 * @property { string } options.test - Test sound url
 * @property { string } options.silence - Silence sound url
 * @property { string } options.visited - Visited spot audio url
@@ -60,7 +60,7 @@ import { isObjectLike } from './utils/helpers';
 * @property { string } patterns[].spots[].audio - Spot linked audio id
 * @property { string } [patterns[].spots[].after = null] - Spot can go active only after this spot id has been visited
 * @property { string } [patterns[].spots[].notAfter = null] - Spot cannot go active after this spot id has been visited
-* @property { Object } options - Experience default values
+* @property { Object } options - Experience options
 * @property { number } options.visitedFilter - Time before visisted spot is notified for filtering [seconds]
 */
 
