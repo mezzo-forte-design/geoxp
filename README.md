@@ -173,8 +173,8 @@ Configuration for geolocation (*geo*) is a simple map of positions and parameter
 
 Configuration for experience is meant to set links between positions and related content.
 
-Each configuration section has a .default child that stores some module working parameters.
-If no default object is provided, GeoXp will use its hardcoded default configuration.
+Each configuration section has a .options child that stores some module working parameters.
+If no options object is provided, GeoXp will use its hardcoded default configuration.
 
 
 ### <a name="geo-configuration"></a> **Geo configuration**
@@ -193,11 +193,11 @@ geo: {
       fetch: number // prefetching distance as ratio of the radius, from 1 to n
     }
   ],
-  default: {
-    minAccuracy: number // minimum acceptable accuracy in meters
-    posDeadband: number // default fencing deadband
-    playDistance: number // default fencing radius
-    fetchDistance: number // default prefetch distance ratio
+  options: {
+    accuracy: number // minimum acceptable accuracy in meters
+    defaultDeadband: number // default fencing deadband
+    defaultRadius: number // default fencing radius
+    defaultFetch: number // default prefetch distance ratio
   }
 }
 ```
@@ -213,10 +213,12 @@ audio: {
       url: string // content url (local or remote)
     }
   ],
-  default: {
+  options: {
     test: string // url for test sound
     silence: string // url for silence sound
     visited: string // url for spot already visited sound
+    fadeInTime: number // fade in time [ms]
+    fadeOutTime: number // fade out time [ms]
   }
 ```
 
@@ -243,8 +245,8 @@ experience: {
       ]
     }
   ],
-  default: {
-    visitedFilter: number // milliseconds after an already visited spot is notified
+  options: {
+    visitedFilter: number // time after an already visited spot is notified [ms]
   }
 }
 ```
@@ -455,7 +457,7 @@ Unless content overlapping is desired, it’s better to avoid positions overlap 
 
 If two pattern spots are actually near each other, try setting radiuses in a way that fencing doesn’t overlap (maybe by setting a small radius and a big delta: user has to be close to the position for the content to start, but the content will not stop if he walks away).
 
-If overlapping isn’t avoidable, make sure to apply filtering with `experience.default.visitedFilter` (usually 5000 or 10000 ms is enough).
+If overlapping isn’t avoidable, make sure to apply filtering with `experience.options.visitedFilter` (usually 5000 or 10000 ms is enough).
 
 ## <a name="mobile-integration"></a> Mobile integration
 Most mobile browsers will block Howler and Geolocation API after some time with no user interaction, resulting in unpredictable geoXp behavior.
