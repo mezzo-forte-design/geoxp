@@ -40,7 +40,7 @@ export default class AudioManager {
         label,
         url,
       }],
-      default: {
+      options: {
         test,
         silence,
         visited,
