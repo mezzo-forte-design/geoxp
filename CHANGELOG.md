@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## **Unreleased**
 ### Added
+* add UMD dist bundle and build before publishing
 * notAfter option to spots (prevents a spot to play after another)
 * parametric fade time, configurable by the user
 * Babel support for dist bundle
@@ -14,8 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 * moved all magic numbers to constants file
 * improved configuration checks and warnings
-* add UMD dist bundle and build before publishing
 * use lower bitrates for system sounds
+* "default" config object is now "options"
+* geo default object names changed to fit positions properties
+* magic numbers renamed according to default object names
 
 ### Fixed
 * fix missing default config values initalization

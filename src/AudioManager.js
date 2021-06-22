@@ -40,7 +40,7 @@ export default class AudioManager {
         label,
         url,
       }],
-      default: {
+      options: {
         test,
         silence,
         visited,
@@ -63,11 +63,11 @@ export default class AudioManager {
   _init(config) {
 
     // sets default if none provided
-    if (!config.default) {
+    if (!config.options) {
       console.info(
         '*** [AudioManager] *** System sounds URLs not provided -> Using default sounds. You can find example audio files in /src/audio folder ***'
       );
-      config.default = {
+      config.options = {
         test: defaultTestSound,
         silence: defaultSilenceSound,
         visited: defaultVisitedSound,
@@ -76,28 +76,28 @@ export default class AudioManager {
       }
     } else {
 
-      if (!config.default.test) {
+      if (!config.options.test) {
         console.info(
           '*** [AudioManager] *** Test sound URL not provided -> Using default sound ***'
         );
-        config.default.test = defaultTestSound;
+        config.options.test = defaultTestSound;
       }
 
-      if (!config.default.visited) {
+      if (!config.options.visited) {
         console.info(
           '*** [AudioManager] *** Visited spot sound URL not provided -> Using default sound ***'
         );
-        config.default.visited = defaultVisitedSound;
+        config.options.visited = defaultVisitedSound;
       }
 
-      config.default.silence = config.default.silence || defaultSilenceSound;
+      config.options.silence = config.options.silence || defaultSilenceSound;
 
-      config.default.fadeInTime = isPositiveNumber(config.default.fadeInTime) ?
-        config.default.fadeInTime :
+      config.options.fadeInTime = isPositiveNumber(config.options.fadeInTime) ?
+        config.options.fadeInTime :
         DEFAULT_FADE_IN_TIME;
 
-      config.default.fadeOutTime = isPositiveNumber(config.default.fadeOutTime) ?
-        config.default.fadeOutTime :
+      config.options.fadeOutTime = isPositiveNumber(config.options.fadeOutTime) ?
+        config.options.fadeOutTime :
         DEFAULT_FADE_OUT_TIME;
     }
 
@@ -135,28 +135,28 @@ export default class AudioManager {
   * Plays test system sound
   */
   test() {
-    this._playSystemSound(this._config.default.test);
+    this._playSystemSound(this._config.options.test);
   }
 
   /**
   * Plays silence
   */
   silence() {
-    this._playSystemSound(this._config.default.silence);
+    this._playSystemSound(this._config.options.silence);
   }
 
   /**
   * Unlocks web audio
   */
   unlock() {
-    this._playSystemSound(this._config.default.silence);
+    this._playSystemSound(this._config.options.silence);
   }
 
   /**
   * Plays already visited system sound
   */
   visited() {
-    this._playSystemSound(this._config.default.visited);
+    this._playSystemSound(this._config.options.visited);
   }
 
   /**
@@ -217,7 +217,7 @@ export default class AudioManager {
 
       // start sound
       if (sound.playWhenReady) {
-        const fadeTime = fade ? fade : this._config.default.fadeInTime;
+        const fadeTime = fade ? fade : this._config.options.fadeInTime;
         this.play(spot, overlap, fadeTime);
       }
     });
@@ -256,7 +256,7 @@ export default class AudioManager {
           sound.audio.play();
 
           // fade in
-          const fadeTime = fade ? fade : this._config.default.fadeInTime;
+          const fadeTime = fade ? fade : this._config.options.fadeInTime;
           if (fadeTime > 0) sound.audio.fade(0, volume, fadeTime);
           else sound.audio.volume(volume);
         }
@@ -286,7 +286,7 @@ export default class AudioManager {
       if (sound.audio.playing()) {
 
         // fade out then stop
-        const fadeTime = fade ? fade : this._config.default.fadeOutTime;
+        const fadeTime = fade ? fade : this._config.options.fadeOutTime;
         if (fadeTime > 0) {
           sound.audio.fade(sound.audio.volume(), 0, fadeTime);
           sound.audio.once('fade', () => {

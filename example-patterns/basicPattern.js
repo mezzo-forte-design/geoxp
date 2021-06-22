@@ -34,12 +34,12 @@ const geo = {
     }
   ],
 
-  // internal geoXp default values could be overridden appending "default" object to configuration
-  default: {
-    fetchDistance: 1, // same as radius, no prefetch
-    minAccuracy: 10, // meters
-    playDistance: 30, // meters
-    posDeadband: 5 // meters
+  // internal geoXp default values could be overridden appending "options" object to configuration
+  options: {
+    defaultFetch: 1, // same as radius, no prefetch
+    accuracy: 10, // meters
+    defaultRadius: 30, // meters
+    defaultDeadband: 5 // meters
   }
 };
 
@@ -62,11 +62,13 @@ const audio = {
     }
   ],
 
-  // internal geoXp default values could be overridden appending "default" object to configuration
-  default: {
+  // internal geoXp default values could be overridden appending "options" object to configuration
+  options: {
     test: './audio/system/test.mp3', // url for test sound
     silence: './audio/system/silence.mp3', // url for silence sound
-    visited: './audio/system/visited.mp3' // url for spot already visited sound
+    visited: './audio/system/visited.mp3', // url for spot already visited sound
+    fadeInTime: 0, // fade in time [ms]
+    fadeOutTime: 1000, // fade out time [ms]
   }
 };
 
