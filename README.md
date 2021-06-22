@@ -120,8 +120,9 @@ Multiple patterns could be active at any time, providing multiple simultaneous e
 Patterns are separate entities that don’t talk to each other, spots order and content overlap management are independent between patterns.
 
 ### <a name="spots-order"></a> **Spots order**
-GeoXP provides limited content queue management. This can be achieved using the spot “after” property.
+GeoXP provides limited content queue management. This can be achieved using the spot “after” and “notAfter” properties.
 If after is defined, GeoXp will not reproduce a certain spot content unless the after spot has already been played.
+If notAfter is defined, GeoXp will not reproduce a certain spot content if the notAfter spot has already been played.
 
 ### <a name="content-replay"></a> **Content replay**
 When content starts playing, a spot becomes “visited”.
@@ -237,7 +238,8 @@ experience: {
           id: string // spot unique id
           position: // position id as in geo position configuration
           audio: // audio id as in audio sound configuration
-          after: // id of the previous mandatory spot (see “key concepts”, “Spot order”)
+          after: // id of the previous mandatory spot (see “key concepts”, “Spots order”)
+          notAfter: // id of the spot that prevents current spot playback (see “key concepts”, “Spots order”)
           label: // spot name or descriptions
         }
       ]
