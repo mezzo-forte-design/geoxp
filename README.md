@@ -235,7 +235,7 @@ experience: {
       disabled: bool // pattern is disabled
       replay: bool // spots are automatically replayed
       overlap: bool // content playback can overlap
-      spot: [ // array of pattern’s spots
+      spots: [ // array of pattern’s spots
         {
           id: string // spot unique id
           position: // position id as in geo position configuration
