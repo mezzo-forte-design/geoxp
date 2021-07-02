@@ -6,16 +6,12 @@ const geo = {
       "label": "pos1",
       "lat": 45.116177,
       "lon": 7.742615,
-      "radius": 10000,
-      "deadband": 20
     },
     {
       "id": "pos2",
       "label": "pos2",
       "lat": 45.116177,
       "lon": 6.742615,
-      "radius": 10000,
-      "deadband": 20
     }
   ],
   "options": {
@@ -51,21 +47,30 @@ const audio = {
 const experience = {
   "patterns": [
     {
+      "id": "pattern1",
       "label": "pattern1",
-      "enabled": true,
       "overlap": false,
+      "replay": true,
       "spots": [
         {
           "id": "spot1",
           "position": "pos1",
           "audio": "aud1",
           "label": "Spot 1!!"
-        },
+        }
+      ]
+    },
+    {
+      "id": "pattern2",
+      "label": "pattern2",
+      "disabled": true,
+      "overlap": false,
+      "replay": true,
+      "spots": [
         {
           "id": "spot2",
           "position": "pos2",
           "audio": "aud2",
-          "notAfter": "spot1",
           "label": "Spot 2!!"
         }
       ]
