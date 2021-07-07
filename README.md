@@ -195,10 +195,10 @@ geo: {
     }
   ],
   options: {
-    accuracy: number // minimum acceptable accuracy in meters
-    defaultDeadband: number // default fencing deadband
-    defaultRadius: number // default fencing radius
-    defaultFetch: number // default prefetch distance ratio
+    accuracy: number // minimum acceptable accuracy in meters - default value = 25m
+    defaultDeadband: number // default fencing deadband - default value = 10m
+    defaultRadius: number // default fencing radius - default value = 20m
+    defaultFetch: number // default prefetch distance ratio default value = 1 (integer)
   }
 }
 ```
@@ -218,8 +218,8 @@ audio: {
     test: string // url for test sound
     silence: string // url for silence sound
     visited: string // url for spot already visited sound
-    fadeInTime: number // fade in time [ms]
-    fadeOutTime: number // fade out time [ms]
+    fadeInTime: number // fade in time [ms] - default value = 0 ms
+    fadeOutTime: number // fade out time [ms] - default value = 1000 ms
   }
 ```
 
@@ -248,7 +248,7 @@ experience: {
     }
   ],
   options: {
-    visitedFilter: number // time after an already visited spot is notified [ms]
+    visitedFilter: number // time after an already visited spot is notified [ms] - default value = 5000 ms
   }
 }
 ```
