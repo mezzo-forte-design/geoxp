@@ -19,9 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * "default" config object is now "options"
 * geo default object names changed to fit positions properties
 * magic numbers renamed according to default object names
+* changed DEFAULT_ACCURACY to 25 m
 
 ### Fixed
 * fix missing default config values initalization
+* fix deadband (now used only to calculate outgoing spots, not incoming)
 
 ## **v1.1.0** - 2021-06-06
 ### Added
