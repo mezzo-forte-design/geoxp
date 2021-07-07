@@ -249,9 +249,7 @@ export default class GeoManager {
             this.inside = this.inside.filter(e => e !== position.id);
             this.outgoing$.next(position.id);
           }
-
-        this.inside = this.inside.filter(e => e !== position.id);
-        this.outgoing$.next(position.id);
+          
       } else {
 
         // currently not inside
