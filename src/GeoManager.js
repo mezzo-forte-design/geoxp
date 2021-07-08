@@ -236,31 +236,36 @@ export default class GeoManager {
       const dist = this._calcGeoDistance(pos.coords.longitude, pos.coords.latitude, position.lon, position.lat);
 
       // calc rardiuses
-      const inside = (position.radius || this._config.options.defaultRadius) - (position.deadband || this._config.options.defaultDeadband);
+      const inside = position.radius || this._config.options.defaultRadius;
       const outside = (position.radius || this._config.options.defaultRadius) + (position.deadband || this._config.options.defaultDeadband);
       const fetch = (position.fetch || this._config.options.defaultFetch) * inside;
 
-      // check distances
-      if (dist <= inside) {
+      if (this.inside.includes(position.id)) {
 
-        // inside play area
-        if (!this.inside.includes(position.id)) {
+          // already inside
+          if (dist > outside) {
+
+            // outside radius + deadband
+            this.inside = this.inside.filter(e => e !== position.id);
+            this.outgoing$.next(position.id);
+          }
+          
+      } else {
+
+        // currently not inside
+        if (dist <= inside) {
+
+          // inside play area
           this.inside.push(position.id);
           this.inside$.next(position.id);
         }
 
-      } else if (dist <= fetch) {
+        else if (dist <= fetch) {
 
-        // inside prefetch area
-        this.incoming$.next(position);
-
-      } else if (dist > outside) {
-
-        // outside play area
-        if (this.inside.includes(position.id)) {
-          this.inside = this.inside.filter(e => e !== position.id);
-          this.outgoing$.next(position.id);
+          // inside prefetch area
+          this.incoming$.next(position);
         }
+
       }
     });
   }

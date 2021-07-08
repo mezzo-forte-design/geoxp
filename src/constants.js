@@ -11,7 +11,7 @@ export const DEFAULT_VISITED_FILTER_TIME = 5000; // ms
  */
 
 // minimum accuracy (in meters) to consider a position update as valid
-export const DEFAULT_ACCURACY = 10; // meters
+export const DEFAULT_ACCURACY = 25; // meters
 
 // position deadband
 export const DEFAULT_DEADBAND = 10; // meters
