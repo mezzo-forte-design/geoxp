@@ -5,7 +5,7 @@
   "main": "/dist/geoxp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production --env=production",
     "build-dev": "webpack --mode development",
     "watch": "webpack --watch",
     "start-example": "npm run build-dev && cd example-app && webpack serve --content-base ./ --open",
