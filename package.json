@@ -5,9 +5,10 @@
   "main": "/dist/geoxp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production --env=production",
+    "build-dev": "webpack --mode development",
     "watch": "webpack --watch",
-    "start-example": "npm run build && cd example-app && webpack serve --content-base ./ --open",
+    "start-example": "npm run build-dev && cd example-app && webpack serve --content-base ./ --open",
     "docs": "./node_modules/.bin/jsdoc src/index.js --readme README.md --destination public",
     "prepare": "npm run build"
   },

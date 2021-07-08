@@ -73,31 +73,42 @@ export default class ExperienceManager {
     // sets config
     this._config = config;
 
-    // loads patterns
-    this._loadPatterns();
+    // reloads patterns
+    this._loadPatterns(true);
   }
 
   /**
   * Builds all enabled patterns
+  * @param { boolean } [restart = false] - inits pattern spot memories
   */
-  _loadPatterns() {
+  _loadPatterns(restart = false) {
 
     // clears all
-    if (this._patterns) {
+    if (this._patterns && restart) {
       this._patterns.clear();
     }
 
     // builds all enabled patterns
     this._config.patterns.forEach(cfg => {
-      if (!cfg.disabled) {
-        const pattern = {
+
+      const pattern = this._patterns.get(cfg.id);
+      
+      if (pattern) {
+
+        // pattern alredy exists, change cfg info
+        pattern.cfg = cfg;
+
+      } else {
+
+        // new pattern, add to map
+        const toAdd = {
           cfg,
           visited: [],
           inside: [],
           active: []
         };
 
-        this._patterns.set(cfg.id, pattern);
+        this._patterns.set(cfg.id, toAdd);
       }
     });
   }
@@ -108,6 +119,7 @@ export default class ExperienceManager {
   */
   reload(config) {
     this._init(config);
+    console.log('config', config);
   }
 
   /**
@@ -118,16 +130,41 @@ export default class ExperienceManager {
   }
 
   /**
-  * Enables/disables specific pattern
-  * @param { string } id - pattern id to toggle
-  * @param { boolean } enb - flag for enable/disable
+  * Enables specific pattern
+  * @param { string } id - pattern id to enable
   */
-  enablePattern(id, enb) {
+  enablePattern(id) {
+
+    // finds pattern in map
     const pattern = this._patterns.get(id);
     if (pattern) {
-      pattern.cfg.disabled = !enb;
+
+      // pattern enabled
+      pattern.cfg.disabled = false;
+
+      // calls for geo refresh
+      this.geoRefresh$.next();
+
     } else {
       console.error('[GeoManager.enablePattern] - Pattern id not found, cannot enable');
+      return;
+    }
+  }
+
+  /**
+  * Disables specific pattern
+  * @param { string } id - pattern id to disable
+  */
+  disablePattern(id) {
+
+    // finds pattern in map
+    const pattern = this._patterns.get(id);
+    if (pattern) {
+
+      // pattern disabled
+      pattern.cfg.disabled = true;
+    } else {
+      console.error('[GeoManager.disablePattern] - Pattern id not found, cannot disable');
       return;
     }
 
@@ -141,15 +178,20 @@ export default class ExperienceManager {
   */
   incoming(position) {
 
-    // for each enabled pattern
+    // for each pattern
     this._patterns.forEach(pattern => {
-      // checks if position is on pattern, then load if needed
-      const spots = pattern.cfg.spots.filter((e) => e.position === position);
-      spots.forEach((spot) => {
 
-        // preload spot
-        this.spotIncoming$.next(spot);
-      });
+      // checks if pattern enabled
+      if (!pattern.cfg.disabled) {
+
+        // checks if position is on pattern, then load if needed
+        const spots = pattern.cfg.spots.filter((e) => e.position === position);
+        spots.forEach((spot) => {
+
+          // preload spot
+          this.spotIncoming$.next(spot);
+        });
+      }
     });
   }
 
@@ -159,68 +201,72 @@ export default class ExperienceManager {
   */
   inside(position) {
 
-    // for each enabled pattern
+    // for each pattern
     this._patterns.forEach(pattern => {
 
-      // checks if position is on pattern, then play if needed
-      const spots = pattern.cfg.spots.filter((e) => e.position === position);
+      // checks if pattern enabled
+      if (!pattern.cfg.disabled) {
 
-      // evaluates each spot to check if something's to play
-      spots.forEach((spot) => {
+        // checks if position is on pattern, then play if needed
+        const spots = pattern.cfg.spots.filter((e) => e.position === position);
 
-        // for each spot linked to position
-        // first time
-        if (pattern.cfg.replay || !pattern.visited.includes(spot.id)) {
+        // evaluates each spot to check if something's to play
+        spots.forEach((spot) => {
 
-          // spot order ok
-          if ((!spot.after || pattern.visited.includes(spot.after))
-            && (!spot.notAfter || !pattern.visited.includes(spot.notAfter))) {
+          // for each spot linked to position
+          // first time
+          if (pattern.cfg.replay || !pattern.visited.includes(spot.id)) {
 
-            // overlap ok
-            if (pattern.cfg.overlap || pattern.active.length == 0) {
+            // spot order ok
+            if ((!spot.after || pattern.visited.includes(spot.after))
+              && (!spot.notAfter || !pattern.visited.includes(spot.notAfter))) {
 
-              if (!pattern.active.includes(spot.id)) {
-                pattern.active.push(spot.id);
+              // overlap ok
+              if (pattern.cfg.overlap || pattern.active.length == 0) {
+
+                if (!pattern.active.includes(spot.id)) {
+                  pattern.active.push(spot.id);
+                }
+
+                const info = {
+                  spot,
+                  overlap: pattern.cfg.overlap
+                }
+
+                // play audio
+                this.spotActive$.next(info);
               }
-
-              const info = {
-                spot,
-                overlap: pattern.cfg.overlap
-              }
-
-              // play audio
-              this.spotActive$.next(info);
             }
           }
-        }
-      });
+        });
 
-      // reevaluates each spot to check if visited
-      spots.forEach((spot) => {
-        if (!pattern.cfg.replay && pattern.visited.includes(spot.id)) {
+        // reevaluates each spot to check if visited
+        spots.forEach((spot) => {
+          if (!pattern.cfg.replay && pattern.visited.includes(spot.id)) {
 
-          // just when spot is first inside
-          if (!pattern.inside.includes(spot.id)) {
+            // just when spot is first inside
+            if (!pattern.inside.includes(spot.id)) {
 
-            // waits to see if somthing goes active
-            setTimeout(() => {
+              // waits to see if somthing goes active
+              setTimeout(() => {
 
-              // still inside and nothing active
-              if (pattern.inside.includes(spot.id) && pattern.active.length == 0) {
-                this.spotVisited$.next(spot);
-              }
-            }, this._config.options.visitedFilter);
+                // still inside and nothing active
+                if (pattern.inside.includes(spot.id) && pattern.active.length == 0) {
+                  this.spotVisited$.next(spot);
+                }
+              }, this._config.options.visitedFilter);
+            }
           }
-        }
-      });
+        });
 
-      // reevaluates each spot to check when first inside
-      spots.forEach((spot) => {
-        // inside spot
-        if (!pattern.inside.includes(spot.id)) {
-          pattern.inside.push(spot.id);
-        }
-      });
+        // reevaluates each spot to check when first inside
+        spots.forEach((spot) => {
+          // inside spot
+          if (!pattern.inside.includes(spot.id)) {
+            pattern.inside.push(spot.id);
+          }
+        });
+      }
     });
   }
 
@@ -394,6 +440,12 @@ export default class ExperienceManager {
       // checks if spot actually exist in pattern
       const spot = pattern.cfg.spots.find(e => e.id === id);
       if (spot) {
+
+        // checks if pattern enabled
+        if (pattern.cfg.disabled) {
+          console.error('[ExperienceManager.forceSpot] - pattern is disabled, cannot force')
+          return;
+        }
 
         // if there are spots active
         if (pattern.active.length > 0) {

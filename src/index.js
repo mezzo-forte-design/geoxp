@@ -306,7 +306,7 @@ class GeoXp {
   * @param { string } id - pattern id to enable
   */
   enablePattern(id) {
-    this.experience.enablePattern(id, true);
+    this.experience.enablePattern(id);
   }
 
   /**
@@ -314,7 +314,7 @@ class GeoXp {
   * @param { string } id - pattern id to disable
   */
   disablePattern(id) {
-    this.experience.enablePattern(id, false);
+    this.experience.disablePattern(id);
   }
 
   /**
