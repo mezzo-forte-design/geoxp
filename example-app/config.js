@@ -15,6 +15,7 @@ const geo = {
     }
   ],
   "options": {
+    "enableHighAccuracy": true,
     "accuracy": 100,
     "defaultDeadband": 10,
     "defaultRadius": 20,

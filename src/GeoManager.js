@@ -69,6 +69,12 @@ export default class GeoManager {
   */
   _init(config) {
 
+    this._geolocationApiConfig = {
+      enableHighAccuracy : config.options.enableHighAccuracy || true,
+      maximumAge         : config.options.maximumAge || 30000,
+      timeout            : config.options.timeout || 27000
+    };
+
     // sets default is nothing provided
     if (!config.options) {
       config.options = {
@@ -111,7 +117,7 @@ export default class GeoManager {
       navigator.geolocation.clearWatch(this._GEO_WATCH);
     }
 
-    this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
+    this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, this._geolocationApiConfig);
   }
 
   /**
@@ -156,7 +162,7 @@ export default class GeoManager {
   */
   internalGeolocation(enabled) {
     if (enabled) {
-      this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
+      this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, this._geolocationApiConfig);
     } else if (this._GEO_WATCH) {
       navigator.geolocation.clearWatch(this._GEO_WATCH);
     }
@@ -249,7 +255,7 @@ export default class GeoManager {
             this.inside = this.inside.filter(e => e !== position.id);
             this.outgoing$.next(position.id);
           }
-          
+
       } else {
 
         // currently not inside
