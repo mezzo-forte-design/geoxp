@@ -190,7 +190,6 @@ export default class AudioManager {
       playWhenReady,
       audio: new Howl({
         src: [audio.url],
-        format: 'mp3',
         html5: !USE_WEBAUDIO
       })
     }
