@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * fix missing default config values initalization
 * fix deadband (now used only to calculate outgoing spots, not incoming)
 * fix pattern enable/disable (now it works!)
+* remove hardcoded mp3 from audio manager
 
 ## **v1.1.0** - 2021-06-06
 ### Added
