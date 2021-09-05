@@ -2,14 +2,21 @@
 
 import { Howl, Howler } from 'howler';
 
-import Device from './utils/Device.js';
-
 import { Subject } from 'rxjs';
 
+import Device from './utils/Device.js';
+
+import { isPositiveNumber } from './utils/helpers.js';
+
+import {
+  DEFAULT_FADE_IN_TIME,
+  DEFAULT_FADE_OUT_TIME
+} from './constants';
+
 // default audio
-const defaultSilenceSound = './audio/silence.mp3';
-const defaultTestSound = './audio/test.mp3';
-const defaultVisitedSound = './audio/visited.mp3';
+import defaultSilenceSound from './audio/silence.mp3';
+import defaultTestSound from './audio/test.mp3';
+import defaultVisitedSound from './audio/visited.mp3';
 
 // Howler configuration
 const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
@@ -33,17 +40,15 @@ export default class AudioManager {
         label,
         url,
       }],
-      default: {
+      options: {
         test,
         silence,
-        visited
+        visited,
+        fadeInTime,
+        fadeOutTime
       }
     }
     */
-
-    if (!config) {
-      console.error('[AudioManager] - Missing audio config! GeoXp needs an audio object in the configuration file. Check the docs for details');
-    }
 
     this.play$ = new Subject();
     this.done$ = new Subject();
@@ -58,17 +63,42 @@ export default class AudioManager {
   _init(config) {
 
     // sets default if none provided
-    if (!config.default) {
-      console.warn('[AudioManager] - System sounds URLs not provided -> pointing to default URL (/audio/*.mp3). You can find example audio files in /src/audio folder');
-      config.default = {
+    if (!config.options) {
+      console.info(
+        '*** [AudioManager] *** System sounds URLs not provided -> Using default sounds. You can find example audio files in /src/audio folder ***'
+      );
+      config.options = {
         test: defaultTestSound,
         silence: defaultSilenceSound,
-        visited: defaultVisitedSound
+        visited: defaultVisitedSound,
+        fadeInTime: DEFAULT_FADE_IN_TIME,
+        fadeOutTime: DEFAULT_FADE_OUT_TIME
       }
     } else {
-      config.test ? config.test : defaultTestSound;
-      config.silence ? config.silence : defaultSilenceSound;
-      config.visited ? config.visited : defaultVisitedSound;
+
+      if (!config.options.test) {
+        console.info(
+          '*** [AudioManager] *** Test sound URL not provided -> Using default sound ***'
+        );
+        config.options.test = defaultTestSound;
+      }
+
+      if (!config.options.visited) {
+        console.info(
+          '*** [AudioManager] *** Visited spot sound URL not provided -> Using default sound ***'
+        );
+        config.options.visited = defaultVisitedSound;
+      }
+
+      config.options.silence = config.options.silence || defaultSilenceSound;
+
+      config.options.fadeInTime = isPositiveNumber(config.options.fadeInTime) ?
+        config.options.fadeInTime :
+        DEFAULT_FADE_IN_TIME;
+
+      config.options.fadeOutTime = isPositiveNumber(config.options.fadeOutTime) ?
+        config.options.fadeOutTime :
+        DEFAULT_FADE_OUT_TIME;
     }
 
     // sets config
@@ -105,37 +135,38 @@ export default class AudioManager {
   * Plays test system sound
   */
   test() {
-    this._playSystemSound(this._config.default.test);
+    this._playSystemSound(this._config.options.test);
   }
 
   /**
   * Plays silence
   */
   silence() {
-    this._playSystemSound(this._config.default.silence);
+    this._playSystemSound(this._config.options.silence);
   }
 
   /**
   * Unlocks web audio
   */
   unlock() {
-    this._playSystemSound(this._config.default.silence);
+    this._playSystemSound(this._config.options.silence);
   }
 
   /**
   * Plays already visited system sound
   */
   visited() {
-    this._playSystemSound(this._config.default.visited);
+    this._playSystemSound(this._config.options.visited);
   }
 
   /**
   * Loads Howler sounds in buffer
   * @param { Object } spot - spot to load
   * @param { boolean } overlap - can overlap other sounds
+  * @param { number } [fade = null] - fade in time [ms]
   * @param { boolean } [playWhenReady = false] - play sound when loaded
   */
-  load(spot, overlap = false, playWhenReady = false) {
+  load(spot, overlap = false, fade = null, playWhenReady = false) {
 
     if (!spot.audio) {
       console.error('[AudioManager.load] - audio info not provided. Cannot load');
@@ -159,7 +190,6 @@ export default class AudioManager {
       playWhenReady,
       audio: new Howl({
         src: [audio.url],
-        format: 'mp3',
         html5: !USE_WEBAUDIO
       })
     }
@@ -186,7 +216,8 @@ export default class AudioManager {
 
       // start sound
       if (sound.playWhenReady) {
-        this.play(spot, 0, 1);
+        const fadeTime = fade ? fade : this._config.options.fadeInTime;
+        this.play(spot, overlap, fadeTime);
       }
     });
   }
@@ -195,10 +226,10 @@ export default class AudioManager {
   * Plays Howler sounds if loaded, else load() then play().
   * @param { Object } spot - spot to load
   * @param { boolean } overlap - can overlap other sounds
-  * @param { number } [fade = 0] - fade in time
+  * @param { number } [fade = null] - fade in time [ms]
   * @param { number } [volume = 1] - playback volume from 0 to 1
   */
-  play(spot, overlap = false, fade = 0, volume = 1) {
+  play(spot, overlap = false, fade = null, volume = 1) {
 
     if (!spot.audio) {
       console.error('[AudioManager.play] - audio info non provided. Cannot play');
@@ -213,17 +244,19 @@ export default class AudioManager {
     if (!sound) {
 
       // load audio and play when ready
-      this.load(spot, overlap, true);
+      this.load(spot, overlap, fade, true);
 
     } else {
       // if sounds are ready play(), else playWhenReady
       if (sound.audio.state() === 'loaded') {
         if (!sound.audio.playing()) {
 
+          // play sound
           sound.audio.play();
 
-          // fade
-          if (fade > 0) sound.audio.fade(0, volume, fade);
+          // fade in
+          const fadeTime = fade ? fade : this._config.options.fadeInTime;
+          if (fadeTime > 0) sound.audio.fade(0, volume, fadeTime);
           else sound.audio.volume(volume);
         }
       }
@@ -234,9 +267,9 @@ export default class AudioManager {
   /**
   * Stops specific spot sound
   * @param { Object } spot - spot to load
-  * @param { number } [fade = 0] - fade out time
+  * @param { number } [fade = null] - fade out time [ms]
   */
-  stop(spot, fade = 0) {
+  stop(spot, fade = null) {
 
     if (!spot.audio) {
       console.error('[AudioManager.stop] - audio info non provided. Cannot stop');
@@ -250,13 +283,17 @@ export default class AudioManager {
     const sound = this._buffer.get(id);
     if (sound) {
       if (sound.audio.playing()) {
-        if (fade > 0) {
-          // fade out
-          sound.audio.fade(sound.audio.volume(), 0, fade);
+
+        // fade out then stop
+        const fadeTime = fade ? fade : this._config.options.fadeOutTime;
+        if (fadeTime > 0) {
+          sound.audio.fade(sound.audio.volume(), 0, fadeTime);
           sound.audio.once('fade', () => {
             sound.audio.stop();
           });
+
         } else sound.audio.stop();
+
       } else this._destroy(id);
     }
   }

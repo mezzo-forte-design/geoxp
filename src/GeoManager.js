@@ -4,6 +4,15 @@ import { Subject } from 'rxjs';
 
 import Device from './utils/Device';
 
+import {
+  DEFAULT_ACCURACY,
+  DEFAULT_DEADBAND,
+  DEFAULT_RADIUS,
+  DEFAULT_FETCH,
+  DEFAULT_FORCE_ACCURACY
+} from './constants';
+import { isNumber } from './utils/helpers';
+
 /** Converts numeric degrees to radians */
 if (typeof (Number.prototype.toRad) === "undefined") {
   Number.prototype.toRad = function () {
@@ -31,18 +40,14 @@ export default class GeoManager {
         deadband,  [m]
         fetch     1 : n ratio of radius for prefetching
       }],
-      default: {
-        minAccuracy,
-        playDistance,
-        posDeadband,
-        fetchDistance
+      options: {
+        accuracy,
+        defaultRadius,
+        defaultDeadband,
+        defaultFetch
       }
     }
     */
-
-    if (!config) {
-      console.error('[GeoManager] - Missing geo config! GeoXp needs a geo object in the configuration file. Check the docs for details');
-    }
 
     // bind listeners
     this._geoSuccess = this._geoSuccess.bind(this);
@@ -64,24 +69,41 @@ export default class GeoManager {
   */
   _init(config) {
 
+    this._geolocationApiConfig = {
+      enableHighAccuracy : config.options.enableHighAccuracy || true,
+      maximumAge         : config.options.maximumAge || 30000,
+      timeout            : config.options.timeout || 27000
+    };
+
     // sets default is nothing provided
-    if (!config.default) {
-      config.default = {
-        minAccuracy: 10,
-        posDeadband: 10,
-        playDistance: 20,
-        fetchDistance: 1
+    if (!config.options) {
+      config.options = {
+        accuracy: DEFAULT_ACCURACY,
+        defaultDeadband: DEFAULT_DEADBAND,
+        defaultRadius: DEFAULT_RADIUS,
+        defaultFetch: DEFAULT_FETCH
       }
     } else {
-      config.minAccuracy ? config.minAccuracy : 10;
-      config.posDeadband ? config.posDeadband : 10;
-      config.playDistance ? config.playDistance : 20;
-      config.fetchDistance ? config.fetchDistance : 1;
+      // check if some of the single options are missing
+      config.options.accuracy = isNumber(config.options.accuracy) ?
+        config.options.accuracy :
+        DEFAULT_ACCURACY;
+
+      config.options.defaultDeadband = isNumber(config.options.defaultDeadband) ?
+        config.options.defaultDeadband :
+        DEFAULT_DEADBAND;
+
+      config.options.defaultRadius = isNumber(config.options.defaultRadius) ?
+        config.options.defaultRadius :
+        DEFAULT_RADIUS;
+
+      config.options.defaultFetch = (isNumber(config.options.defaultFetch) && config.options.defaultFetch >= 1) ?
+        config.options.defaultFetch :
+        DEFAULT_FETCH;
     }
 
     // sets minimum manual mode precision
-    this.FORCE_MIN_ACCURACY = 100; // m
-    this.FORCE_MAX_DISTANCE = 100; // m
+    this.FORCE_ACCURACY = DEFAULT_FORCE_ACCURACY;
 
     // sets config
     this._config = config;
@@ -95,7 +117,7 @@ export default class GeoManager {
       navigator.geolocation.clearWatch(this._GEO_WATCH);
     }
 
-    this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
+    this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, this._geolocationApiConfig);
   }
 
   /**
@@ -140,7 +162,7 @@ export default class GeoManager {
   */
   internalGeolocation(enabled) {
     if (enabled) {
-      this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, Device.geolocationOpts);
+      this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, this._geolocationApiConfig);
     } else if (this._GEO_WATCH) {
       navigator.geolocation.clearWatch(this._GEO_WATCH);
     }
@@ -161,7 +183,7 @@ export default class GeoManager {
 
       const accuracy = this.lastPosition.coords.accuracy;
       const distance = this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat);
-      const spotArea = (position.radius || this._config.default.playDistance) + (position.deadband || this._config.default.posDeadband);
+      const spotArea = (position.radius || this._config.options.defaultRadius) + (position.deadband || this._config.options.defaultDeadband);
 
       // checks for max allowed distance
       if (distance - accuracy > spotArea) {
@@ -169,7 +191,7 @@ export default class GeoManager {
         return false;
       }
 
-      if (accuracy > this.FORCE_MIN_ACCURACY) {
+      if (accuracy > this.FORCE_ACCURACY) {
 
         // canForce, poor accuracy
         return true;
@@ -210,8 +232,8 @@ export default class GeoManager {
     // Sets last registered position
     this.lastPosition = pos;
 
-    // exec only if position.coords.accuracy is < a given threshold (to define)
-    if (pos.coords.accuracy > this._config.default.minAccuracy) {
+    // exec only if position.coords.accuracy is < than accuracy threshold
+    if (pos.coords.accuracy > this._config.options.accuracy) {
       return;
     }
 
@@ -220,31 +242,36 @@ export default class GeoManager {
       const dist = this._calcGeoDistance(pos.coords.longitude, pos.coords.latitude, position.lon, position.lat);
 
       // calc rardiuses
-      const inside = (position.radius || this._config.default.playDistance) - (position.deadband || this._config.default.posDeadband);
-      const outside = (position.radius || this._config.default.playDistance) + (position.deadband || this._config.default.posDeadband);
-      const fetch = (position.fetch || this._config.default.fetchDistance) * inside;
+      const inside = position.radius || this._config.options.defaultRadius;
+      const outside = (position.radius || this._config.options.defaultRadius) + (position.deadband || this._config.options.defaultDeadband);
+      const fetch = (position.fetch || this._config.options.defaultFetch) * inside;
 
-      // check distances
-      if (dist <= inside) {
+      if (this.inside.includes(position.id)) {
 
-        // inside play area
-        if (!this.inside.includes(position.id)) {
+          // already inside
+          if (dist > outside) {
+
+            // outside radius + deadband
+            this.inside = this.inside.filter(e => e !== position.id);
+            this.outgoing$.next(position.id);
+          }
+
+      } else {
+
+        // currently not inside
+        if (dist <= inside) {
+
+          // inside play area
           this.inside.push(position.id);
           this.inside$.next(position.id);
         }
 
-      } else if (dist <= fetch) {
+        else if (dist <= fetch) {
 
-        // inside prefetch area
-        this.incoming$.next(position);
-
-      } else if (dist > outside) {
-
-        // outside play area
-        if (this.inside.includes(position.id)) {
-          this.inside = this.inside.filter(e => e !== position.id);
-          this.outgoing$.next(position.id);
+          // inside prefetch area
+          this.incoming$.next(position);
         }
+
       }
     });
   }

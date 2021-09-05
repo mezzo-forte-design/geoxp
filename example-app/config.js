@@ -6,15 +6,20 @@ const geo = {
       "label": "pos1",
       "lat": 45.116177,
       "lon": 7.742615,
-      "radius": 10000,
-      "deadband": 20
+    },
+    {
+      "id": "pos2",
+      "label": "pos2",
+      "lat": 45.116177,
+      "lon": 6.742615,
     }
   ],
-  "default": {
-    "minAccuracy": 100,
-    "posDeadband": 10,
-    "playDistance": 20,
-    "fetchDistance": 1
+  "options": {
+    "enableHighAccuracy": true,
+    "accuracy": 100,
+    "defaultDeadband": 10,
+    "defaultRadius": 20,
+    "defaultFetch": 1
   }
 };
 
@@ -30,10 +35,12 @@ const audio = {
       "url": "./audio/music2.mp3"
     }
   ],
-  "default": {
+  "options": {
     "test": "./audio/system/test.mp3",
     "silence": "./audio/system/silence.mp3",
-    "visited": "./audio/system/visited.mp3"
+    "visited": "./audio/system/visited.mp3",
+    "fadeInTime": 5000,
+    "fadeOutTime": 1000
   }
 };
 
@@ -41,21 +48,30 @@ const audio = {
 const experience = {
   "patterns": [
     {
+      "id": "pattern1",
       "label": "pattern1",
-      "enabled": true,
       "overlap": false,
+      "replay": true,
       "spots": [
         {
           "id": "spot1",
           "position": "pos1",
           "audio": "aud1",
           "label": "Spot 1!!"
-        },
+        }
+      ]
+    },
+    {
+      "id": "pattern2",
+      "label": "pattern2",
+      "disabled": true,
+      "overlap": false,
+      "replay": true,
+      "spots": [
         {
           "id": "spot2",
-          "position": "pos1",
+          "position": "pos2",
           "audio": "aud2",
-          "after": "spot1",
           "label": "Spot 2!!"
         }
       ]

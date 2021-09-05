@@ -7,7 +7,9 @@ import AudioManager from './AudioManager';
 
 import ExperienceManager from './ExperienceManager';
 
+/* UTILS */
 import Device from './utils/Device';
+import { isObjectLike } from './utils/helpers';
 
 
 //////////////////////////////////////////////
@@ -24,11 +26,11 @@ import Device from './utils/Device';
 * @property { number } positions[].radius - Position inner radius [meters]
 * @property { number } positions[].deadband - Position deadband from inner radius [meters]
 * @property { number } positions[].fetch - Radius for content prefetching [rate of radius]
-* @property { Object } default - Geo default values
-* @property { number } default.minAccuracy - Min acceptable accuracy [meters]
-* @property { number } default.posDeadband - Default deadband [meters]
-* @property { number } default.playDistance - Default position radius [meters]
-* @property { number } default.fetchDistance - Default prefetch distance [meters]
+* @property { Object } options - Geo options
+* @property { number } options.accuracy - Min acceptable accuracy [meters]
+* @property { number } options.defaultDeadband - Default deadband [meters]
+* @property { number } options.defaultRadius - Default position radius [meters]
+* @property { number } options.defaultFetch - Default prefetch distance [meters]
 */
 
 /**
@@ -37,10 +39,12 @@ import Device from './utils/Device';
 * @property { string } sounds[].id - Sound id
 * @property { string } sounds[].label - Sound name/desc
 * @property { string } sounds[].url - Sound url, local or remote
-* @property { Object } default - Audio default values
-* @property { string } default.test - Test sound url
-* @property { string } default.silence - Silence sound url
-* @property { string } default.visited - Visited spot audio url
+* @property { Object } options - Audio options
+* @property { string } options.test - Test sound url
+* @property { string } options.silence - Silence sound url
+* @property { string } options.visited - Visited spot audio url
+* @property { string } options.fadeInTime - fade time after play [ms]
+* @property { string } options.fadeOutTime - fade time before stop [ms]
 */
 
 /**
@@ -55,8 +59,9 @@ import Device from './utils/Device';
 * @property { string } patterns[].spots[].position - Spot linked position id
 * @property { string } patterns[].spots[].audio - Spot linked audio id
 * @property { string } [patterns[].spots[].after = null] - Spot can go active only after this spot id has been visited
-* @property { Object } default - Experience default values
-* @property { number } default.visitedFilter - Time before visisted spot is notified for filtering [seconds]
+* @property { string } [patterns[].spots[].notAfter = null] - Spot cannot go active after this spot id has been visited
+* @property { Object } options - Experience options
+* @property { number } options.visitedFilter - Time before visisted spot is notified for filtering [seconds]
 */
 
 /**
@@ -66,6 +71,7 @@ import Device from './utils/Device';
 * @property { string } position - Spot linked position id
 * @property { string } audio - Spot linked audio id
 * @property { string } [after = null] - Spot can go active only after this spot id has been visited
+* @property { string } [notAfter = null] - Spot cannot go active after this spot id has been visited
 */
 
 /**
@@ -78,7 +84,7 @@ import Device from './utils/Device';
 */
 
 /**
-* play | end event listener 
+* play | end event listener
 * @callback audioListener
 * @param { Audio } audio
 */
@@ -106,6 +112,28 @@ import Device from './utils/Device';
 */
 class GeoXp {
   constructor(config) {
+
+    // checks for config object
+    if (!config || !isObjectLike(config)) {
+      console.error('[GeoXp] - Missing or invalid config object! GeoXp needs a configuration object when creating an instance. Check the docs for details');
+      return;
+    }
+
+    if (!config.experience || !isObjectLike(config.experience)) {
+      console.error('[ExperienceManager] - Missing or invalid experience config! GeoXp needs an experience object in the configuration file. Check the docs for details');
+      return;
+    }
+
+    if (!config.geo || !isObjectLike(config.geo)) {
+      console.error('[GeoManager] - Missing or invalid geo config! GeoXp needs a geo object in the configuration file. Check the docs for details');
+      return;
+    }
+
+    if (!config.audio || !isObjectLike(config.audio)) {
+      console.error('[AudioManager] - Missing or invalid audio config! GeoXp needs an audio object in the configuration file. Check the docs for details');
+      return;
+    }
+
     this._config = config;
 
     // instantiates modules
@@ -149,7 +177,7 @@ class GeoXp {
       .subscribe(info => {
 
         // play spot audio
-        this.audio.play(info.spot, info.overlap, 0, 1);
+        this.audio.play(info.spot, info.overlap);
 
         // emits spot active
         this.event.emit('active', info.spot);
@@ -167,10 +195,8 @@ class GeoXp {
     this.subExperienceOutgoing = this.experience.spotOutgoing$
       .subscribe(spot => {
 
-        const fade = 5000; // [s]
-
         // stop spot audio
-        this.audio.stop(spot, fade);
+        this.audio.stop(spot);
 
         // emits spot outgoing
         this.event.emit('outgoing', spot);
@@ -248,7 +274,7 @@ class GeoXp {
   }
 
   /**
-  * Unlock method forces geolocation api and howler js activation. 
+  * Unlock method forces geolocation api and howler js activation.
   * This is needed in mobile integration, to avoid browser locking the functionalities when app goes background
   * **IMPORTANT - call this method within a user action, such as a click listener!**
   */
@@ -280,7 +306,7 @@ class GeoXp {
   * @param { string } id - pattern id to enable
   */
   enablePattern(id) {
-    this.experience.enablePattern(id, true);
+    this.experience.enablePattern(id);
   }
 
   /**
@@ -288,7 +314,7 @@ class GeoXp {
   * @param { string } id - pattern id to disable
   */
   disablePattern(id) {
-    this.experience.enablePattern(id, false);
+    this.experience.disablePattern(id);
   }
 
   /**

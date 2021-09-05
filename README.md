@@ -120,8 +120,9 @@ Multiple patterns could be active at any time, providing multiple simultaneous e
 Patterns are separate entities that don’t talk to each other, spots order and content overlap management are independent between patterns.
 
 ### <a name="spots-order"></a> **Spots order**
-GeoXP provides limited content queue management. This can be achieved using the spot “after” property.
+GeoXP provides limited content queue management. This can be achieved using the spot “after” and “notAfter” properties.
 If after is defined, GeoXp will not reproduce a certain spot content unless the after spot has already been played.
+If notAfter is defined, GeoXp will not reproduce a certain spot content if the notAfter spot has already been played.
 
 ### <a name="content-replay"></a> **Content replay**
 When content starts playing, a spot becomes “visited”.
@@ -173,8 +174,8 @@ Configuration for geolocation (*geo*) is a simple map of positions and parameter
 
 Configuration for experience is meant to set links between positions and related content.
 
-Each configuration section has a .default child that stores some module working parameters.
-If no default object is provided, GeoXp will use its hardcoded default configuration.
+Each configuration section has a .options child that stores some module working parameters.
+If no options object is provided, GeoXp will use its hardcoded default configuration.
 
 
 ### <a name="geo-configuration"></a> **Geo configuration**
@@ -193,11 +194,11 @@ geo: {
       fetch: number // prefetching distance as ratio of the radius, from 1 to n
     }
   ],
-  default: {
-    minAccuracy: number // minimum acceptable accuracy in meters
-    posDeadband: number // default fencing deadband
-    playDistance: number // default fencing radius
-    fetchDistance: number // default prefetch distance ratio
+  options: {
+    accuracy: number // minimum acceptable accuracy in meters - default value = 25m
+    defaultDeadband: number // default fencing deadband - default value = 10m
+    defaultRadius: number // default fencing radius - default value = 20m
+    defaultFetch: number // default prefetch distance ratio default value = 1 (integer)
   }
 }
 ```
@@ -213,10 +214,12 @@ audio: {
       url: string // content url (local or remote)
     }
   ],
-  default: {
+  options: {
     test: string // url for test sound
     silence: string // url for silence sound
     visited: string // url for spot already visited sound
+    fadeInTime: number // fade in time [ms] - default value = 0 ms
+    fadeOutTime: number // fade out time [ms] - default value = 1000 ms
   }
 ```
 
@@ -232,19 +235,20 @@ experience: {
       disabled: bool // pattern is disabled
       replay: bool // spots are automatically replayed
       overlap: bool // content playback can overlap
-      spot: [ // array of pattern’s spots
+      spots: [ // array of pattern’s spots
         {
           id: string // spot unique id
           position: // position id as in geo position configuration
           audio: // audio id as in audio sound configuration
-          after: // id of the previous mandatory spot (see “key concepts”, “Spot order”)
+          after: // id of the previous mandatory spot (see “key concepts”, “Spots order”)
+          notAfter: // id of the spot that prevents current spot playback (see “key concepts”, “Spots order”)
           label: // spot name or descriptions
         }
       ]
     }
   ],
-  default: {
-    visitedFilter: number // milliseconds after an already visited spot is notified
+  options: {
+    visitedFilter: number // time after an already visited spot is notified [ms] - default value = 5000 ms
   }
 }
 ```
@@ -455,7 +459,7 @@ Unless content overlapping is desired, it’s better to avoid positions overlap 
 
 If two pattern spots are actually near each other, try setting radiuses in a way that fencing doesn’t overlap (maybe by setting a small radius and a big delta: user has to be close to the position for the content to start, but the content will not stop if he walks away).
 
-If overlapping isn’t avoidable, make sure to apply filtering with `experience.default.visitedFilter` (usually 5000 or 10000 ms is enough).
+If overlapping isn’t avoidable, make sure to apply filtering with `experience.options.visitedFilter` (usually 5000 or 10000 ms is enough).
 
 ## <a name="mobile-integration"></a> Mobile integration
 Most mobile browsers will block Howler and Geolocation API after some time with no user interaction, resulting in unpredictable geoXp behavior.
