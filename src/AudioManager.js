@@ -201,11 +201,14 @@ export default class AudioManager {
 
       //TODO end, stop, differences?
       sound.audio.on('end', () => {
+        
+        this._destroy(id);
         this.done$.next(sound);
       });
 
       sound.audio.on('stop', () => {
-        // when stopped playback notify
+
+        this._destroy(id);
         this.done$.next(sound);
       });
 

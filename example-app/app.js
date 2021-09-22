@@ -1,8 +1,39 @@
 import GeoXp from '../dist/geoxp';
 
-import { config } from './config';
+//import { config } from './config';
+import geo from "./config/geo";
+import audio from "./config/audio";
+import experience from "./config/experience";
+
+const config = { geo, audio, experience };
 
 let geoXp;
+
+const simulateSpot = (spotId) => {
+  const spot = experience.patterns[0].spots.find((el) => el.id === spotId);
+  if (!spot) {
+    console.warn("spot not found", spotId);
+  }
+
+  const posId = spot.position;
+
+  const position = geo.positions.find((pos) => pos.id === posId);
+  if (!position) {
+    console.warn("position not found", posId);
+  }
+
+  console.log("simultaing spot", spot, "with position", position);
+
+  geoXp.updateGeolocation({
+    coords: {
+      latitude: position.lat,
+      longitude: position.lon,
+      accuracy: 10,
+    },
+  });
+};
+
+window.simulateSpot = simulateSpot;
 
 window.onload = (ev) => {
   

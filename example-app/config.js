@@ -51,13 +51,19 @@ const experience = {
       "id": "pattern1",
       "label": "pattern1",
       "overlap": false,
-      "replay": true,
       "spots": [
         {
           "id": "spot1",
           "position": "pos1",
           "audio": "aud1",
           "label": "Spot 1!!"
+        },
+        {
+          "id": "spot2",
+          "position": "pos2",
+          "audio": "aud2",
+          "label": "Spot 2!!",
+          "last": true
         }
       ]
     },
@@ -76,7 +82,15 @@ const experience = {
         }
       ]
     }
-  ]
+  ],
+  "options": {
+    "cookies": {
+      "enabled": true,
+      "expiration": 1,
+      "deleteOnLastSpot": true,
+      "deleteOnCompletion": false
+    }
+  }
 };
 
 export const config = { geo, audio, experience };

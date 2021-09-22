@@ -1,0 +1,126 @@
+const geo = {
+  positions: [
+    {
+      id: "p0a",
+      label: "Darsena Nuova",
+      lon: 10.302873,
+      lat: 43.546384,
+      radius: 50,
+      deadband: 185,
+    },
+    {
+      id: "p01",
+      label: "Porto Mediceo",
+      lon: 10.300235,
+      lat: 43.547615,
+      radius: 60,
+      deadband: 225,
+    },
+    {
+      id: "p02",
+      label: "Fortezza Vecchia e Darsena Vecchia",
+      lon: 10.302153,
+      lat: 43.551338,
+      radius: 20,
+      deadband: 185,
+    },
+    {
+      id: "p03",
+      label: "Monumento 4 Mori e Fortezza Vecchia",
+      lon: 10.303764,
+      lat: 43.549586,
+      radius: 45,
+      deadband: 300,
+    },
+    {
+      id: "p04",
+      label: "Quartiere Venezia II Parte",
+      lon: 10.303764,
+      lat: 43.552719,
+      radius: 15,
+      deadband: 232,
+    },
+    {
+      id: "p0b",
+      label: "Benvenuti e Venezia",
+      lon: 10.307894,
+      lat: 43.552984,
+      radius: 15,
+      deadband: 95,
+    },
+    {
+      id: "p05",
+      label: "Scali Rosciano",
+      lon: 10.306709,
+      lat: 43.553597,
+      radius: 15,
+      deadband: 165,
+    },
+    {
+      id: "p06",
+      label: "Chiesa e Convento dei Domenicani e Fortezza Nuova",
+      lon: 10.308712,
+      lat: 43.554551,
+      radius: 15,
+      deadband: 142,
+    },
+    {
+      id: "p07",
+      label: "Il Pontino",
+      lon: 10.310403,
+      lat: 43.555447,
+      radius: 20,
+      deadband: 288,
+    },
+    {
+      id: "p08",
+      label: "Piazza della Repubblica",
+      lon: 10.313111,
+      lat: 43.553422,
+      radius: 15,
+      deadband: 304,
+    },
+    {
+      id: "p09",
+      label: "Mercato Centrale",
+      lon: 10.314301,
+      lat: 43.550627,
+      radius: 12,
+      deadband: 210,
+    },
+    {
+      id: "p10",
+      label: "Chiesa degli Olandesi",
+      lon: 10.312527,
+      lat: 43.548934,
+      radius: 15,
+      deadband: 225,
+    },
+    {
+      id: "p11",
+      label:
+        "I Palazzi dell'800",
+      lon: 10.310240,
+      lat: 43.547415,
+      radius: 15,
+      deadband: 363,
+    },
+    {
+      id: "p12",
+      label: "Cantina Canottieri Livornesi e Palio Marinaro",
+      lon: 10.305466,
+      lat: 43.547520,
+      radius: 13,
+      deadband: 290
+    }
+  ],
+  options: {
+    enableHighAccuracy: true,
+    accuracy: 50,
+    defaultDeadband: 500,
+    defaultRadius: 20,
+    defaultFetch: 1,
+  }
+};
+
+export default geo;
