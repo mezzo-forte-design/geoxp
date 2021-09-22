@@ -27,6 +27,7 @@ import { isObjectLike } from './utils/helpers';
 * @property { number } positions[].deadband - Position deadband from inner radius [meters]
 * @property { number } positions[].fetch - Radius for content prefetching [rate of radius]
 * @property { Object } options - Geo options
+* @property { number } options.enableHighAccuracy - @see https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions/enableHighAccuracy [boolean]
 * @property { number } options.accuracy - Min acceptable accuracy [meters]
 * @property { number } options.defaultDeadband - Default deadband [meters]
 * @property { number } options.defaultRadius - Default position radius [meters]
