@@ -199,18 +199,23 @@ export default class AudioManager {
 
     sound.audio.once('load', () => {
 
-      //TODO end, stop, differences?
       sound.audio.on('end', () => {
+
+        // playback ended
+        this._destroy(id);
         this.done$.next(sound);
       });
 
       sound.audio.on('stop', () => {
-        // when stopped playback notify
+        
+        // playback stopped
+        this._destroy(id);
         this.done$.next(sound);
       });
 
       sound.audio.on('play', () => {
-        // When starting playback notify
+
+        // playback started
         this.play$.next(sound);
       });
 
