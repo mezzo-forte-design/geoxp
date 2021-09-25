@@ -9,7 +9,7 @@ export const DEFAULT_VISITED_FILTER_TIME = 5000; // ms
 export const DEFAULT_PATTERN_COOKIE_PREFIX = 'geoxp-pattern';
 
 // pattern visited spots cookie default expiration time
-export const DEFAULT_PATTERN_COOKIE_EXPIRATION = 10; // [min]
+export const DEFAULT_PATTERN_COOKIE_EXPIRATION = 5; // [min]
 
 
 

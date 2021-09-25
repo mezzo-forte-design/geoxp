@@ -60,8 +60,13 @@ import { isObjectLike } from './utils/helpers';
 * @property { string } patterns[].spots[].audio - Spot linked audio id
 * @property { string } [patterns[].spots[].after = null] - Spot can go active only after this spot id has been visited
 * @property { string } [patterns[].spots[].notAfter = null] - Spot cannot go active after this spot id has been visited
+* @property { boolean } [patterns[].spots[].last = null] - Marks last spot in pattern
 * @property { Object } options - Experience options
 * @property { number } options.visitedFilter - Time before visisted spot is notified for filtering [seconds]
+* @property { Object } [options.cookies = null] - Patterns visited spots cookies
+* @property { boolean } [options.cookies.deleteOnLastSpot = null] - Visited spot cookie is deleted when "last" spot is visited
+* @property { boolean } [options.cookies.deleteOnCompletion = true] - Visited spot cookie is deleted all pattern spots have been visited. Overrides deleteOnLastSpot
+* @property { number } [options.cookies.expiration = 5] - Visited spot cookie expiration [min]
 */
 
 /**
@@ -72,6 +77,7 @@ import { isObjectLike } from './utils/helpers';
 * @property { string } audio - Spot linked audio id
 * @property { string } [after = null] - Spot can go active only after this spot id has been visited
 * @property { string } [notAfter = null] - Spot cannot go active after this spot id has been visited
+* @property { boolean } [last = null] - Marks last spot in pattern
 */
 
 /**
@@ -394,6 +400,14 @@ class GeoXp {
   * */
   hasAudioPlaying(overlap = false) {
     return this.audio.hasAudioPlaying(overlap);
+  }
+
+  /**
+  * Clears pattern cookies, if no pattern specified, clears all
+  * @param { string } [id = null] - id of pattern to clear
+  */
+  clearCookies(id = null) {
+    this.experience.clearCookies(id);
   }
 
   /**

@@ -37,9 +37,9 @@ export default class ExperienceManager {
       options: {
         visitedFilter [ms]
         cookies: {
-          enabled
           deleteOnLastSpot
           deleteOnCompletion
+          expiration [min]
         }
       }
     }
@@ -67,13 +67,25 @@ export default class ExperienceManager {
     // check options
     if (!config.options) {
       config.options = {
-        visitedFilter: DEFAULT_VISITED_FILTER_TIME
+        visitedFilter: DEFAULT_VISITED_FILTER_TIME,
+        cookies: null
       }
     } else {
+
       config.options.visitedFilter = isNumber(config.options.visitedFilter) ?
         config.options.visitedFilter :
         DEFAULT_VISITED_FILTER_TIME;
 
+      // check cookies
+      if (config.options.cookies
+      && !config.options.cookies.deleteOnLastSpot 
+      && !config.options.cookies.deleteOnCompletion) {
+
+        // defaults to deleteOnCompletion
+        config.options.cookies = {
+          deleteOnCompletion: true
+        }
+      }
     }
 
     // inits force spot
@@ -113,7 +125,7 @@ export default class ExperienceManager {
         let visited = [];
         const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${cfg.id}`;
 
-        if (this._config.options.cookies && this._config.options.cookies.enabled) {
+        if (this._config.options.cookies) {
 
           // cookies enabled, reload visited spots
           const cookie = getCookie(cName);
@@ -149,20 +161,33 @@ export default class ExperienceManager {
   /**
   * Unloads all object memories and subscriptions
   */
-   unload() {
+  unload() {
     this.clearCookies();
   }
 
   /**
-  * Clears all saved cookies
+  * Clears pattern cookies, if no pattern specified, clears all
+  * @param { string } id - id of pattern to clear
   */
-  clearCookies() {
-    this._config.patterns.forEach(cfg => {
+  clearCookies(id) {
+
+    if (id) {
+
+      const pattern = this._config.patterns.find(e => e.id === id);
+      if (pattern) {
+
+        // delete cookies if present
+        const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${pattern.id}`;
+        deleteCookie(cName);
+      }
+    } else {
+      this._config.patterns.forEach(cfg => {
        
-      // delete cookies if present
-      const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${cfg.id}`;
-      deleteCookie(cName);
-    });
+        // delete cookies if present
+        const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${cfg.id}`;
+        deleteCookie(cName);
+      });
+    }
   }
 
   /**
@@ -363,7 +388,7 @@ export default class ExperienceManager {
         }
 
         // cookies management
-        if (this._config.options.cookies && this._config.options.cookies.enabled) {
+        if (this._config.options.cookies) {
 
           const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${pattern.cfg.id}`;
 
@@ -378,7 +403,7 @@ export default class ExperienceManager {
           } else {
 
             // deletes cookies on pattern completion
-            if (!pattern.cfg.spots.filter(e => !pattern.visited.includes(e.id))) deleteCookie(cName);
+            if (pattern.cfg.spots.filter(e => !pattern.visited.includes(e.id)).length <= 0) deleteCookie(cName);
           }
         }
       }
