@@ -48,6 +48,7 @@ It’s made of three modules.
     * [Patterns](#patterns)
     * [Spots order](#spots-order)
     * [Content replay](#content-replay)
+    * [Pattern cookie](#pattern-cookie)
     * [Content overlap](#content-overlap)
     * [Manual mode](#manual-mode)
 
@@ -129,6 +130,16 @@ When content starts playing, a spot becomes “visited”.
 When the user reenters a visited spot, geoXp will not play its content. It will throw a notification instead, to let the user choose what to do.
 This behavior can be overridden using the pattern “replay” option. In this case, when the user reenters a visited spot, its content replays as usual.
 See [Spot content replay](#spots-content-replay) for details.
+
+### <a name="pattern-cookie"></a> **Cookies**
+As default behavior, when GeoXp instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling cookies for patterns in configuration.
+When this option is activated, a cookie for each pattern is updated every time a new spot is visited.
+This cookie is deleted (to let the experience restart) when:
+* by default, when all spots in a pattern are visited (“cookies.deleteOnCompletion”).
+* when a specific spot, flagged with the “last” option is activated (“cookies.deleteOnLastSpot”).
+* manually, when “geoXp.clearCookies()” is called.
+* manually, when geoXp instance is destroyed (“geoXp.destroy()”).
+Please note that “deleteOnCompletion” overrides “deleteOnLastSpot”.
 
 ### <a name="content-overlap"></a> **Content overlap**
 When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior GeoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
@@ -249,6 +260,11 @@ experience: {
   ],
   options: {
     visitedFilter: number // time after an already visited spot is notified [ms] - default value = 5000 ms
+    cookies: { // enables pattern visited spots cookie
+      deleteOnCompletion: boolean // default option, deletes cookie when all pattern spots are visited
+      deleteOnLastSpot: boolean // deletes cookie when spot flagged with "last" is visited
+      expiration: number // [minutes] overrides cookies default expiration time (5 minutes) 
+    }
   }
 }
 ```
