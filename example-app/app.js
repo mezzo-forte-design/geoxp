@@ -1,22 +1,17 @@
 import GeoXp from '../dist/geoxp';
 
-//import { config } from './config';
-import geo from "./config/geo";
-import audio from "./config/audio";
-import experience from "./config/experience";
+import { config } from './config';
 
 import Logger from './logger';
 
 const logger = new Logger('logs-container');
-
-const config = { geo, audio, experience };
 
 let geoXp;
 
 let internalGeolocation = false;
 
 const simulateSpot = (spotId) => {
-  const spot = experience.patterns[0].spots.find((el) => el.id === spotId);
+  const spot = config.experience.patterns[0].spots.find((el) => el.id === spotId);
   if (!spot) {
     console.warn("spot not found", spotId);
     logger.warn(`Spot with id "${spotId}" not found`);
@@ -25,7 +20,7 @@ const simulateSpot = (spotId) => {
 
   const posId = spot.position;
 
-  const position = geo.positions.find((pos) => pos.id === posId);
+  const position = config.geo.positions.find((pos) => pos.id === posId);
   if (!position) {
     console.warn("position not found", posId);
     logger.warn(`Position with id "${posId}" not found`);
