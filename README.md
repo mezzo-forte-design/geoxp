@@ -140,6 +140,8 @@ This cookie is deleted (to let the experience restart) when:
 * manually, when “geoXp.clearCookies()” is called.
 * manually, when geoXp instance is destroyed (“geoXp.destroy()”).
 Please note that “deleteOnCompletion” overrides “deleteOnLastSpot”.
+Cookies have a standard lifespan of 5 minutes (which can be overridden with (“cookies.expiration”). Please note that when cookies expire they are deleted, but no change is made to the current geoXp instance runtime visited spots.
+To let the experience to restart, a reload or page refresh is needed.
 
 ### <a name="content-overlap"></a> **Content overlap**
 When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior GeoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
