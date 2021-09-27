@@ -132,8 +132,8 @@ This behavior can be overridden using the pattern “replay” option. In this c
 See [Spot content replay](#spots-content-replay) for details.
 
 ### <a name="pattern-cookie"></a> **Cookies**
-As default behavior, when GeoXp instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling cookies for patterns in configuration.
-When this option is activated, a cookie for each pattern is updated every time a new spot is visited.
+As default behavior, when GeoXp instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling cookies for patterns in configuration, by appending a “cookies” property to experience options.
+When activated, a cookie for each pattern is updated every time a new spot is visited.
 This cookie is deleted (to let the experience restart) when:
 * by default, when all spots in a pattern are visited (“cookies.deleteOnCompletion”).
 * when a specific spot, flagged with the “last” option is activated (“cookies.deleteOnLastSpot”).
