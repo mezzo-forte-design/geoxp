@@ -6,10 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-* pattern visited spots cookie
+* cookies to make pattern "visited spots" persistent
 * cookies automatic deletion
-* restyled test UI
+
+### Changed
+* restyled test app UI
 * test UI audios changed
+* improved JDoc with a new template
+
 
 ## **v1.2.0** - 2021-09-05
 ### Added
