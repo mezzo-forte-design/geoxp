@@ -46,7 +46,7 @@ window.simulateSpot = simulateSpot;
 window.onload = (ev) => {
 
   geoXp = new GeoXp(config);
-  window.geoxp = geoXp;
+  window.geoXp = geoXp;
 
   // example of event listeners
   geoXp.on('active', spotData => {
@@ -138,7 +138,7 @@ document.getElementById('unlock-button').addEventListener('click', e => {
 document.getElementById('internal-geolocation-button').addEventListener('click', e => {
   geoXp.internalGeolocation(internalGeolocation);
   console.log('Internal geolocation', internalGeolocation);
-  printLog(`Internal geolocation set to ${internalGeolocation}`);
+  logger.message(`Internal geolocation set to ${internalGeolocation}`);
   internalGeolocation = !internalGeolocation;
 });
 
