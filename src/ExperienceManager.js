@@ -465,6 +465,21 @@ export default class ExperienceManager {
   }
 
   /**
+  * Gets visited spots for a given pattern
+  * @param { string } id - pattern id
+  * @returns { string[] } array of visited spots
+  */
+  getVisitedSpots(id) {
+    const pattern =  this._patterns.find(e => e.id === id);
+    if (!pattern) {
+      console.error('[GeoXp.ExperienceManager.getVisitedSpots] - Pattern not found!');
+      return;
+    }
+
+    return pattern.visited;
+  }
+
+  /**
   * Gets spot by id
   * @param { string } id - id of spot to find
   * @returns { object|null } spot found or null
