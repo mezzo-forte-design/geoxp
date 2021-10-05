@@ -273,7 +273,7 @@ experience: {
   ],
   options: {
     visitedFilter: number // time after an already visited spot is notified [ms] - default value = 5000 ms
-    cookies: { // enables pattern visited spots cookie
+    cookies: { // enables pattern "visited spots" cookies
       deleteOnCompletion: boolean // default option, deletes cookie when all pattern spots are visited
       deleteOnLastSpot: boolean // deletes cookie when spot flagged with "last" is visited
       expiration: number // [minutes] overrides cookies default expiration time (5 minutes)
