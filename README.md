@@ -78,6 +78,8 @@ It’s made of three modules.
 
 * [Examples](#examples)
 
+* [Credits](#credits)
+
 ***
 
 # <a name="key-concepts"></a> **Key concepts**
@@ -265,7 +267,7 @@ experience: {
     cookies: { // enables pattern visited spots cookie
       deleteOnCompletion: boolean // default option, deletes cookie when all pattern spots are visited
       deleteOnLastSpot: boolean // deletes cookie when spot flagged with "last" is visited
-      expiration: number // [minutes] overrides cookies default expiration time (5 minutes) 
+      expiration: number // [minutes] overrides cookies default expiration time (5 minutes)
     }
   }
 }
@@ -488,4 +490,11 @@ To avoid this, force a periodic unlocking calling the `unlock()` method inside a
 # <a name="examples"></a> Examples
 Some configuration examples, for different kind of patterns, can be found inside the [example-patterns](https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/tree/master/example-patterns).
 A basic application, with event usage, can be found inside the [example-app](https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/tree/master/example-app) folder.
+
+***
+
+# <a name="credits"></a> Credits
+* concept - [Mezzo Forte](https://mezzoforte.design/?lang=en)
+* development - Francesco Cretti & Giuliano Buratti
+* music for example application - [Bensound](https://www.bensound.com)
 
