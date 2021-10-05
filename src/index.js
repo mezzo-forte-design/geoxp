@@ -332,6 +332,15 @@ class GeoXp {
   }
 
   /**
+  * Gets visited spots for a given pattern
+  * @param { string } id - pattern id
+  * @returns { string[]|null } array of visited spots
+  */
+  getVisitedSpots(id) {
+    return this.experience.getVisitedSpots(id);
+  }
+
+  /**
   * Returns spot by id
   * @param { string } id - id of spot to find
   * @returns { Spot | null } Spot found or null
