@@ -128,22 +128,28 @@ If after is defined, GeoXp will not reproduce a certain spot content unless the 
 If notAfter is defined, GeoXp will not reproduce a certain spot content if the notAfter spot has already been played.
 
 ### <a name="content-replay"></a> **Content replay**
-When content starts playing, a spot becomes “visited”.
+When content starts playing, a spot becomes `visited`.
 When the user reenters a visited spot, geoXp will not play its content. It will throw a notification instead, to let the user choose what to do.
-This behavior can be overridden using the pattern “replay” option. In this case, when the user reenters a visited spot, its content replays as usual.
+This behavior can be overridden using the pattern `replay` option. In this case, when the user reenters a visited spot, its content replays as usual.
 See [Spot content replay](#spots-content-replay) for details.
 
 ### <a name="pattern-cookie"></a> **Cookies**
-As default behavior, when GeoXp instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling cookies for patterns in configuration, by appending a “cookies” property to experience options.
+As default behavior, when GeoXp instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling cookies for patterns in configuration, by appending a `cookies` property to experience options.
+
 When activated, a cookie for each pattern is updated every time a new spot is visited.
+
 This cookie is deleted (to let the experience restart) when:
-* by default, when all spots in a pattern are visited (“cookies.deleteOnCompletion”).
-* when a specific spot, flagged with the “last” option is activated (“cookies.deleteOnLastSpot”).
-* manually, when “geoXp.clearCookies()” is called.
-* manually, when geoXp instance is destroyed (“geoXp.destroy()”).
-Please note that “deleteOnCompletion” overrides “deleteOnLastSpot”.
-Cookies have a standard lifespan of 5 minutes (which can be overridden with (“cookies.expiration”). Please note that when cookies expire they are deleted, but no change is made to the current geoXp instance runtime visited spots.
-To let the experience to restart, a reload or page refresh is needed.
+* by default, when all spots in a pattern are visited (`cookies.deleteOnCompletion`).
+* when a specific spot, flagged with the “last” option is activated (`cookies.deleteOnLastSpot`).
+* manually, when `geoXp.clearCookies()` is called.
+* manually, when geoXp instance is destroyed (`geoXp.destroy()`).
+
+Please note that `deleteOnCompletion` overrides `deleteOnLastSpot`.
+
+__The `cookie` property of a `pattern` can be set to `true` to use all the default options, or to an object with specific values [See here for more details on configuration options](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/global.html#ExperienceCfg)__
+
+> **IMPORTANT** Cookies have a standard lifespan of **5 minutes**, which can be overridden with `cookies.expiration`. Please note that when cookies expire they are deleted, but no change is made runtime to the current geoXp visited spots.
+**To let the experience to restart, a reload or page refresh is needed**.
 
 ### <a name="content-overlap"></a> **Content overlap**
 When the user is actually inside multiple spots at the same time (locations are overlapping, multiple spots are linked to the same location), as default behavior GeoXp will play one content at a time, with no overlapping. When the first audio finishes, the other starts.
@@ -195,6 +201,7 @@ If no options object is provided, GeoXp will use its hardcoded default configura
 
 ### <a name="geo-configuration"></a> **Geo configuration**
 Provides information for geolocation module configuration.
+[See here for more details on Geo options](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/global.html#GeoCfg)
 
 ```javascript
 geo: {
@@ -220,6 +227,7 @@ geo: {
 
 ### <a name="audio-configuration"></a> **Audio configuration**
 Provides information for audio module configuration.
+[See here for more details on Audio options](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/global.html#AudioCfg)
 
 ```javascript
 audio: {
@@ -240,6 +248,7 @@ audio: {
 
 ### <a name="experience-configuration"></a> **Experience configuration**
 Experience configuration provides relations between geolocation and content.
+[See here for more details on Experience options](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/global.html#ExperienceCfg)
 
 ```javascript
 experience: {
@@ -272,7 +281,7 @@ experience: {
   }
 }
 ```
-> NOTE - patterns are enabled by deafult. See [core methods](#core-methods) to know how to disable or re-enable them
+> **NOTE** - patterns are enabled by default. See [core methods](#core-methods) to know how to disable or re-enable them
 
 ## <a name="reload-and-disposal"></a> **Reload and disposal**
 
