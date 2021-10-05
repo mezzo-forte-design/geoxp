@@ -217,6 +217,7 @@ geo: {
     }
   ],
   options: {
+    enableHighAccuracy: boolean // @see https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions/enableHighAccuracy
     accuracy: number // minimum acceptable accuracy in meters - default value = 25m
     defaultDeadband: number // default fencing deadband - default value = 10m
     defaultRadius: number // default fencing radius - default value = 20m

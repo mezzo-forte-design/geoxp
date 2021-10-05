@@ -20,6 +20,7 @@ import { isObjectLike } from './utils/helpers';
  * @typedef {Object} GeoConfig GeoXp `geo` configuration object
  * @property { Position[] } positions - array of geo Positions
  * @property { Object } options - Geo options
+ * @property { number } options.enableHighAccuracy - @see https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions/enableHighAccuracy [boolean]
  * @property { number } options.accuracy - Min acceptable accuracy [meters]
  * @property { number } options.defaultDeadband - Default deadband [meters]
  * @property { number } options.defaultRadius - Default position radius [meters]
