@@ -2,9 +2,13 @@
 
 import { Subject } from 'rxjs';
 
-import { isNumber } from './utils/helpers';
+import { isNumber, setCookie, getCookie, deleteCookie } from './utils/helpers';
 
-import { DEFAULT_VISITED_FILTER_TIME } from './constants';
+import { 
+  DEFAULT_VISITED_FILTER_TIME, 
+  DEFAULT_PATTERN_COOKIE_PREFIX, 
+  DEFAULT_PATTERN_COOKIE_EXPIRATION 
+} from './constants';
 
 /**
  * Creates ExperienceManager class.
@@ -32,6 +36,11 @@ export default class ExperienceManager {
       }],
       options: {
         visitedFilter [ms]
+        cookies: {
+          deleteOnLastSpot
+          deleteOnCompletion
+          expiration [min]
+        }
       }
     }
     */
@@ -58,13 +67,25 @@ export default class ExperienceManager {
     // check options
     if (!config.options) {
       config.options = {
-        visitedFilter: DEFAULT_VISITED_FILTER_TIME
+        visitedFilter: DEFAULT_VISITED_FILTER_TIME,
+        cookies: null
       }
     } else {
+
       config.options.visitedFilter = isNumber(config.options.visitedFilter) ?
         config.options.visitedFilter :
         DEFAULT_VISITED_FILTER_TIME;
 
+      // check cookies
+      if (config.options.cookies
+      && !config.options.cookies.deleteOnLastSpot 
+      && !config.options.cookies.deleteOnCompletion) {
+
+        // defaults to deleteOnCompletion
+        config.options.cookies = {
+          deleteOnCompletion: true
+        }
+      }
     }
 
     // inits force spot
@@ -100,10 +121,25 @@ export default class ExperienceManager {
 
       } else {
 
+        // checks for cookies
+        let visited = [];
+        const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${cfg.id}`;
+
+        if (this._config.options.cookies) {
+
+          // cookies enabled, reload visited spots
+          const cookie = getCookie(cName);
+          if (cookie) visited = JSON.parse(cookie);
+        } else {
+
+          // cookies disabled, delete cookies if present
+          deleteCookie(cName);
+        }
+
         // new pattern, add to map
         const toAdd = {
           cfg,
-          visited: [],
+          visited,
           inside: [],
           active: []
         };
@@ -126,7 +162,32 @@ export default class ExperienceManager {
   * Unloads all object memories and subscriptions
   */
   unload() {
-    // Nothing to do
+    this.clearCookies();
+  }
+
+  /**
+  * Clears pattern cookies, if no pattern specified, clears all
+  * @param { string } id - id of pattern to clear
+  */
+  clearCookies(id) {
+
+    if (id) {
+
+      const pattern = this._config.patterns.find(e => e.id === id);
+      if (pattern) {
+
+        // delete cookies if present
+        const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${pattern.id}`;
+        deleteCookie(cName);
+      }
+    } else {
+      this._config.patterns.forEach(cfg => {
+       
+        // delete cookies if present
+        const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${cfg.id}`;
+        deleteCookie(cName);
+      });
+    }
   }
 
   /**
@@ -325,6 +386,26 @@ export default class ExperienceManager {
         if (!pattern.visited.includes(_spot.id)) {
           pattern.visited.push(_spot.id)
         }
+
+        // cookies management
+        if (this._config.options.cookies) {
+
+          const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${pattern.cfg.id}`;
+
+          // updates pattern visited spots cookie
+          setCookie(cName, JSON.stringify(pattern.visited), this._config.options.cookies.expiration || DEFAULT_PATTERN_COOKIE_EXPIRATION);
+
+          // eventual cookies deletion
+          if (!this._config.options.cookies.deleteOnCompletion) {
+
+            // deletes cookies on last spot
+            if (this._config.options.cookies.deleteOnLastSpot && _spot.last) deleteCookie(cName);
+          } else {
+
+            // deletes cookies on pattern completion
+            if (pattern.cfg.spots.filter(e => !pattern.visited.includes(e.id)).length <= 0) deleteCookie(cName);
+          }
+        }
       }
 
     });
@@ -381,6 +462,21 @@ export default class ExperienceManager {
       }
     });
     return someActive;
+  }
+
+  /**
+  * Gets visited spots for a given pattern
+  * @param { string } id - pattern id
+  * @returns { string[]|null } array of visited spots
+  */
+  getVisitedSpots(id) {
+    const pattern =  this._patterns.get(id);
+    if (!pattern) {
+      console.error('[GeoXp.ExperienceManager.getVisitedSpots] - Pattern not found!');
+      return;
+    }
+
+    return pattern.visited;
   }
 
   /**

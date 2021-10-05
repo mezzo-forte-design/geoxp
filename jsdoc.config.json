@@ -1,0 +1,17 @@
+{
+  "opts": {
+    "template": "jsdoc-template/unsorted-clean-theme",
+    "readme": "README.md",
+    "destination": "public",
+    "theme_opts": {
+      "theme": "light",
+      "menu": [
+        {
+          "title": "GitLab",
+          "link": "https://gitlab.com/mezzo-forte/mezzoforte-geoxp",
+          "target": "_blank"
+        }
+      ]
+    }
+  }
+}
