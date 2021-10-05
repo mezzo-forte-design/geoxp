@@ -17,89 +17,96 @@ import { isObjectLike } from './utils/helpers';
 //////////////////////////////////////////////
 
 /**
-* @typedef {Object} GeoCfg
-* @property { Object[] } positions - Geo positions
-* @property { string } positions[].id - Position id
-* @property { string } positions[].label - Position name/desc
-* @property { number } positions[].lat - Position latitude [degrees North]
-* @property { number } positions[].lon - Position longitude [degrees East]
-* @property { number } positions[].radius - Position inner radius [meters]
-* @property { number } positions[].deadband - Position deadband from inner radius [meters]
-* @property { number } positions[].fetch - Radius for content prefetching [rate of radius]
-* @property { Object } options - Geo options
-* @property { number } options.accuracy - Min acceptable accuracy [meters]
-* @property { number } options.defaultDeadband - Default deadband [meters]
-* @property { number } options.defaultRadius - Default position radius [meters]
-* @property { number } options.defaultFetch - Default prefetch distance [meters]
-*/
+ * @typedef {Object} GeoConfig GeoXp `geo` configuration object
+ * @property { Position[] } positions - array of geo Positions
+ * @property { Object } options - Geo options
+ * @property { number } options.accuracy - Min acceptable accuracy [meters]
+ * @property { number } options.defaultDeadband - Default deadband [meters]
+ * @property { number } options.defaultRadius - Default position radius [meters]
+ * @property { number } options.defaultFetch - Default prefetch distance [meters]
+ */
 
 /**
-* @typedef {Object} AudioCfg
-* @property { Object[] } sounds - Audio sounds
-* @property { string } sounds[].id - Sound id
-* @property { string } sounds[].label - Sound name/desc
-* @property { string } sounds[].url - Sound url, local or remote
-* @property { Object } options - Audio options
-* @property { string } options.test - Test sound url
-* @property { string } options.silence - Silence sound url
-* @property { string } options.visited - Visited spot audio url
-* @property { string } options.fadeInTime - fade time after play [ms]
-* @property { string } options.fadeOutTime - fade time before stop [ms]
-*/
+ * @typedef {Objcet} Position  an object representing a geographic position with certain options
+ * @property { string } id - Position id
+ * @property { string } label - Position name/desc
+ * @property { number } lat - Position latitude [degrees North]
+ * @property { number } lon - Position longitude [degrees East]
+ * @property { number } radius - Position inner radius [meters]
+ * @property { number } deadband - Position deadband from inner radius [meters]
+ * @property { number } fetch - Radius for content prefetching [rate of radius]
+ */
 
 /**
-* @typedef {Object} ExperienceCfg
-* @property { string } patterns[].id - Pattern id
-* @property { string } patterns[].label - Pattern name/desc
-* @property { boolean } [patterns[].disabled = null] - Pattern is disabled
-* @property { boolean } [patterns[].replay = null] - Pattern spots are replayed by default
-* @property { boolean } [patterns[].overlap = null] - Pattern spots can overlap (more than one can be active at the same time)
-* @property { Object[] } patterns[].spots - Pattern spots
-* @property { string } patterns[].spots[].id - Spot id
-* @property { string } patterns[].spots[].position - Spot linked position id
-* @property { string } patterns[].spots[].audio - Spot linked audio id
-* @property { string } [patterns[].spots[].after = null] - Spot can go active only after this spot id has been visited
-* @property { string } [patterns[].spots[].notAfter = null] - Spot cannot go active after this spot id has been visited
-* @property { boolean } [patterns[].spots[].last = null] - Marks last spot in pattern
-* @property { Object } options - Experience options
-* @property { number } options.visitedFilter - Time before visisted spot is notified for filtering [seconds]
-* @property { Object|boolean } [options.cookies = null] - Pattern "Visited spots" cookies. Set to true to use default options. Use an object for custom values.
-* @property { boolean } [options.cookies.deleteOnLastSpot = null] - Visited spot cookie is deleted when "last" spot is visited
-* @property { boolean } [options.cookies.deleteOnCompletion = true] - Visited spot cookie is deleted all pattern spots have been visited. Overrides deleteOnLastSpot
-* @property { number } [options.cookies.expiration = 5] - Visited spot cookie expiration [min]
-*/
+ * @typedef {Object} AudioConfig GeoXp `audio` configuration object
+ * @property { Sound[] } sounds - Audio sounds
+ * @property { Object } options - Audio options
+ * @property { string } options.test - Test sound url
+ * @property { string } options.silence - Silence sound url
+ * @property { string } options.visited - Visited spot audio url
+ * @property { string } options.fadeInTime - fade time after play [ms]
+ * @property { string } options.fadeOutTime - fade time before stop [ms]
+ */
 
 /**
-* @typedef {Object} Spot
-* @property { string } id - Spot id
-* @property { string } label - Spot name/desc
-* @property { string } position - Spot linked position id
-* @property { string } audio - Spot linked audio id
-* @property { string } [after = null] - Spot can go active only after this spot id has been visited
-* @property { string } [notAfter = null] - Spot cannot go active after this spot id has been visited
-* @property { boolean } [last = null] - Marks last spot in pattern
-*/
+ * @typedef {Object} Sound an object representing an sound asset
+ * @property { string } id - Sound id
+ * @property { string } label - Sound name/desc
+ * @property { string } url - Sound url, local or remote
+ */
 
 /**
-* @typedef {Object} Audio
-* @property { string } id - Audio id
-* @property { boolean } overlap - Audio can overlap with others yet playing
-* @property { boolean } playWhenReady - Audio is to be played immediately when loaded
-* @property { Spot } spot - Spot that owns this audio content
-* @property { Object } audio - Audio instance as [Howler.Howl] {@link https://pub.dev/documentation/howler/latest/howler/Howl-class.html}
-*/
+ * @typedef {Object} ExperienceConfig GeoXp `exerience` configuration object
+ * @property { Pattern[] } patterns - Array of patterns for the experience
+ * @property { Object } options - Experience options
+ * @property { number } options.visitedFilter - Time before visisted spot is notified for filtering [seconds]
+ * @property { Object|boolean } [options.cookies = null] - Pattern "Visited spots" cookies. Set to true to use default options. Use an object for custom values.
+ * @property { boolean } [options.cookies.deleteOnLastSpot = null] - Visited spot cookie is deleted when "last" spot is visited
+ * @property { boolean } [options.cookies.deleteOnCompletion = true] - Visited spot cookie is deleted all pattern spots have been visited. Overrides deleteOnLastSpot
+ * @property { number } [options.cookies.expiration = 5] - Visited spot cookie expiration [min]
+ */
 
 /**
-* play | end event listener
-* @callback audioListener
-* @param { Audio } audio
-*/
+ * @typedef {Object} Pattern A group of spots with with certain behavior options
+ * @property { string } id - Pattern id
+ * @property { string } label - Pattern name/desc
+ * @property { boolean } [disabled = null] - Pattern is disabled
+ * @property { boolean } [replay = null] - Pattern spots are replayed by default
+ * @property { boolean } [overlap = null] - Pattern spots can overlap (more than one can be active at the same time)
+ * @property { Spot[] } spots - array of Spots of this pattern
+ */
 
 /**
-* incoming | active | visited | ougoing event listener
-* @callback spotListener
-* @param { Spot } spot
-*/
+ * @typedef {Object} Spot A GeoXp active spot that links an audio content to a geographic position
+ * @property { string } id - Spot id
+ * @property { string } label - Spot name/desc
+ * @property { string } position - Spot linked position id
+ * @property { string } audio - Spot linked audio id
+ * @property { string } [after = null] - Spot can go active only after this spot id has been visited
+ * @property { string } [notAfter = null] - Spot cannot go active after this spot id has been visited
+ * @property { boolean } [last = null] - Marks last spot in pattern
+ */
+
+/**
+ * @typedef {Object} Audio Audio object returned by `play` and `stop` events
+ * @property { string } id - Audio id
+ * @property { boolean } overlap - Audio can overlap with others yet playing
+ * @property { boolean } playWhenReady - Audio is to be played immediately when loaded
+ * @property { Spot } spot - Spot that owns this audio content
+ * @property { Object } audio - Audio instance as [Howler.Howl] {@link https://pub.dev/documentation/howler/latest/howler/Howl-class.html}
+ */
+
+/**
+ * play | end event listener
+ * @callback audioListener
+ * @param { Audio } audio
+ */
+
+/**
+ * incoming | active | visited | ougoing event listener
+ * @callback spotListener
+ * @param { Spot } spot
+ */
 
 
 //////////////////////////////////////////////
