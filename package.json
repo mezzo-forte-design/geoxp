@@ -10,7 +10,9 @@
     "watch": "webpack --watch",
     "start-example": "npm run build-dev && cd example-app && webpack serve --content-base ./ --open",
     "docs": "./node_modules/.bin/jsdoc src/index.js --configure jsdoc.config.json",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "tag" : "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
+    "release": "echo \"Releasing GeoXp v$npm_config_vers\" && npm run build && git add dist/* && git commit -m \"dist bundle\" && npm version $npm_config_vers && git push && npm publish && npm run tag"
   },
   "contributors": [
     {
