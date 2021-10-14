@@ -207,7 +207,7 @@ export default class AudioManager {
       });
 
       sound.audio.on('stop', () => {
-        
+
         // playback stopped
         this._destroy(id);
         this.done$.next(sound);

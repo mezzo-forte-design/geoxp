@@ -2,13 +2,13 @@
 const geo = {
   "positions": [
     {
-      "id": "pos1",
+      "id": "p01",
       "label": "pos1",
       "lat": 45.116177,
       "lon": 7.742615,
     },
     {
-      "id": "pos2",
+      "id": "p02",
       "label": "pos2",
       "lat": 45.116177,
       "lon": 6.742615,
@@ -27,12 +27,20 @@ const geo = {
 const audio = {
   "sounds": [
     {
-      "id": "aud1",
-      "url": "./audio/music1.mp3"
+      "id": "a01",
+      "url": "./audio/01.mp3"
     },
     {
-      "id": "aud2",
-      "url": "./audio/music2.mp3"
+      "id": "a02",
+      "url": "./audio/02.mp3"
+    },
+    {
+      "id": "a03",
+      "url": "./audio/03.mp3"
+    },
+    {
+      "id": "a04",
+      "url": "./audio/04.mp3"
     }
   ],
   "options": {
@@ -51,32 +59,45 @@ const experience = {
       "id": "pattern1",
       "label": "pattern1",
       "overlap": false,
-      "replay": true,
       "spots": [
         {
-          "id": "spot1",
-          "position": "pos1",
-          "audio": "aud1",
+          "id": "s01",
+          "position": "p01",
+          "audio": "a01",
           "label": "Spot 1!!"
+        },
+        {
+          "id": "s02",
+          "position": "p02",
+          "audio": "a02",
+          "label": "Spot 2!!",
+          "last": true
         }
       ]
     },
     {
-      "id": "pattern2",
-      "label": "pattern2",
-      "disabled": true,
+      "id": "p02",
+      "label": "p02",
       "overlap": false,
       "replay": true,
       "spots": [
         {
-          "id": "spot2",
-          "position": "pos2",
-          "audio": "aud2",
-          "label": "Spot 2!!"
+          "id": "s03",
+          "position": "p02",
+          "audio": "a03",
+          "label": "Spot 3!!"
         }
       ]
     }
-  ]
+  ],
+  "options": {
+    "cookies": {
+      "enabled": true,
+      "expiration": 1,
+      "deleteOnLastSpot": true,
+      "deleteOnCompletion": false
+    }
+  }
 };
 
 export const config = { geo, audio, experience };

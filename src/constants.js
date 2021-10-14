@@ -5,6 +5,13 @@
 // time to wait to see if somthing goes active before setting a spot as visited
 export const DEFAULT_VISITED_FILTER_TIME = 5000; // ms
 
+// pattern visited spots cookie prefix
+export const DEFAULT_PATTERN_COOKIE_PREFIX = 'geoxp-pattern';
+
+// pattern visited spots cookie default expiration time
+export const DEFAULT_PATTERN_COOKIE_EXPIRATION = 5; // [min]
+
+
 
 /**
  * Geo Manager
