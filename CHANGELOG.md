@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * cookies to make pattern "visited spots" persistent
 * cookies automatic deletion
+* `getVisitedSpots()` method
 
 ### Changed
 * restyled test app UI
