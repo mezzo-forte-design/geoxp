@@ -1,6 +1,6 @@
 {
   "name": "@mezzo-forte/geoxp",
-  "version": "1.3.0-beta.0",
+  "version": "1.3.0",
   "description": "Mezzo Forte Geo Experience",
   "main": "/dist/geoxp.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "start-example": "npm run build-dev && cd example-app && webpack serve --content-base ./ --open",
     "docs": "./node_modules/.bin/jsdoc src/index.js --configure jsdoc.config.json",
     "prepare": "npm run build",
-    "tag" : "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
+    "tag": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
     "release": "echo \"Releasing GeoXp v$npm_config_vers\" && npm run build && git add -f --all dist && git commit -m \"dist bundle\" && npm version $npm_config_vers && git push && npm publish && npm run tag"
   },
   "contributors": [
