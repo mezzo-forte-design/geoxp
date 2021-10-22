@@ -1,5 +1,7 @@
 const path = require('path');
 
+const ESLintPlugin = require('eslint-webpack-plugin');
+
 module.exports = env => {
 
   const isProduction = Boolean(env.production);
@@ -17,6 +19,11 @@ module.exports = env => {
       }
     },
     devtool: isProduction ? 'source-map' : 'eval-source-map',
+    plugins: [
+      new ESLintPlugin({
+        extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx']
+      })
+    ],
     module: {
       rules: [
         {
