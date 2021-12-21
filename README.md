@@ -487,7 +487,7 @@ Now, let’s change application. GeoXp is used to play ambient sounds at certain
 ## <a name="positions-overlap"></a> Positions overlap
 Unless content overlapping is desired, it’s better to avoid positions overlap when possible.
 
-If two pattern spots are actually near each other, try setting radiuses in a way that fencing doesn’t overlap (maybe by setting a small radius and a big delta: user has to be close to the position for the content to start, but the content will not stop if he walks away).
+If two pattern spots are actually near each other, try setting radiuses in a way that fencing doesn’t overlap (maybe by setting a small radius and a big deadband: user has to be close to the position for the content to start, but the content will not stop if he walks away).
 
 If overlapping isn’t avoidable, make sure to apply filtering with `experience.options.visitedFilter` (usually 5000 or 10000 ms is enough).
 
