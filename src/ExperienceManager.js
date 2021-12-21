@@ -274,30 +274,38 @@ export default class ExperienceManager {
         // evaluates each spot to check if something's to play
         spots.forEach((spot) => {
 
-          // for each spot linked to position
-          // first time
-          if (pattern.cfg.replay || !pattern.visited.includes(spot.id)) {
+          // check if not already visited, or auto-replay is active for pattern
+          const notVisitedOrReplay = pattern.cfg.replay || !pattern.visited.includes(spot.id);
 
-            // spot order ok
-            if ((!spot.after || pattern.visited.includes(spot.after))
-              && (!spot.notAfter || !pattern.visited.includes(spot.notAfter))) {
+          // check if order of spot respects after/notAfter rules
+          const spotOrderOk = (!spot.after || pattern.visited.includes(spot.after)) &&
+            (!spot.notAfter || !pattern.visited.includes(spot.notAfter));
 
-              // overlap ok
-              if (pattern.cfg.overlap || pattern.active.length === 0) {
+          // check overlapping with other spots
+          const overlapOk = pattern.cfg.overlap || pattern.active.length === 0;
 
-                if (!pattern.active.includes(spot.id)) {
-                  pattern.active.push(spot.id);
-                }
+          // execute only on first time, so if user stays in the same position, content is not repeated
+          const firstTime = !pattern.inside.includes(spot.id) || !pattern.visited.includes(spot.id);
 
-                const info = {
-                  spot,
-                  overlap: pattern.cfg.overlap
-                };
+          if (
+            notVisitedOrReplay &&
+            spotOrderOk &&
+            overlapOk &&
+            firstTime
+          ) {
 
-                // play audio
-                this.spotActive$.next(info);
-              }
+            // push in array if not already in there
+            if (!pattern.active.includes(spot.id)) {
+              pattern.active.push(spot.id);
             }
+
+            const info = {
+              spot,
+              overlap: pattern.cfg.overlap
+            };
+
+            // play audio
+            this.spotActive$.next(info);
           }
         });
 
