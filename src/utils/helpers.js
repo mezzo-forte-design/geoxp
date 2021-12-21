@@ -1,15 +1,15 @@
 export const isObjectLike = (value) => {
   return (
-    value != null &&
+    value !== null &&
     typeof value === 'object' &&
     !(typeof value === 'function') &&
     !Array.isArray(value)
   );
 };
 
-export const isNumber = value => typeof value == 'number';
+export const isNumber = value => typeof value === 'number';
 
-export const isPositiveNumber = value => typeof value == 'number' && value >= 0;
+export const isPositiveNumber = value => typeof value === 'number' && value >= 0;
 
 export const setCookie = (name, value, duration) => {
   const exp = new Date();
@@ -38,3 +38,6 @@ export const getCookie = (name) => {
 export const deleteCookie = (name) => {
   document.cookie = `${name}= ; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
 };
+
+/** Converts numeric degrees to radians */
+export const toRad = number => number * Math.PI / 180;
