@@ -41,6 +41,18 @@ const audio = {
     {
       "id": "a04",
       "url": "./audio/04.mp3"
+    },
+    {
+      "id": "k",
+      "url": "./audio/kitchen.mp3"
+    },
+    {
+      "id": "b",
+      "url": "./audio/bedroom.mp3"
+    },
+    {
+      "id": "c",
+      "url": "./audio/corridor.mp3"
     }
   ],
   "options": {
@@ -59,19 +71,19 @@ const experience = {
       "id": "pattern1",
       "label": "pattern1",
       "overlap": false,
+      "replay": true,
       "spots": [
         {
           "id": "s01",
           "position": "p01",
-          "audio": "a01",
+          "audio": "k",
           "label": "Spot 1!!"
         },
         {
           "id": "s02",
           "position": "p02",
-          "audio": "a02",
-          "label": "Spot 2!!",
-          "last": true
+          "audio": "c",
+          "label": "Spot 2!!"
         }
       ]
     },
@@ -91,12 +103,7 @@ const experience = {
     }
   ],
   "options": {
-    "cookies": {
-      "enabled": true,
-      "expiration": 1,
-      "deleteOnLastSpot": true,
-      "deleteOnCompletion": false
-    }
+    "cookies": false
   }
 };
 
