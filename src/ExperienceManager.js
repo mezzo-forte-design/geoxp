@@ -77,9 +77,11 @@ export default class ExperienceManager {
         DEFAULT_VISITED_FILTER_TIME;
 
       // check cookies
-      if (config.options.cookies
-      && !config.options.cookies.deleteOnLastSpot
-      && !config.options.cookies.deleteOnCompletion) {
+      if (
+        config.options.cookies &&
+        !config.options.cookies.deleteOnLastSpot &&
+        !config.options.cookies.deleteOnCompletion
+      ) {
 
         // defaults to deleteOnCompletion
         config.options.cookies = {
@@ -478,7 +480,7 @@ export default class ExperienceManager {
   * @returns { string[]|null } array of visited spots
   */
   getVisitedSpots(id) {
-    const pattern =  this._patterns.get(id);
+    const pattern = this._patterns.get(id);
     if (!pattern) {
       console.error('[GeoXp.ExperienceManager.getVisitedSpots] - Pattern not found!');
       return;
