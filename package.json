@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "./node_modules/.bin/eslint src",
     "eslint-fix": "./node_modules/.bin/eslint --fix src",
-    "build": "webpack --mode production --env=production",
+    "build": "npm run eslint && webpack --mode production --env=production",
     "build-dev": "webpack --mode development",
     "watch": "webpack --watch",
     "start-example": "npm run build-dev && cd example-app && webpack serve --content-base ./ --open",
