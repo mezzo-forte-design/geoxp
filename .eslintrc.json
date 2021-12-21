@@ -58,8 +58,9 @@
     "no-undef": "error",
     "no-unused-expressions": "warn",
     "no-unused-vars": "warn",
-    "no-useless-constructor": "warn"
-
+    "no-useless-constructor": "warn",
+    "eqeqeq": "error",
+    "no-extend-native": "warn"
   },
   "globals": {
     "fetch": false,
