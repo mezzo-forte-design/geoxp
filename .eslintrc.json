@@ -1,0 +1,77 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "semi": "error",
+    "id-length": [
+      "error",
+      {
+        "min": 2,
+        "exceptions": [
+          "e",
+          "i",
+          "j",
+          "k",
+          "d",
+          "x",
+          "y",
+          "a",
+          "b",
+          "_",
+          "q",
+          "t"
+        ]
+      }
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        "ImportDeclaration": {
+          "minProperties": 5,
+          "multiline": true
+        }
+      }
+    ],
+    "no-duplicate-imports": [
+      "error",
+      {
+        "includeExports": true
+      }
+    ],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1,
+        "VariableDeclarator": {
+          "var": 2,
+          "let": 2,
+          "const": 3
+        },
+        "MemberExpression": 1,
+        "outerIIFEBody": 1,
+        "ObjectExpression": 1
+      }
+    ],
+    "no-undef": "error",
+    "no-unused-expressions": "warn",
+    "no-unused-vars": "warn",
+    "no-useless-constructor": "warn",
+    "eqeqeq": "error",
+    "no-extend-native": "warn"
+  },
+  "globals": {
+    "fetch": false,
+    "console": false,
+    "alert": false,
+    "navigator": false,
+    "setTimeout": false,
+    "window": false,
+    "document": false,
+    "Promise": false,
+    "URL": false,
+    "Map": false
+  }
+}
