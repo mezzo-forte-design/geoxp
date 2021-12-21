@@ -4,10 +4,10 @@ import { Subject } from 'rxjs';
 
 import { isNumber, setCookie, getCookie, deleteCookie } from './utils/helpers';
 
-import { 
-  DEFAULT_VISITED_FILTER_TIME, 
-  DEFAULT_PATTERN_COOKIE_PREFIX, 
-  DEFAULT_PATTERN_COOKIE_EXPIRATION 
+import {
+  DEFAULT_VISITED_FILTER_TIME,
+  DEFAULT_PATTERN_COOKIE_PREFIX,
+  DEFAULT_PATTERN_COOKIE_EXPIRATION
 } from './constants';
 
 /**
@@ -69,7 +69,7 @@ export default class ExperienceManager {
       config.options = {
         visitedFilter: DEFAULT_VISITED_FILTER_TIME,
         cookies: null
-      }
+      };
     } else {
 
       config.options.visitedFilter = isNumber(config.options.visitedFilter) ?
@@ -77,14 +77,16 @@ export default class ExperienceManager {
         DEFAULT_VISITED_FILTER_TIME;
 
       // check cookies
-      if (config.options.cookies
-      && !config.options.cookies.deleteOnLastSpot 
-      && !config.options.cookies.deleteOnCompletion) {
+      if (
+        config.options.cookies &&
+        !config.options.cookies.deleteOnLastSpot &&
+        !config.options.cookies.deleteOnCompletion
+      ) {
 
         // defaults to deleteOnCompletion
         config.options.cookies = {
           deleteOnCompletion: true
-        }
+        };
       }
     }
 
@@ -113,7 +115,7 @@ export default class ExperienceManager {
     this._config.patterns.forEach(cfg => {
 
       const pattern = this._patterns.get(cfg.id);
-      
+
       if (pattern) {
 
         // pattern alredy exists, change cfg info
@@ -182,7 +184,7 @@ export default class ExperienceManager {
       }
     } else {
       this._config.patterns.forEach(cfg => {
-       
+
         // delete cookies if present
         const cName = `${DEFAULT_PATTERN_COOKIE_PREFIX}-${cfg.id}`;
         deleteCookie(cName);
@@ -274,30 +276,38 @@ export default class ExperienceManager {
         // evaluates each spot to check if something's to play
         spots.forEach((spot) => {
 
-          // for each spot linked to position
-          // first time
-          if (pattern.cfg.replay || !pattern.visited.includes(spot.id)) {
+          // check if not already visited, or auto-replay is active for pattern
+          const notVisitedOrReplay = pattern.cfg.replay || !pattern.visited.includes(spot.id);
 
-            // spot order ok
-            if ((!spot.after || pattern.visited.includes(spot.after))
-              && (!spot.notAfter || !pattern.visited.includes(spot.notAfter))) {
+          // check if order of spot respects after/notAfter rules
+          const spotOrderOk = (!spot.after || pattern.visited.includes(spot.after)) &&
+            (!spot.notAfter || !pattern.visited.includes(spot.notAfter));
 
-              // overlap ok
-              if (pattern.cfg.overlap || pattern.active.length == 0) {
+          // check overlapping with other spots
+          const overlapOk = pattern.cfg.overlap || pattern.active.length === 0;
 
-                if (!pattern.active.includes(spot.id)) {
-                  pattern.active.push(spot.id);
-                }
+          // execute only on first time, so if user stays in the same position, content is not repeated
+          const firstTime = !pattern.inside.includes(spot.id) || !pattern.visited.includes(spot.id);
 
-                const info = {
-                  spot,
-                  overlap: pattern.cfg.overlap
-                }
+          if (
+            notVisitedOrReplay &&
+            spotOrderOk &&
+            overlapOk &&
+            firstTime
+          ) {
 
-                // play audio
-                this.spotActive$.next(info);
-              }
+            // push in array if not already in there
+            if (!pattern.active.includes(spot.id)) {
+              pattern.active.push(spot.id);
             }
+
+            const info = {
+              spot,
+              overlap: pattern.cfg.overlap
+            };
+
+            // play audio
+            this.spotActive$.next(info);
           }
         });
 
@@ -312,7 +322,7 @@ export default class ExperienceManager {
               setTimeout(() => {
 
                 // still inside and nothing active
-                if (pattern.inside.includes(spot.id) && pattern.active.length == 0) {
+                if (pattern.inside.includes(spot.id) && pattern.active.length === 0) {
                   this.spotVisited$.next(spot);
                 }
               }, this._config.options.visitedFilter);
@@ -379,12 +389,12 @@ export default class ExperienceManager {
 
         // mark spot active (if isn't already)
         if (!pattern.active.includes(_spot.id)) {
-          pattern.active.push(_spot.id)
+          pattern.active.push(_spot.id);
         }
 
         // mark spot visited
         if (!pattern.visited.includes(_spot.id)) {
-          pattern.visited.push(_spot.id)
+          pattern.visited.push(_spot.id);
         }
 
         // cookies management
@@ -470,7 +480,7 @@ export default class ExperienceManager {
   * @returns { string[]|null } array of visited spots
   */
   getVisitedSpots(id) {
-    const pattern =  this._patterns.get(id);
+    const pattern = this._patterns.get(id);
     if (!pattern) {
       console.error('[GeoXp.ExperienceManager.getVisitedSpots] - Pattern not found!');
       return;
@@ -506,7 +516,7 @@ export default class ExperienceManager {
 
         // mark specific spot as unvisited
         if (pattern.visited.includes(id)) {
-          pattern.visited = pattern.visited.filter((e) => e !== spot.id);
+          pattern.visited = pattern.visited.filter((e) => e !== id);
         }
       } else {
 
@@ -539,7 +549,7 @@ export default class ExperienceManager {
 
         // checks if pattern enabled
         if (pattern.cfg.disabled) {
-          console.error('[ExperienceManager.forceSpot] - pattern is disabled, cannot force')
+          console.error('[ExperienceManager.forceSpot] - pattern is disabled, cannot force');
           return;
         }
 
@@ -568,7 +578,7 @@ export default class ExperienceManager {
         const info = {
           spot,
           overlap: pattern.overlap
-        }
+        };
         this.spotActive$.next(info);
 
         // sets spot forced

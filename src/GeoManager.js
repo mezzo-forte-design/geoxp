@@ -2,8 +2,6 @@
 
 import { Subject } from 'rxjs';
 
-import Device from './utils/Device';
-
 import {
   DEFAULT_ACCURACY,
   DEFAULT_DEADBAND,
@@ -11,14 +9,8 @@ import {
   DEFAULT_FETCH,
   DEFAULT_FORCE_ACCURACY
 } from './constants';
-import { isNumber } from './utils/helpers';
 
-/** Converts numeric degrees to radians */
-if (typeof (Number.prototype.toRad) === "undefined") {
-  Number.prototype.toRad = function () {
-    return this * Math.PI / 180;
-  };
-}
+import { isNumber, toRad } from './utils/helpers';
 
 /**
  * Creates GeoManager class.
@@ -70,9 +62,9 @@ export default class GeoManager {
   _init(config) {
 
     this._geolocationApiConfig = {
-      enableHighAccuracy : config.options.enableHighAccuracy || true,
-      maximumAge         : config.options.maximumAge || 30000,
-      timeout            : config.options.timeout || 27000
+      enableHighAccuracy: config.options.enableHighAccuracy || true,
+      maximumAge: config.options.maximumAge || 30000,
+      timeout: config.options.timeout || 27000
     };
 
     // sets default is nothing provided
@@ -82,7 +74,7 @@ export default class GeoManager {
         defaultDeadband: DEFAULT_DEADBAND,
         defaultRadius: DEFAULT_RADIUS,
         defaultFetch: DEFAULT_FETCH
-      }
+      };
     } else {
       // check if some of the single options are missing
       config.options.accuracy = isNumber(config.options.accuracy) ?
@@ -110,7 +102,6 @@ export default class GeoManager {
 
     // init variables
     this.inside = [];
-    this.position;
 
     // Listens for GPS position
     if (this._GEO_WATCH) {
@@ -248,13 +239,13 @@ export default class GeoManager {
 
       if (this.inside.includes(position.id)) {
 
-          // already inside
-          if (dist > outside) {
+        // already inside
+        if (dist > outside) {
 
-            // outside radius + deadband
-            this.inside = this.inside.filter(e => e !== position.id);
-            this.outgoing$.next(position.id);
-          }
+          // outside radius + deadband
+          this.inside = this.inside.filter(e => e !== position.id);
+          this.outgoing$.next(position.id);
+        }
 
       } else {
 
@@ -297,19 +288,19 @@ export default class GeoManager {
     const EARTH_R = 6371;
 
     // Javascript functions in radians
-    const dLat = (lat2 - lat1).toRad();
-    const dLon = (lon2 - lon1).toRad();
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
 
     //
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
     //
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     // Distance in m
-    const dist = EARTH_R * c * 1000;
+    const dist = EARTH_R * b * 1000;
     return dist;
   }
 }

@@ -73,7 +73,7 @@ export default class AudioManager {
         visited: defaultVisitedSound,
         fadeInTime: DEFAULT_FADE_IN_TIME,
         fadeOutTime: DEFAULT_FADE_OUT_TIME
-      }
+      };
     } else {
 
       if (!config.options.test) {
@@ -192,7 +192,7 @@ export default class AudioManager {
         src: [audio.url],
         html5: !USE_WEBAUDIO
       })
-    }
+    };
 
     // save reference to sound (url act as unique ID)
     this._buffer.set(id, sound);
@@ -366,7 +366,7 @@ export default class AudioManager {
 
       this._buffer.forEach(e => {
         if (e) e.audio.volume(.2);
-      })
+      });
 
       const sound = new Howl({
         src: [url],
@@ -379,7 +379,7 @@ export default class AudioManager {
         this._systemSoundPlaying = false;
         this._buffer.forEach(e => {
           if (e) e.audio.volume(1);
-        })
+        });
       });
     }
   }
