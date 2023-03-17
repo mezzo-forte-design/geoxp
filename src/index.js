@@ -17,7 +17,7 @@ import { isObjectLike } from './utils/helpers';
 //////////////////////////////////////////////
 
 /**
- * @typedef {Object} GeoConfig GeoXp `geo` configuration object
+ * @typedef {Object} GeoCfg GeoXp `geo` configuration object
  * @property { Position[] } positions - array of geo Positions
  * @property { Object } options - Geo options
  * @property { number } options.enableHighAccuracy - @see https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions/enableHighAccuracy [boolean]
@@ -28,7 +28,7 @@ import { isObjectLike } from './utils/helpers';
  */
 
 /**
- * @typedef {Objcet} Position  an object representing a geographic position with certain options
+ * @typedef {Object} Position  an object representing a geographic position with certain options
  * @property { string } id - Position id
  * @property { string } label - Position name/desc
  * @property { number } lat - Position latitude [degrees North]
@@ -39,7 +39,7 @@ import { isObjectLike } from './utils/helpers';
  */
 
 /**
- * @typedef {Object} AudioConfig GeoXp `audio` configuration object
+ * @typedef {Object} AudioCfg GeoXp `audio` configuration object
  * @property { Sound[] } sounds - Audio sounds
  * @property { Object } options - Audio options
  * @property { string } options.test - Test sound url
@@ -57,7 +57,7 @@ import { isObjectLike } from './utils/helpers';
  */
 
 /**
- * @typedef {Object} ExperienceConfig GeoXp `exerience` configuration object
+ * @typedef {Object} ExperienceCfg GeoXp `exerience` configuration object
  * @property { Pattern[] } patterns - Array of patterns for the experience
  * @property { Object } options - Experience options
  * @property { number } options.visitedFilter - Time before visisted spot is notified for filtering [seconds]

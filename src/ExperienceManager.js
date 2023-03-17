@@ -75,19 +75,6 @@ export default class ExperienceManager {
       config.options.visitedFilter = isNumber(config.options.visitedFilter) ?
         config.options.visitedFilter :
         DEFAULT_VISITED_FILTER_TIME;
-
-      // check cookies
-      if (
-        config.options.cookies &&
-        !config.options.cookies.deleteOnLastSpot &&
-        !config.options.cookies.deleteOnCompletion
-      ) {
-
-        // defaults to deleteOnCompletion
-        config.options.cookies = {
-          deleteOnCompletion: true
-        };
-      }
     }
 
     // inits force spot
@@ -311,19 +298,20 @@ export default class ExperienceManager {
           }
         });
 
-        // reevaluates each spot to check if visited
+        // reevaluates each spot to what to do after a while
         spots.forEach((spot) => {
-          if (!pattern.cfg.replay && pattern.visited.includes(spot.id)) {
+          if (pattern.visited.includes(spot.id)) {
 
             // just when spot is first inside
             if (!pattern.inside.includes(spot.id)) {
 
-              // waits to see if somthing goes active
+              // waits to see if something goes active or stops
               setTimeout(() => {
 
                 // still inside and nothing active
-                if (pattern.inside.includes(spot.id) && pattern.active.length === 0) {
-                  this.spotVisited$.next(spot);
+                if (pattern.inside.includes(spot.id) && (pattern.active.length === 0 || pattern.cfg.overlap)) {
+                  if ( pattern.cfg.replay ) this.replaySpot();
+                  else this.spotVisited$.next(spot);
                 }
               }, this._config.options.visitedFilter);
             }

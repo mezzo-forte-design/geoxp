@@ -60,11 +60,10 @@ export default class GeoManager {
   * @param config - Geo config options
   */
   _init(config) {
-
     this._geolocationApiConfig = {
-      enableHighAccuracy: config.options.enableHighAccuracy || true,
-      maximumAge: config.options.maximumAge || 30000,
-      timeout: config.options.timeout || 27000
+      enableHighAccuracy: config.options.enableHighAccuracy !== undefined ? config.options.enableHighAccuracy : true,
+      maximumAge: config.options.maximumAge !== undefined ? config.options.maximumAge : 30000,
+      timeout: config.options.timeout !== undefined ? config.options.timeout : 27000
     };
 
     // sets default is nothing provided
