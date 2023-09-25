@@ -326,7 +326,7 @@ export default class AudioManager {
   * @param { number } volume - Set volume 0 to 1
   */
   setVolume(volume) {
-    Howler.volume = volume;
+    Howler.volume(volume);
   }
 
   /**
