@@ -495,6 +495,19 @@ If overlapping isn’t avoidable, make sure to apply filtering with `experience.
 Most mobile browsers will block Howler and Geolocation API after some time with no user interaction, resulting in unpredictable geoXp behavior.
 To avoid this, force a periodic unlocking calling the `unlock()` method inside a user interaction (eg: click listerner, etc).
 
+# Contributing
+
+To contribute to this project, fork the repository, work on a development branch and open a MR.
+Remember to update the changelog (CHANGELOG.md)!
+
+**Repo admins**: to release a new version, follow these steps:
+* verify and test changes
+* verify changelog has been updated
+* merge MR in `master`
+* release a new version with `npm run release --vers=X.Y.Z`
+* create a new release in the release section
+
+
 ***
 
 # <a name="examples"></a> Examples
