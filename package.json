@@ -1,6 +1,6 @@
 {
   "name": "@mezzo-forte/geoxp",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Mezzo Forte Geo Experience",
   "main": "/dist/geoxp.js",
   "scripts": {
