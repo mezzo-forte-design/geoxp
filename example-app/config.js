@@ -71,33 +71,29 @@ const experience = {
       "id": "pattern1",
       "label": "pattern1",
       "overlap": false,
-      "replay": true,
+      "replay": false,
       "spots": [
         {
           "id": "s01",
           "position": "p01",
-          "audio": "k",
+          "audio": "a01",
           "label": "Spot 1!!"
         },
         {
           "id": "s02",
           "position": "p02",
-          "audio": "c",
+          "audio": "a02",
           "label": "Spot 2!!"
-        }
-      ]
-    },
-    {
-      "id": "p02",
-      "label": "p02",
-      "overlap": false,
-      "replay": true,
-      "spots": [
+        },
         {
           "id": "s03",
-          "position": "p02",
           "audio": "a03",
           "label": "Spot 3!!"
+        },
+        {
+          "id": "s04",
+          "audio": "a04",
+          "label": "Spot 4!!"
         }
       ]
     }

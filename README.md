@@ -448,7 +448,27 @@ This behavior could be overridden using the `pattern.replay` option. If a patter
 ## <a name="forcing-spots-activation"></a> **Forcing spots activation**
 If GPS accuracy is low and user isn't too far away from a spot location, the spot can be activated manually using the `forceSpot(id)` method, passing the id of the spot to force.
 GeoXp then enters manual mode (internal geolocation updates are stopped, all other audio content is stopped) and activates the desired spot. When the playback is finished (or stopped), geoXp returns to automatic mode and the experience goes on as usual.
-If you want to know if manual mode is available, just call the `canForceSpot(id)` passing the id of the deisired spot. If rules for manual mode are fulfilled, it returns true.
+If you want to know if manual mode is available, just call the `canForceSpot(id)` passing the id of the deisired spot. If rules for manual mode are not fulfilled, it returns and error string explaing the reason why it can't be forced. Otherwise it will return `undefined`.
+Forcing contents is always allowed for spots that does not have a geographic position associated: in this case the only way to reproduce the audio file is to invoke `forceSpot` method, and the rules described above are not applied.
+
+Example:
+```javascript
+"spots": [
+  {
+    "id": "s02",
+    "position": "p02",
+    "audio": "a02",
+    "label": "Spot 2!!"
+  },
+  {
+    "id": "s03",
+    "audio": "a03",
+    "label": "Spot 3!!"
+  },
+]
+```
+
+In the above list, spot `s02` can be forced only if all the geographic rules are respected. Spot `s03` can always be forced since it does not have an associated `position`.
 
 ## <a name="core-methods"></a> **Core methods**
 All GeoXp core methods are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).

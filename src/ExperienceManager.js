@@ -574,4 +574,30 @@ export default class ExperienceManager {
       }
     });
   }
+
+  /**
+  * Stops and removes any forced spot
+  * */
+  stopForcedSpot() {
+
+    // check for force active
+    if (!this.forced) return;
+
+    this._patterns.forEach(pattern => {
+
+      // check if forced spot is active
+      if (pattern.active.includes(this.forced)) {
+
+        // finds spot info
+        const toDeactivate = pattern.cfg.spots.find(e => e.id === this.forced);
+        if (toDeactivate) {
+
+          // deactivates spot by outgoing it
+          this.spotOutgoing$.next(toDeactivate);
+        }
+      }
+    });
+
+    this.forced = null;
+  }
 }
