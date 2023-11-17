@@ -372,13 +372,13 @@ class GeoXp {
   * Your gps accuracy is really bad
   * You are not too far away
   * @param { string } id - id of spot to force
-  * @returns { boolean } Spot force is available
+  * @returns { string | null } Null if it can be played, else error cause
   * */
   canForceSpot(id) {
 
     // checks if can force current spot based on its position
-    const position = this.experience.getSpot(id).position;
-    return this.geo.canForceSpot(position);
+    const positionId = this.experience.getSpot(id)?.position;
+    return this.geo.canForceSpot(positionId);
   }
 
   /**
@@ -388,11 +388,13 @@ class GeoXp {
   * Your gps accuracy is really bad
   * You are not too far away
   * @param { string } id - spot id
+  * @return { string | undefined } 
   * */
   forceSpot(id) {
 
     // checks if can be forced
-    if (!this.canForceSpot(id)) return;
+    const error = this.canForceSpot(id);
+    if (error) return error;
 
     // stops internal geolocation
     this.geo.internalGeolocation(false);
@@ -408,6 +410,14 @@ class GeoXp {
     this.experience.forced = null;
     this.geo.internalGeolocation(true);
     this.geo.refresh();
+  }
+
+  /**
+  * Stops current forces spot and removes the forced spot activation
+  * */
+  stopForcedSpot() {
+    this.experience.stopForcedSpot();
+    this.removeForce();
   }
 
   /**

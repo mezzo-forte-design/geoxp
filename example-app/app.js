@@ -10,6 +10,26 @@ let geoXp;
 
 let internalGeolocation = false;
 
+const forceSpot = (spotId) => {
+  const spot = config.experience.patterns[0].spots.find((el) => el.id === spotId);
+  if (!spot) {
+    console.warn("spot not found", spotId);
+    logger.warn(`Spot with id "${spotId}" not found`);
+    return false;
+  }
+
+  geoXp.forceSpot(spotId)
+}
+
+window.forceSpot = forceSpot;
+
+const removeForce = () => {
+  console.log("test remove")
+  geoXp.stopForcedSpot()
+}
+
+window.removeForce = removeForce;
+
 const simulateSpot = (spotId) => {
   const spot = config.experience.patterns[0].spots.find((el) => el.id === spotId);
   if (!spot) {
@@ -67,6 +87,7 @@ window.onload = (ev) => {
   geoXp.on('play', audioData => {
     console.log('[EVENT] - Play audio', audioData);
     logger.message('[EVENT] - Play audio', audioData);
+    window.currentSound = audioData
   });
 
   geoXp.on('stop', audioData => {
@@ -158,6 +179,24 @@ document.getElementById('simulate-spot').addEventListener('click', e => {
   if (success) {
     input.value = '';
   }
+});
+
+document.getElementById('force-spot').addEventListener('click', e => {
+  const input = document.getElementById('spot-id-input');
+  const spotId = input.value;
+  if (!spotId) {
+    logger.error('Insert a Spot ID to force a spot');
+    return;
+  }
+
+  const success = forceSpot(spotId);
+  if (success) {
+    input.value = '';
+  }
+});
+
+document.getElementById('unforce-spot').addEventListener('click', e => {
+  removeForce();
 });
 
 document.getElementById('simulate-position').addEventListener('click', e => {

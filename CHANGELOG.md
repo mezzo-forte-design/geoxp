@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## **v1.3.4** - 2023-10-06
+### Added
+* spots without "position" can be forced at any time, disregarding the usual forcing rules
+
+### Changed
+* `canForceSpot` now returns an error string if spot can't be forced, returns `undefined` if spot can be forced
+
 ## **v1.3.3** - 2023-10-06
 ### Fixed
 * global volume setter was bugged

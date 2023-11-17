@@ -164,44 +164,35 @@ export default class GeoManager {
   * Your gps accuracy is really bad
   * You are not too far away
   * @param { string } id - id for position of spot to force
-  * @returns { boolean } Manual mode is available
+  * @returns { string | undefined } Null if it can be played, else error cause
   * */
   canForceSpot(id) {
     const position = this._config.positions.find(e => e.id === id);
 
-    if (position) {
+    // spots without position data can be forced at any time
+    if (!position) return;
 
-      const accuracy = this.lastPosition.coords.accuracy;
-      const distance = this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat);
-      const spotArea = (position.radius || this._config.options.defaultRadius) + (position.deadband || this._config.options.defaultDeadband);
+    const accuracy = this.lastPosition.coords.accuracy;
+    const distance = this._calcGeoDistance(this.lastPosition.coords.longitude, this.lastPosition.coords.latitude, position.lon, position.lat);
+    const spotArea = (position.radius || this._config.options.defaultRadius) + (position.deadband || this._config.options.defaultDeadband);
 
-      // checks for max allowed distance
-      if (distance - accuracy > spotArea) {
-        console.warn('[GeoManager.canForceSpot] - Cannot force spot, too far');
-        return false;
-      }
-
-      if (accuracy > this.FORCE_ACCURACY) {
-
-        // canForce, poor accuracy
-        return true;
-      } else {
-
-        if (distance < spotArea) {
-
-          // can force, near the spot
-          return true;
-        }
-
-        console.warn('[GeoManager.canForceSpot] - Cannot force spot, current position is too accurate');
-        return false;
-      }
-
-    } else {
-      console.error('[GeoManager.canForceSpot] - position id not found');
+    // checks for max allowed distance
+    if (distance - accuracy > spotArea) {
+      console.warn('[GeoManager.canForceSpot] - Cannot force spot, too far');
+      return "too far";
     }
 
-    return false;
+    // check for accuracy
+    if (accuracy <= this.FORCE_ACCURACY) {
+      console.warn('[GeoManager.canForceSpot] - Cannot force spot, current position is too accurate');
+      return "current location is too accurate";
+    }
+
+    // check again for distance
+    if (distance > spotArea) {
+      console.warn('[GeoManager.canForceSpot] - Cannot force spot, too far');
+      return "too far";
+    }
   }
 
   /**
