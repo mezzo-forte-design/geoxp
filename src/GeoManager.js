@@ -51,8 +51,21 @@ export default class GeoManager {
     this.outgoing$ = new Subject();
     this.position$ = new Subject();
 
+    // watch position ids
+    this._GEO_WATCH = [];
+
     // inits the instance based on config
     this._init(config);
+  }
+
+  /**
+  * Clears all geoposition watches
+  */
+  clearPositionWatch() {
+    this._GEO_WATCH.forEach(watchId => {
+      navigator.geolocation.clearWatch(watchId);
+    });
+    this._GEO_WATCH = [];
   }
 
   /**
@@ -102,12 +115,12 @@ export default class GeoManager {
     // init variables
     this.inside = [];
 
-    // Listens for GPS position
-    if (this._GEO_WATCH) {
-      navigator.geolocation.clearWatch(this._GEO_WATCH);
-    }
+    // clear prev GPS position watchers
+    this.clearPositionWatch();
 
-    this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, this._geolocationApiConfig);
+    // Listens for GPS position
+    const newWatchId = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, this._geolocationApiConfig);
+    this._GEO_WATCH.push(newWatchId);
   }
 
   /**
@@ -123,9 +136,7 @@ export default class GeoManager {
   */
   unload() {
     this.inside = [];
-    if (this._GEO_WATCH) {
-      navigator.geolocation.clearWatch(this._GEO_WATCH);
-    }
+    this.clearPositionWatch();
   }
 
   /**
@@ -152,9 +163,10 @@ export default class GeoManager {
   */
   internalGeolocation(enabled) {
     if (enabled) {
-      this._GEO_WATCH = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, this._geolocationApiConfig);
-    } else if (this._GEO_WATCH) {
-      navigator.geolocation.clearWatch(this._GEO_WATCH);
+      const newWatchId = navigator.geolocation.watchPosition(this._geoSuccess, this._geoError, this._geolocationApiConfig);
+      this._GEO_WATCH.push(newWatchId);
+    } else {
+      this.clearPositionWatch();
     }
   }
 
