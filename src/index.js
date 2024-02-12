@@ -163,7 +163,17 @@ class GeoXp {
     // exposes event emitter
     this.event = new EventEmitter();
 
+    // keep track if subscription are active or not
+    this.subsActive = false;
 
+    // activate subs
+    this.activateSubscriptions();
+  }
+
+  /**
+   * Activate threads subscriptions so all modules communicate to each other
+   */
+  activateSubscriptions() {
     //////////////////////////////////////////////
     // subscribes to InventoryManager requests
     //////////////////////////////////////////////
@@ -285,6 +295,9 @@ class GeoXp {
         // emits stopped audio
         this.event.emit('stop', audio);
       });
+
+    // subs are now active
+    this.subsActive = true;
   }
 
   /**
@@ -449,6 +462,10 @@ class GeoXp {
     this.geo.reload(config.geo);
     this.audio.reload(config.audio);
     this.experience.reload(config.experience);
+
+    if (!this.subsActive) {
+      this.activateSubscriptions();
+    }
   }
 
   /**
@@ -466,6 +483,9 @@ class GeoXp {
     this.subGeoInside.unsubscribe();
     this.subGeoOutgoing.unsubscribe();
     this.subGeoIncoming.unsubscribe();
+
+    // subs are now unactive
+    this.subsActive = false;
 
     this.geo.unload();
     this.audio.unload();

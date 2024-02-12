@@ -156,6 +156,10 @@ document.getElementById('unlock-button').addEventListener('click', e => {
   geoXp.unlock();
 });
 
+document.getElementById('destroy-button').addEventListener('click', e => {
+  geoXp.destroy();
+});
+
 document.getElementById('internal-geolocation-button').addEventListener('click', e => {
   geoXp.internalGeolocation(internalGeolocation);
   console.log('Internal geolocation', internalGeolocation);
