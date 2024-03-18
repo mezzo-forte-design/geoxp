@@ -299,7 +299,10 @@ export default class AudioManager {
 
         } else sound.audio.stop();
 
-      } else this._destroy(id);
+      } else {
+        sound.audio.stop();
+        this._destroy(id);
+      }
     }
   }
 
