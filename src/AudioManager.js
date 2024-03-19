@@ -4,8 +4,6 @@ import { Howl, Howler } from 'howler';
 
 import { Subject } from 'rxjs';
 
-import Device from './utils/Device.js';
-
 import { isPositiveNumber } from './utils/helpers.js';
 
 import {
@@ -19,7 +17,7 @@ import defaultTestSound from './audio/test.mp3';
 import defaultVisitedSound from './audio/visited.mp3';
 
 // Howler configuration
-const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
+const USE_WEBAUDIO = false;
 Howler.usingWebAudio = USE_WEBAUDIO;
 Howler.autoUnlock = true;
 
