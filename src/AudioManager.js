@@ -19,7 +19,7 @@ import defaultTestSound from './audio/test.mp3';
 import defaultVisitedSound from './audio/visited.mp3';
 
 // Howler configuration
-const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
+const USE_WEBAUDIO = Device.os === 'iOS' && Device.webaudio();
 Howler.usingWebAudio = USE_WEBAUDIO;
 Howler.autoUnlock = true;
 
