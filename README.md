@@ -14,6 +14,8 @@ It’s meant to be used inside any front-end interface, regardless of the js fra
 
 An API and methods documentation page is available [at this link](https://mezzo-forte.gitlab.io/mezzoforte-geoxp).
 
+The example app (code is in `/example-app` directory) is published [here](https://geoxp.netlify.app/).
+
 It’s made of three modules.
 
 * **Geo**
