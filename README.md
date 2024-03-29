@@ -12,7 +12,7 @@ It maps audio contents to geographical positions, and automatically reproduces t
 
 It’s meant to be used inside any front-end interface, regardless of the js framework.
 
-An API and methods documentation page is available [at this link](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
+An API and methods documentation page is available [at this link](https://mezzo-forte.gitlab.io/mezzoforte-geoxp).
 
 It’s made of three modules.
 

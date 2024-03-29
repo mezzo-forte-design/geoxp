@@ -8,9 +8,10 @@
     "eslint": "./node_modules/.bin/eslint src",
     "eslint-fix": "./node_modules/.bin/eslint --fix src",
     "build": "npm run eslint && webpack --mode production --env=production",
-    "build-dev": "webpack --mode development",
+    "build-dev": "webpack --mode development --watch",
     "watch": "webpack --watch",
-    "start-example": "npm run build-dev && cd example-app && webpack serve --content-base ./ --open",
+    "start-example": "npm run build-dev & (cd example-app && webpack serve --content-base ./ --open)",
+    "build-example": "npm run build && cp -r dist ./example-app && cd example-app && webpack --mode production --env=production",
     "docs": "./node_modules/.bin/jsdoc src/index.js --configure jsdoc.config.json",
     "prepare": "npm run build",
     "release": "echo \"Releasing GeoXp v$npm_config_vers\" && npm run build && git add -f --all dist && git commit -m \"dist bundle\" && npm version $npm_config_vers && git push origin master --tags v$npm_config_vers && npm publish"

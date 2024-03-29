@@ -1,4 +1,4 @@
-import GeoXp from '../dist/geoxp';
+import GeoXp from 'geoxp';
 
 import { config } from './config';
 
