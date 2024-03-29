@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "bowser": "^2.11.0",
-    "howler": "^2.2.1",
+    "howler": "^2.2.4",
     "rxjs": "^6.6.3"
   }
 }
