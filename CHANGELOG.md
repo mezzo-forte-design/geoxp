@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## **v1.3.10** - 2024-03-29
+### Changed
+* upgrade `howler` to last version (v2.2.4)
+* use WebAudio for every browser on iOS
+* force test and silence with HTML5 to unlock webaudio sound for iPhones in slient mode
+
+### Added
+* add script to build and publish example app
+
+### Fixed
+* when starting example app in dev mode, changes in GeoXp code is watched live
+
 ## **v1.3.9** - 2024-03-27
 ### Fix
 * include WebAudio for iOS Safari - ⚠ rolls back changes from v1.3.7
