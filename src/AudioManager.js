@@ -19,7 +19,7 @@ import defaultTestSound from './audio/test.mp3';
 import defaultVisitedSound from './audio/visited.mp3';
 
 // Howler configuration
-const USE_WEBAUDIO = Device.isSafariiOS() && Device.webaudio();
+const USE_WEBAUDIO = Device.os === 'iOS' && Device.webaudio();
 Howler.usingWebAudio = USE_WEBAUDIO;
 Howler.autoUnlock = true;
 
@@ -135,7 +135,7 @@ export default class AudioManager {
   * Plays test system sound
   */
   test() {
-    this._playSystemSound(this._config.options.test);
+    this._playSystemSound(this._config.options.test, true);
   }
 
   /**
@@ -149,7 +149,7 @@ export default class AudioManager {
   * Unlocks web audio
   */
   unlock() {
-    this._playSystemSound(this._config.options.silence);
+    this._playSystemSound(this._config.options.silence, true);
   }
 
   /**
@@ -363,7 +363,7 @@ export default class AudioManager {
   * Plays system sound
   * @param { string } url - url of sound to play
   */
-  _playSystemSound(url) {
+  _playSystemSound(url, forceHtml5) {
     if (!this._systemSoundPlaying) {
       this._systemSoundPlaying = true;
 
@@ -374,7 +374,7 @@ export default class AudioManager {
       const sound = new Howl({
         src: [url],
         format: 'mp3',
-        html5: !USE_WEBAUDIO,
+        html5: forceHtml5 || !USE_WEBAUDIO,
         autoplay: true
       });
 
