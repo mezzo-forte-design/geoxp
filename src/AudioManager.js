@@ -217,7 +217,7 @@ export default class AudioManager {
       sound.audio.on('play', () => {
 
         // fade in
-        const fadeTime = fade ? fade : this._config.options.fadeInTime;
+        const fadeTime = fade ?? this._config.options.fadeInTime;
         if (fadeTime > 0) sound.audio.fade(0, volume, fadeTime);
         else sound.audio.volume(volume);
 
@@ -227,7 +227,7 @@ export default class AudioManager {
 
       // start sound
       if (sound.playWhenReady) {
-        const fadeTime = fade ? fade : this._config.options.fadeInTime;
+        const fadeTime = fade ?? this._config.options.fadeInTime;
         this.play(spot, overlap, fadeTime);
       }
     });
@@ -266,7 +266,7 @@ export default class AudioManager {
           sound.audio.play();
 
           // fade in
-          const fadeTime = fade ? fade : this._config.options.fadeInTime;
+          const fadeTime = fade ?? this._config.options.fadeInTime;
           if (fadeTime > 0) sound.audio.volume(0);
           else sound.audio.volume(volume);
         }
