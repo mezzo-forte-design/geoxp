@@ -164,9 +164,10 @@ export default class AudioManager {
   * @param { Object } spot - spot to load
   * @param { boolean } overlap - can overlap other sounds
   * @param { number } [fade = null] - fade in time [ms]
+  * @param { number } [volume = 1] - playback volume from 0 to 1
   * @param { boolean } [playWhenReady = false] - play sound when loaded
   */
-  load(spot, overlap = false, fade = null, playWhenReady = false) {
+  load(spot, overlap = false, fade = null, volume = 1, playWhenReady = false) {
 
     if (!spot.audio) {
       console.error('[AudioManager.load] - audio info not provided. Cannot load');
@@ -215,13 +216,18 @@ export default class AudioManager {
 
       sound.audio.on('play', () => {
 
+        // fade in
+        const fadeTime = fade ?? this._config.options.fadeInTime;
+        if (fadeTime > 0) sound.audio.fade(0, volume, fadeTime);
+        else sound.audio.volume(volume);
+
         // playback started
         this.play$.next(sound);
       });
 
       // start sound
       if (sound.playWhenReady) {
-        const fadeTime = fade ? fade : this._config.options.fadeInTime;
+        const fadeTime = fade ?? this._config.options.fadeInTime;
         this.play(spot, overlap, fadeTime);
       }
     });
@@ -249,7 +255,7 @@ export default class AudioManager {
     if (!sound) {
 
       // load audio and play when ready
-      this.load(spot, overlap, fade, true);
+      this.load(spot, overlap, fade, volume, true);
 
     } else {
       // if sounds are ready play(), else playWhenReady
@@ -260,8 +266,8 @@ export default class AudioManager {
           sound.audio.play();
 
           // fade in
-          const fadeTime = fade ? fade : this._config.options.fadeInTime;
-          if (fadeTime > 0) sound.audio.fade(0, volume, fadeTime);
+          const fadeTime = fade ?? this._config.options.fadeInTime;
+          if (fadeTime > 0) sound.audio.volume(0);
           else sound.audio.volume(volume);
         }
       }
