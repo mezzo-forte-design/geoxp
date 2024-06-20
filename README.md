@@ -1,35 +1,20 @@
 [<img src="https://mezzoforte.design/img/logo_beige.svg" alt="Mezzo Forte" width="150"/>](https://mezzoforte.design/)
 
 # **Mezzo Forte GeoXp**
-###### 2021
-#
-###
-# **Description**
 
-Mezzo Forte GeoXp is a client side, event based js library that manages all the core background features of a geolocated audio tour.
+## **Description**
 
-It maps audio contents to geographical positions, and automatically reproduces them based on configuration rules.
+Mezzo Forte GeoXp is a client side, event based js library that manages all the core background features of a geolocated tour.
 
-It’s meant to be used inside any front-end interface, regardless of the js framework.
+It maps media contents to geographical locations, and automatically reproduces them based on configuration rules.
+
+It’s meant to be used in any js environment, front or back end, regardless of the js framework or platform.
 
 An API and methods documentation page is available [at this link](https://mezzo-forte.gitlab.io/mezzoforte-geoxp).
 
-The example app (code is in `/example-app` directory) is published [here](https://geoxp.netlify.app/).
+The example app (code is in `/example-web` directory) is published [here](https://geoxp.netlify.app/).
 
-It’s made of three modules.
-
-* **Geo**
-
-    Manages all geolocation logic. It’s based on geolocation API, but it can be used with any external geolocation provider.
-
-* **Audio**
-
-    Manages all audio playback logic. It relies on Howler JS library.
-
-* **Experience**
-
-    It’s the real core of the package, defines automatic actions to be done as a consequence of geolocation updates.
-
+The library is made of modules, with the main one being "core", while there are plugins available to implement media management features and geolocation sources on different platforms.
 
 ***
 

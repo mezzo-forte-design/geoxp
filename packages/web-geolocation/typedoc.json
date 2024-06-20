@@ -1,0 +1,7 @@
+{
+  "extends": ["../../typedoc.base.json"],
+  "name": "Web geolocation plugin",
+  "entryPoints": ["./"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "tsconfig.json"
+}

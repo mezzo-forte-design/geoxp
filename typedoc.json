@@ -1,0 +1,8 @@
+{
+  "extends": ["./typedoc.base.json"],
+  "tsconfig": "tsconfig.json",
+  "name": "Mezzoforte GeoXp",
+  "out": "public",
+  "entryPoints": ["packages/*"],
+  "entryPointStrategy": "packages"
+}

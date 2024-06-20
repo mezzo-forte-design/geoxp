@@ -1,0 +1,7 @@
+{
+  "extends": ["../../typedoc.base.json"],
+  "name": "Web audio plugin",
+  "entryPoints": ["./"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "tsconfig.json"
+}
