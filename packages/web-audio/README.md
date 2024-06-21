@@ -5,6 +5,7 @@
 ## **Description**
 
 GeoXpWebAudio plugin provides audio playback features to GeoXpCore module.
+
 Based on howler.js, it can be used in any web browser environment.
 
 ***

@@ -6,7 +6,7 @@
 
 Mezzo Forte GeoXpCore is a an event based js library that manages all the background features of a geolocated tour.
 
-It maps media contents to geographical locations, and automatically reproduces them based on configuration rules.
+It maps media control events to geographical locations based on configuration rules.
 
 It’s meant to be used in any js environment, front or back end, regardless of the js framework or platform.
 

@@ -5,6 +5,7 @@
 ## **Description**
 
 GeoXpWebStorage plugin provides persistent storage to GeoXpCore using cookies.
+
 It can be used in any web browser environment.
 
 ***

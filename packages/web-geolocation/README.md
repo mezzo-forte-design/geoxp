@@ -5,6 +5,7 @@
 ## **Description**
 
 GeoXpWebGeolocation plugin provides user geolocation based on navigator.geolocation API.
+
 It can be used in any web browser environment.
 
 ***
