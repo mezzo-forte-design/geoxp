@@ -2,6 +2,8 @@
   "files": [],
   "references": [
     { "path": "packages/core" },
-    { "path": "packages/web-audio" }
+    { "path": "packages/web-audio" },
+    { "path": "packages/web-geolocation" },
+    { "path": "packages/web-storage" }
   ]
 }
