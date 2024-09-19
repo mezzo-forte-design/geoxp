@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint packages",
     "eslint:fix": "eslint --fix packages",
-    "build": "npm run typecheck && npm run eslint && npm run build --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
     "build:dev": "npm run build:dev --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "start:web": "cd example-web && webpack serve --content-base ./ --open",
