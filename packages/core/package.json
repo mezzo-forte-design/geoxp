@@ -1,5 +1,5 @@
 {
-  "name": "core",
+  "name": "@geoxp/core",
   "version": "1.0.0",
   "description": "Mezzoforte GeoXp Core module",
   "main": "dist/index.js",

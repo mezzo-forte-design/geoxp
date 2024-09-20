@@ -1,7 +1,5 @@
 {
-  "name": "@mezzo-forte/geoxp",
-  "version": "1.3.12",
-  "description": "Mezzo Forte Geo Experience",
+  "description": "Mezzo Forte GeoXp",
   "main": "/dist/geoxp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
