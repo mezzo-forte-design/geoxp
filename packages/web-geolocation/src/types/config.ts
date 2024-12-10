@@ -1,18 +1,22 @@
 /**
  * Configuration object structure
- * @module Config
+ * @module WebGeolocationConfigTypes
  */
 
-/** GeoXpWebGeolocationConfig */
-export type GeoXpWebGeolocationConfig =
-  | {
-      /** The application would like to receive the best possible results (can increase location fix time) */
-      enableHighAccuracy?: boolean;
+/** Config type for Web Geolocation module */
+export type Config = {
+  /** The application would like to receive the best possible results (can increase location fix time) */
+  enableHighAccuracy?: boolean;
 
-      /** Maximum age of a possible cached position that is acceptable to return [milliseconds] */
-      maximumAge?: number;
+  /** Maximum age of a possible cached position that is acceptable to return [milliseconds] */
+  maximumAge?: number;
 
-      /** Maximum length of time the device is allowed to take in order to return a position [milliseconds] */
-      timemout?: number;
-    }
-  | undefined;
+  /** Maximum length of time the device is allowed to take in order to return a position [milliseconds] */
+  timeout?: number;
+};
+
+/** GeoXpWebGeolocationConfig can be undefined (see Config for properties) */
+export type GeoXpWebGeolocationConfig = Config | undefined;
+
+/** SanitisedConfig corresponds to Config, but all fields are required */
+export type SanitisedConfig = Required<Config>;

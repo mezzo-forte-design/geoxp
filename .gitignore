@@ -61,8 +61,8 @@ typings/
 # next.js build output
 .next
 
-example-app/bundle.js
-example-app/bundle.js.map
+examples/web/bundle.js
+examples/web/bundle.js.map
 
 *.DS_Store
 .vscode
@@ -72,3 +72,10 @@ testApp
 
 # Typedoc
 public
+
+.rollup.cache
+output
+*.min.js
+*.min.js.map
+.nx/cache
+.nx

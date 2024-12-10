@@ -3,6 +3,6 @@
  * @module
  */
 
-import { GeoXpGeolocation } from 'core/src/types/common';
+import type { GeoXpGeolocation } from '@geoxp/core';
 
 export type GeoXpWebGeolocationEvent = { location: [GeoXpGeolocation] };

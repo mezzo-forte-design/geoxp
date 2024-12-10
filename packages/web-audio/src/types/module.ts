@@ -7,11 +7,11 @@ import { GeoXpWebAudioConfigSound } from './config';
 import { Howl } from 'howler';
 
 export type GeoXpWebAudioSound = {
-  cfg: GeoXpWebAudioConfigSound
-  audio: Howl
-  shouldPlay: boolean
-  shouldStop: boolean
-  isFadingOut: boolean
+  cfg: GeoXpWebAudioConfigSound;
+  audio: Howl;
+  shouldPlay: boolean;
+  shouldStop: boolean;
+  isFadingOut: boolean;
 };
 
 export type GeoXpWebAudioEvent =

@@ -1,22 +1,56 @@
 {
   "name": "@geoxp/web-geolocation",
   "version": "1.0.0",
-  "description": "Mezzoforte GeoXp Web Geolocation module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build -w core && npm run typecheck && webpack --mode production --env=production",
-    "build:dev": "npm run build -w core && webpack --mode development --env=development",
-    "build:ext": "npm run typecheck:ext && webpack --mode production --env=production",
-    "build:ext:dev": "webpack --mode development --env=development",
-    "build:clear": "rm -rf dist",
-    "typecheck": "npm run build -w core && tsc --noEmit",
-    "typecheck:ext": "tsc --noEmit"
+  "description": "Mezzo Forte GeoXp Web Geolocation module",
+  "homepage": "https://gitlab.com/mezzo-forte/geoxp#README",
+  "bugs": {
+    "url": "https://gitlab.com/mezzo-forte/geoxp/-/issues"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/mezzo-forte/geoxp.git"
+  },
+  "license": "Apache-2.0",
+  "contributors": [
+    {
+      "name": "Giuliano Buratti",
+      "email": "gbcode.it@gmail.com"
+    },
+    {
+      "name": "Francesco Cretti",
+      "email": "francesco.cretti@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.js",
+  "browser": "dist/geoxp-web-geolocation.min.js",
+  "types": "dist/esm/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npm run build:clear && rollup -c --bundleConfigAsCjs && npm run cjs && npm run esm",
+    "build:clear": "rm -rf dist && rm -rf .rollup.cache",
+    "cjs": "cd dist && mkdir -p cjs && mv index.cjs index.cjs.map cjs/",
+    "esm": "cd dist && mkdir -p esm && mv index.js index.js.map index.d.ts src esm/",
+    "lint": "eslint --fix index.ts ./src",
+    "lint:test": "eslint index.ts ./src",
+    "prettify": "prettier --write \"./src/**/*.{ts,tsx}\" \"index.ts\"",
+    "prettify:test": "prettier --list-different \"./src/**/*.{ts,tsx}\" \"index.ts\"",
+    "test": "echo \"No test specified for @geoxp/web-geolocation\"",
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
-    "core": "^1.0.0"
+    "@geoxp/core": "*",
+    "@geoxp/utils": "*"
+  },
+  "devDependencies": {
+    "@geoxp/eslint-config": "*",
+    "typescript": "^5.4.5"
   }
 }

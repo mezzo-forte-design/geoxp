@@ -1,0 +1,40 @@
+{
+  "name": "@geoxp/eslint-config",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ESlint shared config for GeoXp packages",
+  "homepage": "https://gitlab.com/mezzo-forte/geoxp#README",
+  "bugs": {
+    "url": "https://gitlab.com/mezzo-forte/geoxp/-/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/mezzo-forte/geoxp.git"
+  },
+  "license": "Apache-2.0",
+  "contributors": [
+    {
+      "name": "Giuliano Buratti",
+      "email": "gbcode.it@gmail.com"
+    },
+    {
+      "name": "Francesco Cretti",
+      "email": "francesco.cretti@gmail.com"
+    }
+  ],
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "eslint": "^9.16.0",
+    "eslint-plugin-import": "^2.31.0",
+    "globals": "^15.13.0",
+    "typescript-eslint": "^8.17.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

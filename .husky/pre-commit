@@ -1,0 +1,3 @@
+yarn prettify:test
+yarn lint:test
+yarn typecheck

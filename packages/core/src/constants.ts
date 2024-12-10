@@ -1,6 +1,6 @@
 /**
  * Default values used to fill missing configuration options
- * @module Constants
+ * @module GeoXpCoreConstants
  * */
 
 /** Time before a visited is notified [milliseconds] */
@@ -20,5 +20,3 @@ export const DEFAULT_RADIUS = 20;
 
 /** Default spot position prefetch radius [factor of radius]  */
 export const DEFAULT_FETCH = 1;
-
-export const TEST = '1';

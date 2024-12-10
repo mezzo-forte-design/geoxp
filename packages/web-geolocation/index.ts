@@ -1,15 +1,15 @@
 /**
  * GeoXpWebGeolocation provides use location informations based on navigator.geolocation api
- * @module GeoXpWebGeolocation
+ * @module WebGeolocationClass
  * */
 
-import GeoXpCore from 'core';
+import type GeoXpCore from '@geoxp/core';
+import type { GeoXpGeolocation } from '@geoxp/core';
+import type { Listener, Key } from '@geoxp/utils';
 import { EventEmitter } from 'events';
-import { GeoXpWebGeolocationConfig } from './src/types/config';
-import { GeoXpGeolocation } from 'core/src/types/common';
+import type { GeoXpWebGeolocationConfig, SanitisedConfig } from './src/types/config';
 import { sanitiseConfig } from './src/utils';
-import { GeoXpWebGeolocationEvent } from './src/types/module';
-import { Key, Listener } from 'core/src/utils';
+import type { GeoXpWebGeolocationEvent } from './src/types/module';
 
 /**
  * GeoXpWebGeolocation provides use location informations based on navigator.geolocation api
@@ -19,19 +19,19 @@ export default class GeoXpWebGeolocation {
    * GeoXpCore reference
    * @hidden
    */
-  private geoXpCore: GeoXpCore;
+  private readonly geoXpCore: GeoXpCore;
 
   /**
    * Event emitter
    * @hidden
    */
-  private event = new EventEmitter<GeoXpWebGeolocationEvent>();
+  private readonly event = new EventEmitter<GeoXpWebGeolocationEvent>();
 
   /**
    * Module configuration
    * @hidden
    */
-  private config: GeoXpWebGeolocationConfig;
+  private config: SanitisedConfig;
 
   /**
    * Geolocation subscriptions
@@ -57,7 +57,7 @@ export default class GeoXpWebGeolocation {
    * @param config GeoXpWebGeolocation configuration
    * @returns GeoXpWebGeolocation singleton instance
    */
-  constructor (geoXpCore: GeoXpCore, config: GeoXpWebGeolocationConfig) {
+  constructor(geoXpCore: GeoXpCore, config?: GeoXpWebGeolocationConfig) {
     // bind listeners
     this.geoSuccess = this.geoSuccess.bind(this);
     this.geoError = this.geoError.bind(this);
@@ -66,7 +66,7 @@ export default class GeoXpWebGeolocation {
     this.config = sanitiseConfig(config);
 
     // inits the instance based on config
-    this.init(config);
+    this.init();
 
     // connects core
     this.geoXpCore = geoXpCore;
@@ -78,7 +78,7 @@ export default class GeoXpWebGeolocation {
    * Clears all geoposition watches
    * @hidden
    */
-  private unsubAll () {
+  private unsubAll() {
     this.locationSubs.forEach((subId) => {
       navigator.geolocation.clearWatch(subId);
     });
@@ -90,9 +90,7 @@ export default class GeoXpWebGeolocation {
    * @param config GeoXpWebGeolocation configuration
    * @hidden
    */
-  private init (config: GeoXpWebGeolocationConfig) {
-    this.config = sanitiseConfig(config);
-
+  private init() {
     // clear prev GPS position watchers
     this.unsubAll();
 
@@ -110,22 +108,23 @@ export default class GeoXpWebGeolocation {
    * Loads a new configuration
    * @param config Config options
    */
-  public reload (config: GeoXpWebGeolocationConfig) {
-    this.init(config);
+  public reload(config: GeoXpWebGeolocationConfig) {
+    this.config = sanitiseConfig(config);
+    this.init();
     console.info('[GeoXpWebGeolocation.reload] config reloaded', config);
   }
 
   /**
    * Unloads all subscriptions
    */
-  public unload () {
+  public unload() {
     this.unsubAll();
   }
 
   /**
    * Unlocks geolocation API
    */
-  public unlock () {
+  public unlock() {
     navigator.geolocation.getCurrentPosition(() => {});
   }
 
@@ -133,7 +132,7 @@ export default class GeoXpWebGeolocation {
    * Get current (last) location
    * @returns current (last) location
    */
-  public getLocation () {
+  public getLocation() {
     return this.lastLocation;
   }
 
@@ -141,7 +140,7 @@ export default class GeoXpWebGeolocation {
    * Enables / disables geolocation updates
    * @param enabled enabled or disabled
    */
-  public toggleUpdates (enabled: boolean) {
+  public toggleUpdates(enabled: boolean) {
     if (enabled) {
       const subId = navigator.geolocation.watchPosition(this.geoSuccess, this.geoError, this.config);
 
@@ -160,7 +159,7 @@ export default class GeoXpWebGeolocation {
    * @param location current location as provided by geolocation API
    * @hidden
    */
-  private geoSuccess (position: GeolocationPosition) {
+  private geoSuccess(position: GeolocationPosition) {
     if (!position) {
       console.error('[GeoXpWebGeolocation.geoSuccess] position missing or incorrect format');
       return;
@@ -169,7 +168,7 @@ export default class GeoXpWebGeolocation {
       timestamp: position.timestamp,
       lat: position.coords.latitude,
       lon: position.coords.longitude,
-      accuracy: position.coords.accuracy
+      accuracy: position.coords.accuracy,
     };
 
     // Sets last registered location
@@ -187,7 +186,7 @@ export default class GeoXpWebGeolocation {
    * @param error - error as sent from geolocation API
    * @hidden
    */
-  private geoError (error: GeolocationPositionError) {
+  private geoError(error: GeolocationPositionError) {
     console.error('[GeoXpWebGeolocation.geoError] geolocation error', error);
   }
 
@@ -196,7 +195,7 @@ export default class GeoXpWebGeolocation {
    * @param eventName - 'location'
    * @param listener - event listener
    */
-  public on<K> (eventName: Key<K, GeoXpWebGeolocationEvent>, listener: Listener<K, GeoXpWebGeolocationEvent>) {
+  public on<K>(eventName: Key<K, GeoXpWebGeolocationEvent>, listener: Listener<K, GeoXpWebGeolocationEvent>) {
     if (typeof listener !== 'function') {
       console.error('[GeoXpWebGeolocation.on] listener must be a function');
       return;
@@ -210,7 +209,10 @@ export default class GeoXpWebGeolocation {
    * @param eventName - 'location'
    * @param listener - event listener
    */
-  public once<K> (eventName: Key<K, GeoXpWebGeolocationEvent>, listener: Listener<K, GeoXpWebGeolocationEvent>) {
+  public once<K>(
+    eventName: Key<K, GeoXpWebGeolocationEvent>,
+    listener: Listener<K, GeoXpWebGeolocationEvent>
+  ) {
     if (typeof listener !== 'function') {
       console.error('[GeoXpWebGeolocation.once] listener must be a function');
       return;
@@ -224,7 +226,10 @@ export default class GeoXpWebGeolocation {
    * @param eventName - 'location'
    * @param listener - event listener
    */
-  public off<K> (eventName: Key<K, GeoXpWebGeolocationEvent>, listener: Listener<K, GeoXpWebGeolocationEvent>) {
+  public off<K>(
+    eventName: Key<K, GeoXpWebGeolocationEvent>,
+    listener: Listener<K, GeoXpWebGeolocationEvent>
+  ) {
     if (typeof listener !== 'function') {
       console.error('[GeoXpWebGeolocation.off] listener must be a function');
       return;
@@ -233,3 +238,5 @@ export default class GeoXpWebGeolocation {
     this.event.off(eventName, listener);
   }
 }
+
+export type { GeoXpWebGeolocationConfig, GeoXpGeolocation, GeoXpWebGeolocationEvent };

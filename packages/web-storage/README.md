@@ -11,7 +11,13 @@ It can be used in any web browser environment.
 ***
 
 ## **Installation**
-`npm install @mezzo-forte/geoxp/web-storage`
+```bash
+# npm
+npm install @geoxp/web-storage
+
+# yarn
+yarn add @geoxp/web-storage
+```
 
 ## **Contents**
 * [Usage](#usage)
@@ -26,14 +32,14 @@ It can be used in any web browser environment.
 
 ***
 
-## <a name="usage"></a> **Usage**
+## **Usage**
 GeoXpWebStorage is intended for use as a singleton instance. It has to be created once the application starts, based on a configuration object.
 
-### <a name="instance-creation"></a> **Instance creation**
+### **Instance creation**
 ```javascript
 // import modules
-import GeoXpCore from '@mezzo-forte/geoxp/core';
-import GeoXpWebStorage from '@mezzo-forte/geoxp/web-storage';
+import GeoXpCore from '@geoxp/core';
+import GeoXpWebStorage from '@geoxp/web-storage';
 
 // create configuration object
 const { coreConfig, storageConfig } = { /* your configuration here */ };
@@ -44,7 +50,7 @@ const geoXpWebStorage = new GeoXpWebStorage(geoXpCore, storageConfig);
 
 ```
 
-### <a name="configuration"></a> **Configuration**
+### **Configuration**
 GeoXpWebStorage, once created, works without any external intervention. To provide this high level of automation, it has to be accurately configured according to the desired application.
 The configuration is provided as a json object.
 
@@ -57,7 +63,7 @@ config: {
 }
 ```
 
-### <a name="reload-and-disposal"></a> **Reload and disposal**
+### **Reload and disposal**
 
 ```javascript
 // create the GeoXp instances
@@ -72,7 +78,7 @@ geoXpWebStorage.reload(storageConfig);
 geoXpWebStorage.clearAll();
 ```
 
-### <a name="api"></a> **API**
+### **API**
 All GeoXpWebStorage methods are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
 
 ***
@@ -80,25 +86,26 @@ All GeoXpWebStorage methods are available in the [documentation page](https://me
 ## Contributing
 
 To contribute to this project, fork the repository, work on a development branch and open a MR.
-Remember to update the changelog (CHANGELOG.md)!
+**Remember to update the changelog (CHANGELOG.md)!**
 
-**Repo admins**: to release a new version, follow these steps:
-* verify and test changes
-* verify changelog has been updated
-* merge MR in `master`
-* release a new version with `npm run release --vers=X.Y.Z`
-* create a new release in the release section
+> **For repo admins**
+> To release a new version, follow these steps:
+> * verify and test changes
+> * verify changelog has been updated
+> * merge MR in `main`
+> * publish a new version
+> * create a new release in the release section
 
-
-***
-
-## <a name="examples"></a> Examples
-Some configuration examples, for different kind of patterns, can be found inside the [example-patterns](https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/tree/master/example-patterns).
-A basic application, with event usage, can be found inside the [example-web](https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/tree/master/example-web) folder.
 
 ***
 
-## <a name="credits"></a> Credits
+## Examples
+* Some configuration examples, for different kind of patterns, can be found inside the [examples/guides](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/guides).
+* A basic web application, with event usage, can be found inside the [examples/web](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web) folder.
+
+***
+
+## Credits
 * concept - [Mezzo Forte](https://mezzoforte.design/?lang=en)
 * development - Francesco Cretti & Giuliano Buratti
 * music for example application - [Bensound](https://www.bensound.com)

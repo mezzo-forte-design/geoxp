@@ -1,6 +1,6 @@
 /**
- * Common definitions shared by all GeoXp modules/plugins
- * @module GeoXpCommon
+ * Definitions for basic GeoXp concepts
+ * @module GeoXpBasicTypes
  */
 
 /** GeoXpGeolocation */
@@ -27,10 +27,10 @@ export interface GeoXpSpotPosition {
   lon: number;
 
   /**  Position inner radius [meters] */
-  radius: number;
+  radius?: number;
 
   /** Position deadband extent past inner radius [meters] */
-  deadband: number;
+  deadband?: number;
 
   /** Radius for content prefetching [rate of radius] */
   fetch?: number;
@@ -56,3 +56,5 @@ export interface GeoXpSpot {
   /** Marks last spot in pattern */
   last?: boolean;
 }
+
+export type GetVisitedSpotsCallback = (patternId: string) => string[] | Promise<string[]> | undefined;

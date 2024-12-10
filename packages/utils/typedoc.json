@@ -1,0 +1,7 @@
+{
+  "extends": ["../../typedoc.base.json"],
+  "name": "Utilies Module",
+  "entryPoints": ["./"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "tsconfig.json"
+}

@@ -3,8 +3,8 @@
  * @module
  */
 
-import { GeoXpSpot } from './common';
-import { GeoXpCoreConfigPattern } from './config';
+import type { GeoXpSpot } from './common';
+import type { GeoXpCoreConfigPattern } from './config';
 
 export interface GeoXpCorePattern {
   cfg: GeoXpCoreConfigPattern;
