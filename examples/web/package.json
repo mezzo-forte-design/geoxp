@@ -1,0 +1,36 @@
+{
+  "name": "example-geoxp-web",
+  "version": "0.1.0",
+  "description": "MezzoForte GeoXp example Web Application",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "build": "rollup -c --bundleConfigAsCjs",
+    "dev": "SERVE=true rollup -c --bundleConfigAsCjs"
+  },
+  "contributors": [
+    {
+      "name": "Giuliano Buratti",
+      "email": "gbcode.it@gmail.com"
+    },
+    {
+      "name": "Francesco Cretti",
+      "email": "francesco.cretti@gmail.com"
+    }
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@geoxp/core": "*",
+    "@geoxp/web-audio": "*",
+    "@geoxp/web-geolocation": "*",
+    "@geoxp/web-storage": "*"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-url": "^8.0.2",
+    "rollup": "^4.24.0",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-serve": "^1.1.1"
+  }
+}

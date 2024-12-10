@@ -1,6 +1,6 @@
 /**
  * Configuration object structure
- * @module Config
+ * @module GeoXpCoreConfigTypes
  */
 
 import { GeoXpSpot } from './common';
@@ -48,4 +48,11 @@ export interface GeoXpCoreConfig {
 
   /** Core options */
   options?: GeoXpCoreConfigOptions;
+}
+
+export interface SanitisedConfig {
+  /** Core patterns array */
+  patterns: GeoXpCoreConfigPattern[];
+  /** Core options */
+  options: Required<GeoXpCoreConfigOptions>;
 }

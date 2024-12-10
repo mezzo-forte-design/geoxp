@@ -1,0 +1,7 @@
+{
+  "extends": ["../../typedoc.base.json"],
+  "name": "Web Environment Wrapper",
+  "entryPoints": ["./"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "tsconfig.json"
+}

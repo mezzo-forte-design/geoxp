@@ -1,9 +1,11 @@
 {
   "files": [],
   "references": [
+    { "path": "packages/utils" },
     { "path": "packages/core" },
     { "path": "packages/web-audio" },
     { "path": "packages/web-geolocation" },
-    { "path": "packages/web-storage" }
+    { "path": "packages/web-storage" },
+    { "path": "packages/web" },
   ]
 }

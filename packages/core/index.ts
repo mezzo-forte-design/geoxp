@@ -1,21 +1,15 @@
 /**
  * GeoXpCore provides content playback coordination based on user location
- * @module GeoXpCore
+ * @module GeoXpCoreClass
  * */
 
+import { isNumber } from '@geoxp/utils';
+import type { Listener, Key } from '@geoxp/utils';
 import { EventEmitter } from 'events';
-import { GeoXpSpot, GeoXpGeolocation } from './src/types/common';
-import { GeoXpCoreConfig } from './src/types/config';
-import { GeoXpCorePattern, GeoXpCoreEvent } from './src/types/module';
-import {
-  Key,
-  Listener,
-  forEachSpotInPatterns,
-  getSpotDistances,
-  getSpotFromRef,
-  isNumber,
-  sanitiseConfig
-} from './src/utils';
+import type { GeoXpSpot, GeoXpGeolocation, GetVisitedSpotsCallback } from './src/types/common';
+import type { GeoXpCoreConfig, SanitisedConfig } from './src/types/config';
+import type { GeoXpCorePattern, GeoXpCoreEvent } from './src/types/module';
+import { forEachSpotInPatterns, getSpotDistances, getSpotFromRef, sanitiseConfig } from './src/utils';
 import { FORCE_ACCURACY } from './src/constants';
 
 /**
@@ -24,24 +18,27 @@ import { FORCE_ACCURACY } from './src/constants';
 export default class GeoXpCore {
   /**
    * Function to get stored visited spots
-   * @param patternId Id of pattern for storage retrieval
-   * @returns array of stored visited spotIds for a specific pattern
+   * @param callback A function that:
+   *   - takes the ID of pattern for storage retrieval as argument
+   *   - returns an array of stored visited spotIds for a specific pattern
+   *   - it can also return a Promise if using an asyncronous storage method (e.g. Node fs)
+   *   - it returns undefined is no entries correspond to the provided ID
    */
-  public set getStoredVisitedSpots (callback: (patternId: string) => Promise<string[]> | string[]) {
+  public set getStoredVisitedSpots(callback: GetVisitedSpotsCallback) {
     this._getStoredVisitedSpots = callback;
     this.loadPatterns(false);
 
     console.info('[GeoXpCore.getStoredVisitedSpots] storage reloaded');
   }
 
-  public get getStoredVisitedSpots (): ((patternId: string) => Promise<string[]> | string[]) | undefined {
+  public get getStoredVisitedSpots(): GetVisitedSpotsCallback | undefined {
     return this._getStoredVisitedSpots;
   }
 
   /**
    * @hidden
    */
-  private _getStoredVisitedSpots?: (patternId: string) => Promise<string[]> | string[];
+  private _getStoredVisitedSpots?: GetVisitedSpotsCallback;
 
   /**
    * Function to set stored visited spots
@@ -54,19 +51,19 @@ export default class GeoXpCore {
    * Event emitter
    * @hidden
    */
-  private event = new EventEmitter<GeoXpCoreEvent>();
+  private readonly event = new EventEmitter<GeoXpCoreEvent>();
 
   /**
    * Core configuration
    * @hidden
    */
-  private config: GeoXpCoreConfig;
+  private config: SanitisedConfig;
 
   /**
    * Patterns map
    * @hidden
    */
-  private patterns = new Map<string, GeoXpCorePattern>();
+  private readonly patterns = new Map<string, GeoXpCorePattern>();
 
   /**
    * Current forced spot id
@@ -81,18 +78,46 @@ export default class GeoXpCore {
   private lastLocation?: GeoXpGeolocation;
 
   /**
+   * Wheter to throw errors or just log
+   * @hidden
+   */
+  private readonly throwErrors: boolean;
+
+  /**
    * Constructor for GeoXpCore Class
    * @param config GeoXpCore configuration
+   * @param options Options for GeoXpCore
+   * @param options.throwErrors Whether errors should be throw or not. Throw is default behavior
    * @returns GeoXpCore singleton instance
    */
-  constructor (config: GeoXpCoreConfig) {
+  constructor(
+    config: GeoXpCoreConfig,
+    options?: {
+      throwErrors?: boolean;
+    }
+  ) {
+    // wheter errors are thrown or not
+    this.throwErrors = options?.throwErrors ?? true;
+
     // inits config
     this.config = sanitiseConfig(config);
 
     // inits the instance based on config
-    this.init(config);
+    this.init();
 
-    console.info('[GeoXpCore] instance created', this);
+    console.info('[GeoXpCore] instance created');
+  }
+
+  /**
+   * Handles errors
+   * @hidden
+   */
+  private error(msg: string, ...args: unknown[]) {
+    if (this.throwErrors) {
+      throw new Error(msg);
+    } else {
+      console.error(msg, args);
+    }
   }
 
   /**
@@ -100,10 +125,7 @@ export default class GeoXpCore {
    * @param config Experience config options
    * @hidden
    */
-  private init (config: GeoXpCoreConfig) {
-    // init variables
-    this.config = sanitiseConfig(config);
-
+  private init() {
     // reloads patterns
     this.loadPatterns(true);
   }
@@ -113,7 +135,7 @@ export default class GeoXpCore {
    * @param restart [restart = false] inits pattern spot memories
    * @hidden
    */
-  private async loadPatterns (restart = false) {
+  private async loadPatterns(restart = false) {
     if (!this.config) return;
 
     // clears all
@@ -122,7 +144,7 @@ export default class GeoXpCore {
     }
 
     // builds all enabled patterns
-    this.config.patterns.map(async (cfg) => {
+    this.config.patterns.forEach(async (cfg) => {
       const pattern = this.patterns.get(cfg.id);
 
       if (pattern) {
@@ -145,7 +167,7 @@ export default class GeoXpCore {
           cfg,
           visited,
           inside: [],
-          active: []
+          active: [],
         };
 
         this.patterns.set(cfg.id, toAdd);
@@ -157,16 +179,17 @@ export default class GeoXpCore {
    * Loads a new config
    * @param config GeoXpCore configuration
    */
-  public reload (config: GeoXpCoreConfig) {
-    this.init(config);
+  public reload(config: GeoXpCoreConfig) {
+    this.config = sanitiseConfig(config);
+    this.init();
     console.info('[GeoXpCore.reload] config reloaded', config);
   }
 
   /**
    * Enables specific pattern
-   * @param id pattern id to enable
+   * @param patternId pattern id to enable
    */
-  public enablePattern (patternId: string) {
+  public enablePattern(patternId: string) {
     // finds pattern in map
     const pattern = this.patterns.get(patternId);
     if (pattern) {
@@ -178,7 +201,7 @@ export default class GeoXpCore {
         this.geolocationUpdate(this.lastLocation);
       }
     } else {
-      console.error('[GeoXpCore.enablePattern] pattern id not found, cannot enable', patternId);
+      this.error(`[GeoXpCore.enablePattern] pattern id [${patternId}] not found, cannot enable`);
     }
   }
 
@@ -186,14 +209,14 @@ export default class GeoXpCore {
    * Disables specific pattern
    * @param patternId pattern id to disable
    */
-  public disablePattern (patternId: string) {
+  public disablePattern(patternId: string) {
     // finds pattern in map
     const pattern = this.patterns.get(patternId);
     if (pattern) {
       // pattern disabled
       pattern.cfg.disabled = true;
     } else {
-      console.error('[GeoXpCore.disablePattern] pattern id not found, cannot disable', patternId);
+      this.error(`[GeoXpCore.disablePattern] pattern id [${patternId}] not found, cannot disable`);
       return;
     }
 
@@ -205,7 +228,7 @@ export default class GeoXpCore {
    * Checks to see if there's any active spots
    * @returns at least one spot is active
    */
-  public hasActiveSpots () {
+  public hasActiveSpots() {
     let someActive = false;
     this.patterns.forEach((pattern) => {
       if (pattern.active.length > 0) {
@@ -221,11 +244,11 @@ export default class GeoXpCore {
    * @param patternId pattern id
    * @returns array of visited spots
    */
-  public getVisitedSpots (patternId?: string) {
+  public getVisitedSpots(patternId?: string) {
     if (patternId) {
       const pattern = this.patterns.get(patternId);
       if (!pattern) {
-        console.error('[GeoXpCore.getVisitedSpots] pattern not found', patternId);
+        this.error(`[GeoXpCore.getVisitedSpots] pattern id [${patternId}] not found`);
         return;
       }
 
@@ -242,7 +265,7 @@ export default class GeoXpCore {
    * @param _spot spot to find
    * @returns spot
    */
-  public getSpot (_spot: GeoXpSpot | string): GeoXpSpot | undefined {
+  public getSpot(_spot: GeoXpSpot | string): GeoXpSpot | undefined {
     const { spot } = getSpotFromRef(this.patterns, _spot);
     return spot;
   }
@@ -252,17 +275,19 @@ export default class GeoXpCore {
    * If no spot id provided, marks all inside spots as unvisited
    * @param _spot spot to unvisit
    */
-  public replaySpot (_spot?: GeoXpSpot | string) {
+  public replaySpot(_spot?: GeoXpSpot | string) {
     const { spot, pattern } = getSpotFromRef(this.patterns, _spot);
     if (spot && pattern) {
       // mark specific spot as unvisited
       if (pattern.visited.includes(spot.id)) {
-        pattern.visited = pattern.visited.filter((e) => e !== spot.id);
+        pattern.visited = pattern.visited.filter((visited) => visited !== spot.id);
       }
     } else {
       this.patterns.forEach((pattern) => {
         // remove all inside if not active from visited
-        pattern.visited = pattern.visited.filter((e) => !pattern.inside.includes(e) || pattern.active.includes(e));
+        pattern.visited = pattern.visited.filter(
+          (e) => !pattern.inside.includes(e) || pattern.active.includes(e)
+        );
       });
     }
 
@@ -281,11 +306,11 @@ export default class GeoXpCore {
    * @param _spot spot to force
    * @returns error
    */
-  public canForceSpot (_spot: GeoXpSpot | string): null | string {
+  public canForceSpot(_spot: GeoXpSpot | string): null | string {
     const { spot, pattern } = getSpotFromRef(this.patterns, _spot);
 
     if (!spot || !pattern) {
-      console.error('[GeoXpCore.canForceSpot] spot not found', _spot);
+      this.error(`[GeoXpCore.canForceSpot] spot [${typeof _spot === 'string' ? _spot : _spot.id}] not found`);
       return 'spot not found';
     }
 
@@ -294,11 +319,11 @@ export default class GeoXpCore {
 
     // location never updated
     if (!this.lastLocation) {
-      console.error('[GeoXpCore.canForceSpot] location never updated');
+      this.error('[GeoXpCore.canForceSpot] location never updated');
       return 'location update not received yet';
     }
 
-    const { distance, inside } = getSpotDistances(this.lastLocation, spot, this.config.options!);
+    const { distance, inside } = getSpotDistances(this.lastLocation, spot, this.config.options);
 
     // checks for max allowed distance
     if (distance - this.lastLocation.accuracy > inside) {
@@ -327,7 +352,7 @@ export default class GeoXpCore {
    * @param _spot spot to force
    * @returns error
    */
-  public forceSpot (_spot: GeoXpSpot | string): null | string {
+  public forceSpot(_spot: GeoXpSpot | string): null | string {
     // check if spot can be forced
     const canForceSpotError = this.canForceSpot(_spot);
     if (canForceSpotError) {
@@ -338,13 +363,17 @@ export default class GeoXpCore {
     const { spot, pattern } = getSpotFromRef(this.patterns, _spot);
 
     if (!spot || !pattern) {
-      console.error('[GeoXpCore.forceSpot] spot not found, cannot activate', _spot);
+      this.error(
+        `[GeoXpCore.forceSpot] spot [${typeof _spot === 'string' ? _spot : _spot.id}] not found, cannot activate`
+      );
       return 'spot not found';
     }
 
     // checks if pattern enabled
     if (pattern.cfg.disabled) {
-      console.error('[GeoXpCore.forceSpot] pattern is disabled, cannot force', { spot, pattern });
+      this.error(
+        `[GeoXpCore.forceSpot] pattern is disabled, cannot force spot [${typeof _spot === 'string' ? _spot : _spot.id}]`
+      );
       return 'pattern is disabled';
     }
 
@@ -356,7 +385,7 @@ export default class GeoXpCore {
 
         if (toDeactivate) {
           // removes from active spots
-          pattern.active = pattern.active.filter((e) => e !== toDeactivate.id);
+          pattern.active = pattern.active.filter((active) => active !== toDeactivate.id);
 
           // deactivates spot by outgoing it
           this.event.emit('inactive', toDeactivate);
@@ -381,7 +410,7 @@ export default class GeoXpCore {
   /**
    * Stops and removes any forced spot
    */
-  public stopForcedSpot () {
+  public stopForcedSpot() {
     // check for force active
     if (!this.forced) return;
 
@@ -414,14 +443,14 @@ export default class GeoXpCore {
    *
    * @param location geolocation update
    */
-  public geolocationUpdate (location: GeoXpGeolocation) {
+  public geolocationUpdate(location: GeoXpGeolocation) {
     if (!this.config) return;
 
     // if forced ignore location update
     if (this.forced) return;
 
     if (!location || !isNumber(location.lat) || !isNumber(location.lon) || !isNumber(location.accuracy)) {
-      console.error('[GeoXpCore.geolocationUpdate] location missing or incorrect format', location);
+      this.error('[GeoXpCore.geolocationUpdate] location missing or incorrect format');
       return;
     }
 
@@ -429,10 +458,10 @@ export default class GeoXpCore {
     this.lastLocation = location;
 
     // exec only if locaiont accuracy is < than accuracy threshold
-    if (location.accuracy > this.config.options!.accuracy!) {
+    if (location.accuracy > this.config.options.accuracy) {
       console.info('[GeoXpCore.geolocationUpdate] location update refused, bad accuracy', {
-        target: this.config.options!.accuracy!,
-        current: location.accuracy
+        target: this.config.options.accuracy,
+        current: location.accuracy,
       });
       return;
     }
@@ -445,15 +474,15 @@ export default class GeoXpCore {
 
     // deactivate spots
     forEachSpotInPatterns(this.patterns, (pattern, spot) => {
-      const { distance, outside } = getSpotDistances(location, spot, this.config?.options!);
+      const { distance, outside } = getSpotDistances(location, spot, this.config?.options);
 
       if (distance > outside) {
         // spot is outside
-        pattern.inside = pattern.inside.filter((e) => e !== spot.id);
+        pattern.inside = pattern.inside.filter((inside) => inside !== spot.id);
 
         if (pattern.active.includes(spot.id)) {
           // spot is active, deactivate
-          pattern.active = pattern.active.filter((e) => e !== spot.id);
+          pattern.active = pattern.active.filter((active) => active !== spot.id);
           this.event.emit('inactive', spot);
         }
       }
@@ -461,7 +490,7 @@ export default class GeoXpCore {
 
     // activate new spots, prefetch incoming spots
     forEachSpotInPatterns(this.patterns, (pattern, spot) => {
-      const { distance, inside, fetch } = getSpotDistances(location, spot, this.config?.options!);
+      const { distance, inside, fetch } = getSpotDistances(location, spot, this.config?.options);
 
       if (distance <= inside) {
         // first time inside (if user stays in the same location, content is not repeated)
@@ -490,7 +519,7 @@ export default class GeoXpCore {
 
     // activate spots to replay or visited
     forEachSpotInPatterns(this.patterns, (pattern, spot) => {
-      const { distance, inside } = getSpotDistances(location, spot, this.config?.options!);
+      const { distance, inside } = getSpotDistances(location, spot, this.config?.options);
 
       if (distance <= inside) {
         // first time inside (if user stays in the same location, content is not repeated)
@@ -504,7 +533,7 @@ export default class GeoXpCore {
                 if (pattern.cfg.replay) this.replaySpot();
                 else this.event.emit('visited', spot);
               }
-            }, this.config!.options!.visitedFilter!);
+            }, this.config.options.visitedFilter);
           }
         }
       }
@@ -512,7 +541,7 @@ export default class GeoXpCore {
 
     // sets spots first time inside (if user stays in the same location, content is not repeated)
     forEachSpotInPatterns(this.patterns, (pattern, spot) => {
-      const { distance, inside } = getSpotDistances(location, spot, this.config?.options!);
+      const { distance, inside } = getSpotDistances(location, spot, this.config?.options);
 
       if (distance <= inside) {
         // first time inside (if user stays in the same location, content is not repeated)
@@ -527,11 +556,13 @@ export default class GeoXpCore {
    * Confirm spot content activation
    * @param _spot activated spot
    */
-  public spotActivated (_spot: GeoXpSpot | string) {
+  public spotActivated(_spot: GeoXpSpot | string) {
     const { spot, pattern } = getSpotFromRef(this.patterns, _spot);
 
     if (!spot || !pattern) {
-      console.error('[GeoXpCore.spotActivated] missing spot reference', _spot);
+      this.error(
+        `[GeoXpCore.spotActivated] spot [${typeof _spot === 'string' ? _spot : _spot.id}] not found`
+      );
       return;
     }
 
@@ -561,16 +592,18 @@ export default class GeoXpCore {
    * Confirm spot deactivation (either stopped or finished)
    * @param _spot deactivated spot
    */
-  public spotDeactivated (_spot: GeoXpSpot | string) {
+  public spotDeactivated(_spot: GeoXpSpot | string) {
     const { spot, pattern } = getSpotFromRef(this.patterns, _spot);
 
     if (!spot || !pattern) {
-      console.error('[GeoXpCore.spotDeactivated] missing spot reference', _spot);
+      this.error(
+        `[GeoXpCore.spotDeactivated] spot [${typeof _spot === 'string' ? _spot : _spot.id}] not found`
+      );
       return;
     }
 
     // remove from active
-    pattern.active = pattern.active.filter((e) => e !== spot.id);
+    pattern.active = pattern.active.filter((active) => active !== spot.id);
 
     // if matches forced spot, remove force
     let removeForce = false;
@@ -591,9 +624,9 @@ export default class GeoXpCore {
    * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete'
    * @param listener event listener
    */
-  public on<K> (eventName: Key<K, GeoXpCoreEvent>, listener: Listener<K, GeoXpCoreEvent>) {
+  public on<K>(eventName: Key<K, GeoXpCoreEvent>, listener: Listener<K, GeoXpCoreEvent>) {
     if (typeof listener !== 'function') {
-      console.error('[GeoXpCore.on] listener must be a function');
+      this.error('[GeoXpCore.on] listener must be a function');
       return;
     }
 
@@ -605,9 +638,9 @@ export default class GeoXpCore {
    * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete'
    * @param listener event listener
    */
-  public once<K> (eventName: Key<K, GeoXpCoreEvent>, listener: Listener<K, GeoXpCoreEvent>) {
+  public once<K>(eventName: Key<K, GeoXpCoreEvent>, listener: Listener<K, GeoXpCoreEvent>) {
     if (typeof listener !== 'function') {
-      console.error('[GeoXpCore.once] listener must be a function');
+      this.error('[GeoXpCore.once] listener must be a function');
       return;
     }
 
@@ -619,12 +652,18 @@ export default class GeoXpCore {
    * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete'
    * @param listener event listener
    */
-  public off<K> (eventName: Key<K, GeoXpCoreEvent>, listener: Listener<K, GeoXpCoreEvent>) {
+  public off<K>(eventName: Key<K, GeoXpCoreEvent>, listener: Listener<K, GeoXpCoreEvent>) {
     if (typeof listener !== 'function') {
-      console.error('[GeoXpCore.off] listener must be a function');
+      this.error('[GeoXpCore.off] listener must be a function');
       return;
     }
 
     this.event.off(eventName, listener);
   }
+
+  public sum(a: number, b: number): number {
+    return a + b;
+  }
 }
+
+export type { GeoXpSpot, GeoXpGeolocation, GeoXpCoreConfig, GeoXpCorePattern, GeoXpCoreEvent };

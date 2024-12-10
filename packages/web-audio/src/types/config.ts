@@ -1,6 +1,6 @@
 /**
  * Configuration object structure
- * @module Config
+ * @module WebAudioConfigTypes
  */
 
 /** GeoXpWebAudioConfigSound */
@@ -24,16 +24,16 @@ export type GeoXpWebAudioConfigSound = {
 /** GeoXpWebAudioConfigOptions */
 export type GeoXpWebAudioConfigOptions = {
   /** Url for audio test sound */
-  test: string;
+  test?: string;
 
   /** Url for silence sound */
-  silence: string;
+  silence?: string;
 
   /** fade in time [milliseconds] */
-  fadeInTime: number;
+  fadeInTime?: number;
 
   /** fade out time [milliseconds] */
-  fadeOutTime: number;
+  fadeOutTime?: number;
 };
 
 /** GeoXpWebAudioConfig */
@@ -42,5 +42,12 @@ export type GeoXpWebAudioConfig = {
   sounds: GeoXpWebAudioConfigSound[];
 
   /** module config options */
-  options: GeoXpWebAudioConfigOptions;
+  options?: GeoXpWebAudioConfigOptions;
+};
+
+export type SanitisedConfig = {
+  /** sounds config array */
+  sounds: GeoXpWebAudioConfigSound[];
+  /** required module config options */
+  options: Required<GeoXpWebAudioConfigOptions>;
 };

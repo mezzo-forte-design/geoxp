@@ -15,7 +15,13 @@ An API and methods documentation page is available [at this link](https://mezzo-
 ***
 
 ## **Install**
-`npm install @mezzo-forte/geoxp/core`
+```bash
+# install using npm
+npm install @geoxp/core
+
+# or using yarn
+yarn add @geoxp/core
+```
 
 ## **Contents**
 * [Key concepts](#key-concepts)
@@ -56,22 +62,22 @@ An API and methods documentation page is available [at this link](https://mezzo-
 
 ***
 
-## <a name="key-concepts"></a> **Key concepts**
-### <a name="positions"></a> **Positions**
+## **Key concepts**
+### **Positions**
 A GeoXp position is a circular area defined by two geographical coordinates (`{lat, lon}`) a radius and a deadband.
 The inner _radius_ defines the **_inside_** position status.
 (_radius_ + _deadband_) defines an outer radius that serves hysteresis purposes to avoid abrupt status changes.
 
-### <a name="minimum-accuracy"></a> **Minimum accuracy**
+### **Minimum accuracy**
 Every geographical data, coming from the geolocation system, that does not fulfill accuracy requrements will be ignored.
 
-### <a name="spots"></a> **Spots**
+### **Spots**
 A GeoXp spot is the core entity of an experience and represents a relation between a position and an audio content. For example, if you want the user to listen the file `audio_1.mp3` in the position `position_A`, it will be necessary to create a new spot that associate the `audio_1` content to the `position_A `geographical coordinates (in the [**Usage**](#usage) section we describe in detail how to make this configuration).
 
 This is to say, the same media content can be linked to multiple positions, and multiple media can be linked to one position.
 
 
-### <a name="behavior"></a> **Behavior**
+### **Behavior**
 The event behavior for a GeoXp spot is designed as follows:
 
 <img src="https://mezzoforte.design/img/geoxp-spot.png" alt="GeoXp spot" width="550"/>
@@ -80,23 +86,23 @@ User enters the position circle (its _inside_ area), spot becomes _active_, asso
 User leaves the position _inside_ area, but he’s still inside the deadband, the content is still playing.
 User leaves the deadband, spot becomes _outgoing_, the audio content fades out and stops.
 
-### <a name="patterns"></a> **Patterns**
+### **Patterns**
 A list of spots is called a pattern. Patterns define the overall behavior of its spots.
 Multiple patterns could be active at any time, providing multiple simultaneous experiences (eg: one pattern defines what speeches to play in certain positions, one pattern defines background audio effects to play alongside the speeches, using the same positions).
 Patterns are separate entities that don’t talk to each other, spots order and content overlap management are independent between patterns.
 
-### <a name="spots-order"></a> **Spots order**
+### **Spots order**
 GeoXP provides limited content queue management. This can be achieved using the spot “after” and “notAfter” properties.
 If after is defined, GeoXp will not reproduce a certain spot content unless the after spot has already been played.
 If notAfter is defined, GeoXp will not reproduce a certain spot content if the notAfter spot has already been played.
 
-### <a name="content-replay"></a> **Content replay**
+### **Content replay**
 When content starts playing, a spot becomes `visited`.
 When the user reenters a visited spot, geoXp will not play its content. It will throw a notification instead, to let the user choose what to do.
 This behavior can be overridden using the pattern `replay` option. In this case, when the user reenters a visited spot, its content replays as usual.
 See [Spot content replay](#spots-content-replay) for details.
 
-### <a name="pattern-storage"></a> **Storage**
+### **Storage**
 As default behavior, when GeoXp instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling storage for patterns, by defining the `getStoredVisitedSpots` and `setStoredVisitedSpots` methods. Storage solution can be anything (eg: cookies/localstorage on browser, fs in node, etc.). GeoXp Core storage is managed automatically by our storage plugins.
 
 When storage is enabled, an enitity for each pattern is updated every time a new spot is visited.
@@ -106,7 +112,7 @@ This storage can be deleted with different strategies:
 * when a specific spot, flagged with the “last” option is activated (core sends out a `last` event).
 * manually (depending on the storage method used).
 
-### <a name="manual-mode"></a> **Manual mode**
+### **Manual mode**
 Sometimes geolocation data could be bad for unpredictable reasons, nearby buildings or trees could block part of the satellites communications, electromagnetic interference by power lines and so on, resulting in poor location accuracy.
 When accuracy is too low, manual spot activation mode becomes available.
 This mode overrides all experience playback rules, so geoXp enables it only for really low accuracy (greater than 100m), and only if user is not too far away from the intended spot playback position (in the case of slow location update time and the user has reached a new spot before an update).
@@ -116,13 +122,13 @@ See [Forcing spots activation](#forcing-spots-activation) for details.
 
 **IMPORTANT - if spot.position is not defined, all rules above don't apply and the spot can be forced at any time. This mechanism can be useful in case one wants to integrate a simpler media player (eg: along a geolocated experience, some spots need to be be triggered manually by the user).**
 
-## <a name="usage"></a> **Usage**
+## **Usage**
 GeoXp Core is intended for usage as a singleton instance. It has to be created once the application starts, based on a configuration object.
 
-## <a name="instance-creation"></a> **Instance creation**
+## **Instance creation**
 ```javascript
 // import module
-import GeoXpCore from '@mezzo-forte/geoxp/core';
+import GeoXpCore from '@geoxp/core';
 
 // create configuration object
 const config = { /* your configuration here */ };
@@ -132,7 +138,7 @@ const geoXpCore = new GeoXpCore(config);
 
 ```
 
-### <a name="configuration"></a> **Configuration**
+### **Configuration**
 GeoXpCore, once created, works without any external intervention. To provide this high level of automation, it has to be accurately configured according to the desired application.
 The configuration is provided as a json object.
 
@@ -173,7 +179,7 @@ config: {
 > **NOTE** - patterns are enabled by default. See [API](#api) to know how to disable or re-enable them
 
 
-### <a name="reload"></a> **Reload**
+### **Reload**
 
 ```javascript
 // Creates a new geoXp instance
@@ -183,7 +189,7 @@ const geoXpCore = new GeoXpCore(config);
 geoXpCore.reload(config);
 ```
 
-### <a name="events-subscription"></a> **Events subscription**
+### **Events subscription**
 GeoXpCore is meant to work automatically based on its configuration, so most of the interaction with it is based on events.
 Its event dispatcher (`geoXpCore.event`) is based on [Node.js EventEmitter](https://nodejs.org/api/events.html) and is responsible for events notification to outside subscribers.
 
@@ -194,7 +200,7 @@ Three main methods are wrappped by the `GeoXp` class:
 
 Available events are:
 
-#### <a name="spot-incoming"></a> **Spot incoming**
+#### **Spot incoming**
 
 ```javascript
 geoXpCore.on('incoming', spot => { /* ... */ })
@@ -202,7 +208,7 @@ geoXpCore.on('incoming', spot => { /* ... */ })
 
 Spot is nearby, start fetching content.
 
-#### <a name="spot-active"></a> **Spot active**
+#### **Spot active**
 
 ```javascript
 geoXpCore.on('active', spot => { /* ... */ })
@@ -211,7 +217,7 @@ geoXpCore.on('active', spot => { /* ... */ })
 Spot has been activated, media content should start.
 
 
-#### <a name="spot-inactive"></a> **Spot inactive**
+#### **Spot inactive**
 
 ```javascript
 geoXpCore.on('inactive', spot => { /* ... */ })
@@ -219,7 +225,7 @@ geoXpCore.on('inactive', spot => { /* ... */ })
 
 Spot has been deactivated, all related media content should stop.
 
-#### <a name="spot-visited"></a> **Spot visited**
+#### **Spot visited**
 
 ```javascript
 geoXpCore.on('visited', spot => { /* ... */ })
@@ -227,7 +233,7 @@ geoXpCore.on('visited', spot => { /* ... */ })
 
 User entered a spot which he already visited before. User should be able to choose whether to replay it or not.
 
-#### <a name="pattern-complete"></a> **Pattern complete**
+#### **Pattern complete**
 
 ```javascript
 geoXpCore.on('complete', patternId => { /* ... */ })
@@ -235,7 +241,7 @@ geoXpCore.on('complete', patternId => { /* ... */ })
 
 All spots in pattern have been visited.
 
-#### <a name="pattern-last"></a> **Pattern last spot**
+#### **Pattern last spot**
 
 ```javascript
 geoXpCore.on('last', patternId => { /* ... */ })
@@ -243,24 +249,24 @@ geoXpCore.on('last', patternId => { /* ... */ })
 
 Spot marked as `last` of pattern has been visited.
 
-## <a name="spots-content-replay"></a> **Spots content replay**
+## **Spots content replay**
 By default, when user reenters a spot he already visisted before, the spot isn't replayed; instead, a `visited` event for that spot is fired.
 The spot replay can be triggered calling the `replaySpot(id)` method, passing the id of the spot to replay. The spot is then marked as unvisited, and the playback starts immediately.
 Multiple spots could be linked to the same position, so multiple `visited` events could be fired at once. If you don't want to care about which spot is to be replayed, call the `replaySpot()` method with no argument, so all the spots linked to the current position are marked as unvisited, and replayed following the rules defined in configuration (eg: spot order).
 This behavior could be overridden using the `pattern.replay` option. If a pattern is set so, its spots will replay immediately, and no `visited` event is fired.
 
-## <a name="forcing-spots-activation"></a> **Forcing spots activation**
+## **Forcing spots activation**
 If GPS accuracy is low and user isn't too far away from a spot location, the spot can be activated manually using the `forceSpot(id)` method, passing the id of the spot to force.
 GeoXp then enters manual mode (internal geolocation updates are stopped, all other audio content is stopped) and activates the desired spot. When the playback is finished (or stopped), geoXp returns to automatic mode and the experience goes on as usual.
 If you want to know if manual mode is available, just call the `canForceSpot(id)` passing the id of the deisired spot. If rules for manual mode are not fulfilled, it returns and error string explaing the reason why it can't be forced. Otherwise it will return `undefined`.
 Forcing contents is always allowed for spots that does not have a geographic position associated: in this case the only way to reproduce the audio file is to invoke `forceSpot` method, and the rules described above are not applied.
 
-## <a name="api"></a> **API**
+## **API**
 All GeoXp core api are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
 
-## <a name="best-practices"></a> **Best practices**
+## **Best practices**
 
-### <a name="designing-configuration-for-a-specific-use"></a> Designing configuration for a specific use
+### Designing configuration for a specific use
 Behavior of geoXp covers a wide variety of applications.
 This broad approach means that, to guarantee the user experience good flow and consistency, some effort needs to be spent on adopting an optimal configuration for the desired result.
 
@@ -277,7 +283,7 @@ Now, let’s change application. GeoXp is used to play ambient sounds at certain
 
     `config.experience.patterns[x].replay = true`
 
-### <a name="positions-overlap"></a> Positions overlap
+### Positions overlap
 Unless content overlapping is desired, it’s better to avoid positions overlap when possible.
 
 If two pattern spots are actually near each other, try setting radiuses in a way that fencing doesn’t overlap (maybe by setting a small radius and a big deadband: user has to be close to the position for the content to start, but the content will not stop if he walks away).
@@ -287,25 +293,27 @@ If overlapping isn’t avoidable, make sure to apply filtering with `experience.
 ## Contributing
 
 To contribute to this project, fork the repository, work on a development branch and open a MR.
-Remember to update the changelog (CHANGELOG.md)!
+**Remember to update the changelog (CHANGELOG.md)!**
 
-**Repo admins**: to release a new version, follow these steps:
-* verify and test changes
-* verify changelog has been updated
-* merge MR in `master`
-* release a new version with `npm run release --vers=X.Y.Z`
-* create a new release in the release section
+> **For repo admins**
+> To release a new version, follow these steps:
+> * verify and test changes
+> * verify changelog has been updated
+> * merge MR in `main`
+> * publish a new version
+> * create a new release in the release section
 
-
-***
-
-## <a name="examples"></a> Examples
-Some configuration examples, for different kind of patterns, can be found inside the [example-patterns](https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/tree/master/example-patterns).
-A basic application, with event usage, can be found inside the [example-web](https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/tree/master/example-web) folder.
 
 ***
 
-## <a name="credits"></a> Credits
+## Examples
+* Some configuration examples, for different kind of patterns, can be found inside the [examples/guides](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/guides).
+* A basic web application, with event usage, can be found inside the [examples/web](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web) folder.
+* An example of GeoXp usage in a Node environment, can be found in [examples/node](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/node)
+
+***
+
+## Credits
 * concept - [Mezzo Forte](https://mezzoforte.design/?lang=en)
 * development - Francesco Cretti & Giuliano Buratti
 * music for example application - [Bensound](https://www.bensound.com)

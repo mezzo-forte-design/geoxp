@@ -1,18 +1,24 @@
 {
+  "private": true,
   "description": "Mezzo Forte GeoXp",
-  "main": "/dist/geoxp.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "eslint packages",
-    "eslint:fix": "eslint --fix packages",
-    "build": "npm run build -w core && npm run build:ext --workspaces --if-present",
-    "build:dev": "npm run build:dev -w core && npm run build:ext:dev --workspaces --if-present",
-    "build:clear": "npm run build:clear --workspaces --if-present",
-    "typecheck": "npm run build -w core && npm run typecheck:ext --workspaces --if-present",
-    "start:web": "cd example-web && webpack serve --content-base ./ --open",
-    "docs": "typedoc --options typedoc.json",
-    "release": "echo \"Releasing GeoXp v$npm_config_vers\" && npm run build && git add -f --all dist && git commit -m \"dist bundle\" && npm version $npm_config_vers && git push origin master --tags v$npm_config_vers && npm publish"
+  "keywords": [
+    "geolocation",
+    "audio",
+    "webaudio",
+    "audio experience",
+    "digital humanities",
+    "mezzo forte",
+    "cultural heritage"
+  ],
+  "homepage": "https://gitlab.com/mezzo-forte/geoxp#README",
+  "bugs": {
+    "url": "https://gitlab.com/mezzo-forte/geoxp/-/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/mezzo-forte/geoxp.git"
+  },
+  "license": "Apache-2.0",
   "contributors": [
     {
       "name": "Giuliano Buratti",
@@ -23,55 +29,47 @@
       "email": "francesco.cretti@gmail.com"
     }
   ],
-  "keywords": [
-    "geolocation",
-    "audio",
-    "webaudio",
-    "audio experience",
-    "digital humanities",
-    "mezzo forte"
+  "workspaces": [
+    "packages/*",
+    "examples/*"
   ],
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.com/mezzo-forte/mezzoforte-geoxp.git"
-  },
-  "homepage": "https://gitlab.com/mezzo-forte/mezzoforte-geoxp#README",
-  "bugs": {
-    "url": "https://gitlab.com/mezzo-forte/mezzoforte-geoxp/-/issues"
+  "scripts": {
+    "build": "lerna run build",
+    "build:clear": "lerna run build:clear",
+    "build:example-web": "lerna run build --scope=example-geoxp-web",
+    "commitlint": "commitlint --edit",
+    "dev": "lerna watch -- lerna run build --since",
+    "dev:example-web": "concurrently \"yarn dev\" \"cd examples/web && yarn dev\"",
+    "docs": "lerna run typecheck && typedoc --options typedoc.json",
+    "lint": "lerna run lint",
+    "lint:test": "lerna run lint:test",
+    "prepare": "husky || true",
+    "prepare:commit": "yarn typecheck && yarn prettify && yarn lint",
+    "prepare:publish": "yarn prepare:commit && yarn test",
+    "prettify": "lerna run prettify",
+    "prettify:test": "lerna run prettify:test",
+    "release": "echo \"Releasing GeoXp v$npm_config_vers\" && npm run build && git add -f --all dist && git commit -m \"dist bundle\" && npm version $npm_config_vers && git push origin master --tags v$npm_config_vers && npm publish",
+    "test": "lerna run test",
+    "typecheck": "lerna run typecheck"
   },
   "devDependencies": {
-    "@types/node": "^20.14.6",
-    "@typescript-eslint/eslint-plugin": "^7.13.1",
-    "@typescript-eslint/parser": "^7.13.1",
-    "better-docs": "^2.7.3",
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.2.0",
-    "eslint-webpack-plugin": "^3.0.1",
-    "fs-extra": "^10.0.0",
-    "ts-loader": "^9.5.1",
-    "typedoc": "^0.25.13",
-    "typedoc-plugin-merge-modules": "^5.1.0",
-    "typescript": "^5.4.5",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.92.1",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^3.11.3",
-    "webpack-merge": "^5.10.0"
-  },
-  "workspaces": [
-    "packages/core",
-    "packages/web-audio",
-    "packages/web-storage",
-    "packages/web-geolocation"
-  ],
-  "dependencies": {
-    "core": "^1.0.0",
-    "web-audio": "^1.0.0",
-    "web-geolocation": "^1.0.0",
-    "web-storage": "^1.0.0"
+    "@babel/core": "^7.26.0",
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.16.0",
+    "husky": "^9.1.7",
+    "lerna": "^8.1.8",
+    "prettier": "^3.4.2",
+    "rollup-plugin-polyfill-node": "^0.13.0",
+    "typedoc": "^0.27.4",
+    "typedoc-material-theme": "^1.2.0",
+    "typedoc-plugin-extras": "^3.1.0",
+    "typedoc-plugin-merge-modules": "^6.1.0",
+    "typescript": "^5.4.5"
   }
 }

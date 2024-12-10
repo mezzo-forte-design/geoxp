@@ -1,5 +1,19 @@
 {
-  "plugin": ["typedoc-plugin-merge-modules"],
+  "plugin": [
+    "typedoc-plugin-merge-modules",
+    "typedoc-material-theme"
+  ],
+  "themeColor": "#f2efeb",
+  "favicon": "./assets/favicon.png",
   "mergeModulesRenameDefaults": true,
-  "mergeModulesMergeMode": "module"
+  "mergeModulesMergeMode": "module",
+  "exclude": [
+    "**/*.d.ts",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/__tests__/*",
+    "**/.rollup.cache/*",
+    "**/dist/*",
+    "**/node_modules/*"
+  ]
 }

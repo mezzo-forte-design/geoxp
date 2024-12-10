@@ -1,16 +1,15 @@
 /**
  * GeoXpWebAudio is a plugin for GeoXpCore to manage audio content on web browsers
- * @module GeoXpWebAudio
+ * @module WebAudioClass
  * */
 
-import GeoXpCore from 'core';
+import type GeoXpCore from '@geoxp/core';
+import type { Listener, Key } from '@geoxp/utils';
 import { Howl, Howler } from 'howler';
 import { EventEmitter } from 'events';
-import {
-  isIOS, hasWebAudio, sanitiseConfig, Key, Listener
-} from './src/utils';
-import { GeoXpWebAudioConfig } from './src/types/config';
-import { GeoXpWebAudioEvent, GeoXpWebAudioSound } from './src/types/module';
+import { isIOS, hasWebAudio, sanitiseConfig } from './src/utils';
+import type { GeoXpWebAudioConfig, SanitisedConfig } from './src/types/config';
+import type { GeoXpWebAudioEvent, GeoXpWebAudioSound } from './src/types/module';
 
 // use webAudio instead of html5 audio only on iOS capable devices
 const USE_WEBAUDIO = isIOS() && hasWebAudio();
@@ -27,25 +26,25 @@ export default class GeoXpWebAudio {
    * GeoXpCore reference
    * @hidden
    */
-  private geoXpCore: GeoXpCore;
+  private readonly geoXpCore: GeoXpCore;
 
   /**
    * Event emitter
    * @hidden
    */
-  private event = new EventEmitter<GeoXpWebAudioEvent>();
+  private readonly event = new EventEmitter<GeoXpWebAudioEvent>();
 
   /**
    * Module configuration
    * @hidden
    */
-  private config: GeoXpWebAudioConfig;
+  private config: SanitisedConfig;
 
   /**
    * Buffer for loaded audio
    * @hidden
    */
-  private buffer = new Map<string, GeoXpWebAudioSound>();
+  private readonly buffer = new Map<string, GeoXpWebAudioSound>();
 
   /**
    * System sound is being played
@@ -59,12 +58,12 @@ export default class GeoXpWebAudio {
    * @param config GeoXpWebAudio configuration
    * @returns GeoXpWebAudio singleton instance
    */
-  constructor (geoXpCore: GeoXpCore, config: GeoXpWebAudioConfig) {
+  constructor(geoXpCore: GeoXpCore, config: GeoXpWebAudioConfig) {
     // sanitise config
     this.config = sanitiseConfig(config);
 
     // inits the instance based on config
-    this.init(config);
+    this.init();
 
     // connects core
     this.geoXpCore = geoXpCore;
@@ -82,10 +81,7 @@ export default class GeoXpWebAudio {
    * @param { Object } config GeoXpWebAudio configuration
    * @hidden
    */
-  private init (config: GeoXpWebAudioConfig) {
-    // init config object
-    this.config = sanitiseConfig(config);
-
+  private init() {
     // reload buffer
     this.buffer.clear();
   }
@@ -94,17 +90,19 @@ export default class GeoXpWebAudio {
    * Resets GeoXpWebAudio to provided options
    * @param config GeoXpWebAudio configuration
    */
-  public reload (config: GeoXpWebAudioConfig) {
+  public reload(config: GeoXpWebAudioConfig) {
     this.unload();
-    this.init(config);
-
+    // sanitise config object
+    this.config = sanitiseConfig(config);
+    // init buffer
+    this.init();
     console.info('[GeoXpWebAudio.reload] config reloaded', this);
   }
 
   /**
    * Clears instance sounds and buffer
    */
-  public unload () {
+  public unload() {
     Howler.stop();
     Howler.unload();
     this.buffer.clear();
@@ -113,21 +111,21 @@ export default class GeoXpWebAudio {
   /**
    * Plays test sound
    */
-  public test () {
+  public test() {
     this.playSystemSound(this.config.options.test, true);
   }
 
   /**
    * Plays silence
    */
-  public silence () {
+  public silence() {
     this.playSystemSound(this.config.options.silence);
   }
 
   /**
    * Unlocks web audio
    */
-  public unlock () {
+  public unlock() {
     this.playSystemSound(this.config.options.silence, true);
   }
 
@@ -135,14 +133,14 @@ export default class GeoXpWebAudio {
    * Sets the volume for all audios
    * @param volume Set volume 0 to 1
    */
-  public setVolume (volume: number) {
+  public setVolume(volume: number) {
     Howler.volume(volume);
   }
 
   /**
    * Stops all sounds imediately
    */
-  public stopAll () {
+  public stopAll() {
     Howler.stop();
   }
 
@@ -150,7 +148,7 @@ export default class GeoXpWebAudio {
    * Mutes all sounds
    * @param muted Mute or unmute
    */
-  public setMute (muted: boolean) {
+  public setMute(muted: boolean) {
     Howler.mute(muted);
   }
 
@@ -159,7 +157,7 @@ export default class GeoXpWebAudio {
    * @param id - id of sound to destroy
    * @hidden
    */
-  private destroy (id: string) {
+  private destroy(id: string) {
     const sound = this.buffer.get(id);
     if (sound) {
       sound.audio.unload();
@@ -171,8 +169,8 @@ export default class GeoXpWebAudio {
    * Refresh buffer to play any sound queued due to overlap rules
    * @hidden
    */
-  private refreshOverlap () {
-    this.buffer.forEach(sound => {
+  private refreshOverlap() {
+    this.buffer.forEach((sound) => {
       // resend play events on queued sounds
       if (sound.shouldPlay && !sound.shouldStop) {
         this.play(sound.cfg.spotId);
@@ -183,11 +181,11 @@ export default class GeoXpWebAudio {
   /**
    * Loads spot content
    * @param spotId reference spot id
-   * @param autoplay [autoplay = false] play sound as soon as it loads
+   * @param autoPlay [autoPlay = false] play sound as soon as it loads
    * @param volume [volume = 1] playback volume from 0 to 1
    * @param fadeIn [fadeIn = null] fade in time [ms]
    */
-  public load (spotId: string, autoPlay: boolean = false, volume: number = 1, fadeIn?: number) {
+  public load(spotId: string, autoPlay: boolean = false, volume: number = 1, fadeIn?: number) {
     const soundsCfg = this.config.sounds.filter((e) => e.spotId === spotId);
     if (!soundsCfg || soundsCfg.length === 0) {
       console.error('[GeoXpWebAudio.load] spot not found');
@@ -195,7 +193,7 @@ export default class GeoXpWebAudio {
     }
 
     // for each sound related to spot
-    soundsCfg.forEach(soundCfg => {
+    soundsCfg.forEach((soundCfg) => {
       // creates new sound
       const sound = {
         cfg: soundCfg,
@@ -204,8 +202,8 @@ export default class GeoXpWebAudio {
         isFadingOut: false,
         audio: new Howl({
           src: [soundCfg.url],
-          html5: !USE_WEBAUDIO
-        })
+          html5: !USE_WEBAUDIO,
+        }),
       };
 
       // sound id = spot id + cfg id
@@ -260,7 +258,7 @@ export default class GeoXpWebAudio {
    * @param volume [volume = 1] playback volume from 0 to 1
    * @param fadeIn [fadeIn = null] fade in time [ms]
    */
-  public play (spotId: string, volume: number = 1, fadeIn?: number) {
+  public play(spotId: string, volume: number = 1, fadeIn?: number) {
     const soundsCfg = this.config.sounds.filter((e) => e.spotId === spotId);
     if (!soundsCfg || soundsCfg.length === 0) {
       console.error('[GeoXpWebAudio.load] spot not found');
@@ -268,7 +266,7 @@ export default class GeoXpWebAudio {
     }
 
     // for each sound related to spot
-    soundsCfg.forEach(soundCfg => {
+    soundsCfg.forEach((soundCfg) => {
       // sound id = spot id + cfg id
       const id = `${soundCfg.spotId}-${soundCfg.id}`;
 
@@ -307,7 +305,7 @@ export default class GeoXpWebAudio {
    * @param spotId reference spot id
    * @param fadeOut [fadeOut = null] fade out time [ms]
    */
-  public stop (spotId: string, fadeOut?: number) {
+  public stop(spotId: string, fadeOut?: number) {
     const soundsCfg = this.config.sounds.filter((e) => e.spotId === spotId);
     if (!soundsCfg || soundsCfg.length === 0) {
       console.error('[GeoXpWebAudio.load] spot not found');
@@ -315,7 +313,7 @@ export default class GeoXpWebAudio {
     }
 
     // for each sound related to spot
-    soundsCfg.forEach(soundCfg => {
+    soundsCfg.forEach((soundCfg) => {
       // sound id = spot id + cfg id
       const id = `${soundCfg.spotId}-${soundCfg.id}`;
 
@@ -324,7 +322,7 @@ export default class GeoXpWebAudio {
       if (sound) {
         if (sound.audio.playing()) {
           // fade out then stop
-          const fadeTime = fadeOut || this.config.options.fadeOutTime;
+          const fadeTime = fadeOut ?? this.config.options.fadeOutTime;
           if (fadeTime > 0) {
             sound.isFadingOut = true;
             sound.audio.fade(sound.audio.volume(), 0, fadeTime);
@@ -351,7 +349,7 @@ export default class GeoXpWebAudio {
    * @param overlap [overlap = false] if true, excludes overlapping audios
    * @returns Sound is playing
    * */
-  public isPlaying (overlap = false) {
+  public isPlaying(overlap = false) {
     let atLeastOne = false;
     this.buffer.forEach((sound) => {
       // if playing
@@ -368,7 +366,7 @@ export default class GeoXpWebAudio {
    * @param url url of sound to play
    * @param forceHtml5 force use html5 audio
    */
-  public playSystemSound (url: string, forceHtml5?: boolean) {
+  public playSystemSound(url: string, forceHtml5?: boolean) {
     if (!this.isPlayingSystemSound) {
       this.isPlayingSystemSound = true;
 
@@ -380,7 +378,7 @@ export default class GeoXpWebAudio {
         src: [url],
         format: 'mp3',
         html5: forceHtml5 || !USE_WEBAUDIO,
-        autoplay: true
+        autoplay: true,
       });
 
       sound.on('end', () => {
@@ -397,7 +395,7 @@ export default class GeoXpWebAudio {
    * @param eventName 'playing' | 'stopped' | 'ended'
    * @param listener event listener
    */
-  public on<K> (eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {
+  public on<K>(eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {
     if (typeof listener !== 'function') {
       console.error('[GeoXpWebAudio.on] listener must be a function');
       return;
@@ -411,7 +409,7 @@ export default class GeoXpWebAudio {
    * @param eventName 'playing' | 'stopped' | 'ended'
    * @param listener event listener
    */
-  public once<K> (eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {
+  public once<K>(eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {
     if (typeof listener !== 'function') {
       console.error('[GeoXpWebAudio.once] listener must be a function');
       return;
@@ -425,7 +423,7 @@ export default class GeoXpWebAudio {
    * @param eventName 'playing' | 'stopped' | 'ended'
    * @param listener event listener
    */
-  public off<K> (eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {
+  public off<K>(eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {
     if (typeof listener !== 'function') {
       console.error('[GeoXpWebAudio.off] listener must be a function');
       return;
@@ -434,3 +432,5 @@ export default class GeoXpWebAudio {
     this.event.off(eventName, listener);
   }
 }
+
+export type { GeoXpWebAudioConfig, GeoXpWebAudioEvent, GeoXpWebAudioSound };

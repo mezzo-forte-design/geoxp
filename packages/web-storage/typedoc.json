@@ -1,6 +1,6 @@
 {
   "extends": ["../../typedoc.base.json"],
-  "name": "Web persistent storage plugin",
+  "name": "Web Persistent Storage Plugin",
   "entryPoints": ["./"],
   "entryPointStrategy": "expand",
   "tsconfig": "tsconfig.json"

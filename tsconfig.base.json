@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "es2020",
+    "target": "ESNext",
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "composite": true,
+    "declaration": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "declarationMap": true,
   }
 }

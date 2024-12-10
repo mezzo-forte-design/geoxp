@@ -3,36 +3,27 @@
  * @module
  * */
 
+import { sanitiseNumber } from '@geoxp/utils';
 import {
   DEFAULT_COOKIE_EXPIRATION,
   DEFAULT_COOKIE_PREFIX,
   DEFAULT_DELETE_ON_COMPLETION,
-  DEFAULT_DELETE_ON_LAST_SPOT
+  DEFAULT_DELETE_ON_LAST_SPOT,
 } from './constants';
-import { GeoXpWebStorageConfig } from './types/config';
+import { GeoXpWebStorageConfig, SanitisedConfig } from './types/config';
 
-export const sanitiseConfig = (config: GeoXpWebStorageConfig) => {
-  if (!config) {
-    config = {
-      cookiePrefix: DEFAULT_COOKIE_PREFIX,
-      deleteOnLastSpot: DEFAULT_DELETE_ON_LAST_SPOT,
-      deleteOnCompletion: DEFAULT_DELETE_ON_COMPLETION,
-      expiration: DEFAULT_COOKIE_EXPIRATION
-    };
-  } else {
-    config.deleteOnLastSpot =
-      config.deleteOnLastSpot !== undefined ? config.deleteOnLastSpot : DEFAULT_DELETE_ON_LAST_SPOT;
-
-    config.deleteOnCompletion =
-      config.deleteOnCompletion !== undefined ? config.deleteOnLastSpot : DEFAULT_DELETE_ON_COMPLETION;
-
-    config.cookiePrefix = config.cookiePrefix ? config.cookiePrefix : DEFAULT_COOKIE_PREFIX;
-
-    config.expiration = isPositiveNumber(config.expiration) ? config.expiration : DEFAULT_COOKIE_EXPIRATION;
-  }
-
-  return config;
-};
+export const sanitiseConfig = (config?: GeoXpWebStorageConfig): SanitisedConfig => ({
+  cookiePrefix: config?.cookiePrefix ?? DEFAULT_COOKIE_PREFIX,
+  expiration: sanitiseNumber({
+    inputLabel: 'cookie expiration (minutes)',
+    inputValue: config?.expiration,
+    defaultValue: DEFAULT_COOKIE_EXPIRATION,
+  }),
+  deleteOnLastSpot:
+    config?.deleteOnLastSpot !== undefined ? config.deleteOnLastSpot : DEFAULT_DELETE_ON_LAST_SPOT,
+  deleteOnCompletion:
+    config?.deleteOnCompletion !== undefined ? config.deleteOnCompletion : DEFAULT_DELETE_ON_COMPLETION,
+});
 
 export const setCookie = (name: string, value: unknown, expiration: number) => {
   try {
@@ -63,17 +54,12 @@ export const getCookie = (name: string) => {
   }
 };
 
-export const getAllCookies = (prefix: string) => {
-  const res = document.cookie
+export const getAllCookies = (prefix: string): string[] =>
+  document.cookie
     .split(';')
-    .filter((cookie) => {
-      return cookie.trim().indexOf(prefix) === 0;
-    })
-    .map((cookie) => {
-      return cookie.substring(0, cookie.indexOf('='));
-    });
-  return res;
-};
+    .map((cookie) => cookie.trim())
+    .filter((cookie) => cookie.startsWith(prefix))
+    .map((cookie) => cookie.substring(0, cookie.indexOf('=')));
 
 export const deleteCookie = (name: string) => {
   try {
@@ -82,24 +68,3 @@ export const deleteCookie = (name: string) => {
     console.error('[GepXpWebStorage.helpers.deleteCookie] error deleting cookie', e);
   }
 };
-
-export const isObjectLike = (value: unknown) => {
-  return value !== null && typeof value === 'object' && !(typeof value === 'function') && !Array.isArray(value);
-};
-
-export const isNumber = (value: unknown) => typeof value === 'number';
-
-export const isPositiveNumber = (value: unknown) => typeof value === 'number' && value >= 0;
-
-export const toRad = (number: number) => (number * Math.PI) / 180;
-
-export type Key<K, T> = T extends [never] ? string | symbol : K | keyof T;
-
-type ListenerFunction<K, T, F> = T extends [never]
-  ? F
-  : K extends keyof T
-    ? T[K] extends unknown[]
-      ? (...args: T[K]) => void
-      : never
-    : never;
-export type Listener<K, T> = ListenerFunction<K, T, (...args: unknown[]) => void>;

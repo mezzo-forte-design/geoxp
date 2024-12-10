@@ -1,6 +1,6 @@
 {
   "extends": ["../../typedoc.base.json"],
-  "name": "Core module",
+  "name": "GeoXp Core",
   "entryPoints": ["./"],
   "entryPointStrategy": "expand",
   "tsconfig": "tsconfig.json"

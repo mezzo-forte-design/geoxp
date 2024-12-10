@@ -1,6 +1,6 @@
 /**
  * Default values used to fill missing configuration options
- * @module Constants
+ * @module WebGeolocationConstants
  * */
 
 /** The application would like to receive the best possible results (can increase location fix time) */

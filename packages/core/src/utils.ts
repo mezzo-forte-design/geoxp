@@ -3,46 +3,48 @@
  * @module
  * */
 
+import { sanitiseNumber } from '@geoxp/utils';
 import { GeoXpCorePattern } from './types/module';
-import { GeoXpCoreConfig, GeoXpCoreConfigOptions } from './types/config';
+import { GeoXpCoreConfig, GeoXpCoreConfigOptions, SanitisedConfig } from './types/config';
 import {
   DEFAULT_VISITED_FILTER_TIME,
   DEFAULT_RADIUS,
   DEFAULT_DEADBAND,
   DEFAULT_FETCH,
-  DEFAULT_ACCURACY
+  DEFAULT_ACCURACY,
 } from './constants';
 import { GeoXpGeolocation, GeoXpSpot } from './types/common';
 
-export const sanitiseConfig = (config: GeoXpCoreConfig) => {
-  if (!config.options) {
-    config.options = {
-      defaultRadius: DEFAULT_RADIUS,
-      defaultDeadband: DEFAULT_DEADBAND,
-      defaultFetch: DEFAULT_FETCH,
-      accuracy: DEFAULT_ACCURACY,
-      visitedFilter: DEFAULT_VISITED_FILTER_TIME
-    };
-  } else {
-    config.options.defaultRadius = isNumber(config.options.defaultRadius)
-      ? config.options.defaultRadius
-      : DEFAULT_RADIUS;
-
-    config.options.defaultDeadband = isNumber(config.options.defaultDeadband)
-      ? config.options.defaultDeadband
-      : DEFAULT_DEADBAND;
-
-    config.options.defaultFetch = isNumber(config.options.defaultFetch) ? config.options.defaultFetch : DEFAULT_FETCH;
-
-    config.options.accuracy = isNumber(config.options.accuracy) ? config.options.accuracy : DEFAULT_ACCURACY;
-
-    config.options.visitedFilter = isNumber(config.options.visitedFilter)
-      ? config.options.visitedFilter
-      : DEFAULT_VISITED_FILTER_TIME;
-  }
-
-  return config;
-};
+export const sanitiseConfig = (config: GeoXpCoreConfig): SanitisedConfig => ({
+  ...config,
+  options: {
+    defaultRadius: sanitiseNumber({
+      inputLabel: 'defaultRadius',
+      inputValue: config.options?.defaultRadius,
+      defaultValue: DEFAULT_RADIUS,
+    }),
+    defaultDeadband: sanitiseNumber({
+      inputLabel: 'defaultDeadband',
+      inputValue: config.options?.defaultDeadband,
+      defaultValue: DEFAULT_DEADBAND,
+    }),
+    defaultFetch: sanitiseNumber({
+      inputLabel: 'defaultFetch',
+      inputValue: config.options?.defaultFetch,
+      defaultValue: DEFAULT_FETCH,
+    }),
+    accuracy: sanitiseNumber({
+      inputLabel: 'accuracy',
+      inputValue: config.options?.accuracy,
+      defaultValue: DEFAULT_ACCURACY,
+    }),
+    visitedFilter: sanitiseNumber({
+      inputLabel: 'visitedFilter time',
+      inputValue: config.options?.visitedFilter,
+      defaultValue: DEFAULT_VISITED_FILTER_TIME,
+    }),
+  },
+});
 
 export const getSpotFromRef = (
   patterns: Map<string, GeoXpCorePattern>,
@@ -80,24 +82,7 @@ export const forEachSpotInPatterns = (
   });
 };
 
-export const getSpotDistances = (location: GeoXpGeolocation, spot: GeoXpSpot, options: GeoXpCoreConfigOptions) => {
-  const position = spot.position;
-
-  // calc distance
-  const distance = calcGeoDistance(location, position);
-
-  // calc rardiuses
-  const inside = position.radius ?? options.defaultRadius;
-  const outside = (position.radius ?? options.defaultRadius) + (position.deadband ?? options.defaultDeadband);
-  const fetch = (position.fetch ?? options.defaultFetch!) * inside;
-
-  return {
-    distance,
-    inside,
-    outside,
-    fetch
-  };
-};
+export const toRad = (number: number) => (number * Math.PI) / 180;
 
 export const calcGeoDistance = (
   coord1: {
@@ -125,23 +110,26 @@ export const calcGeoDistance = (
   return EARTH_R * b * 1000;
 };
 
-export const isObjectLike = (value: unknown) => {
-  return value !== null && typeof value === 'object' && !(typeof value === 'function') && !Array.isArray(value);
+export const getSpotDistances = (
+  location: GeoXpGeolocation,
+  spot: GeoXpSpot,
+  options: GeoXpCoreConfigOptions
+) => {
+  const position = spot.position;
+
+  // calc distance
+  const distance = calcGeoDistance(location, position);
+
+  // calc rardiuses
+  const inside = position.radius ?? options.defaultRadius!;
+  const outside =
+    (position.radius ?? options.defaultRadius!) + (position.deadband ?? options.defaultDeadband!);
+  const fetch = (position.fetch ?? options.defaultFetch!) * inside;
+
+  return {
+    distance,
+    inside,
+    outside,
+    fetch,
+  };
 };
-
-export const isNumber = (value: unknown) => typeof value === 'number';
-
-export const isPositiveNumber = (value: unknown) => typeof value === 'number' && value >= 0;
-
-export const toRad = (number: number) => (number * Math.PI) / 180;
-
-export type Key<K, T> = T extends [never] ? string | symbol : K | keyof T;
-
-type ListenerFunction<K, T, F> = T extends [never]
-  ? F
-  : K extends keyof T
-    ? T[K] extends unknown[]
-      ? (...args: T[K]) => void
-      : never
-    : never;
-export type Listener<K, T> = ListenerFunction<K, T, (...args: unknown[]) => void>;

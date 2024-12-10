@@ -1,8 +1,15 @@
 {
-  "extends": ["./typedoc.base.json"],
+  "extends": [
+    "./typedoc.base.json"
+  ],
   "tsconfig": "tsconfig.json",
-  "name": "Mezzoforte GeoXp",
+  "name": "Mezzo Forte GeoXp Docs",
   "out": "public",
-  "entryPoints": ["packages/*"],
-  "entryPointStrategy": "packages"
+  "entryPoints": [
+    "packages/*"
+  ],
+  "entryPointStrategy": "packages",
+  "exclude": [
+    "packages/eslint-config",
+  ]
 }

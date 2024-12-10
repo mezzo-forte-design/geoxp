@@ -1,6 +1,6 @@
 /**
  * Default values used to fill missing configuration options
- * @module Constants
+ * @module WebStorageConstants
  * */
 
 /** default pattern visited spots cookie prefix */
