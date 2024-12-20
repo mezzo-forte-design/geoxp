@@ -10,7 +10,7 @@ It maps media control events to geographical locations based on configuration ru
 
 It’s meant to be used in any js environment, front or back end, regardless of the js framework or platform.
 
-An API and methods documentation page is available [at this link](https://mezzo-forte.gitlab.io/mezzoforte-geoxp).
+An API and methods documentation page is available [at this link](https://geoxp.mezzoforte.design/).
 
 ***
 
@@ -262,7 +262,7 @@ If you want to know if manual mode is available, just call the `canForceSpot(id)
 Forcing contents is always allowed for spots that does not have a geographic position associated: in this case the only way to reproduce the audio file is to invoke `forceSpot` method, and the rules described above are not applied.
 
 ## **API**
-All GeoXp core api are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
+All GeoXp core api are available in the [documentation page](https://geoxp.mezzoforte.design//GeoXp.html).
 
 ## **Best practices**
 

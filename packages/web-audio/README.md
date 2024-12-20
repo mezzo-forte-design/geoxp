@@ -147,7 +147,7 @@ geoXpWebAudio.muteAll(mute: boolean);
 ```
 
 ### **API**
-All GeoXpWebAudio methods are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
+All GeoXpWebAudio methods are available in the [documentation page](https://geoxp.mezzoforte.design//GeoXp.html).
 
 ***
 

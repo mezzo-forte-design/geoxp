@@ -41,9 +41,9 @@ The library is made of modules, with the main one being "core", while plugin mod
 
 Plugins are not mandatory, one can use the core and develop its own code to provide gelocation and consume media events.
 
-An API and methods documentation page is available [at this link](https://mezzo-forte.gitlab.io/mezzoforte-geoxp).
+An API and methods documentation page is available [at this link](https://geoxp.mezzoforte.design/).
 
-An example web app (code is in `/examples/web` directory) is published [here](https://geoxp.netlify.app/).
+An example web app (code is in `/examples/web` directory) is published [here](https://geoxp-web.netlify.app/).
 
 ## **Main packages**
 ### [**Core**](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/packages/core)

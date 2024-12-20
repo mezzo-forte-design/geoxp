@@ -79,7 +79,7 @@ geoXpWebStorage.clearAll();
 ```
 
 ### **API**
-All GeoXpWebStorage methods are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
+All GeoXpWebStorage methods are available in the [documentation page](https://geoxp.mezzoforte.design//GeoXp.html).
 
 ***
 
