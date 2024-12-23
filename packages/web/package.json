@@ -1,6 +1,6 @@
 {
   "name": "@geoxp/web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mezzo Forte GeoXp Web",
   "homepage": "https://gitlab.com/mezzo-forte/geoxp#README",
   "bugs": {
@@ -47,11 +47,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@geoxp/core": "^1.0.0",
-    "@geoxp/utils": "^1.0.0",
-    "@geoxp/web-audio": "^1.0.0",
-    "@geoxp/web-geolocation": "^1.0.0",
-    "@geoxp/web-storage": "^1.0.0"
+    "@geoxp/core": "^1.0.1",
+    "@geoxp/utils": "^1.0.1",
+    "@geoxp/web-audio": "^1.0.1",
+    "@geoxp/web-geolocation": "^1.0.1",
+    "@geoxp/web-storage": "^1.0.1"
   },
   "devDependencies": {
     "@geoxp/eslint-config": "*",

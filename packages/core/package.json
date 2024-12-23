@@ -1,6 +1,6 @@
 {
   "name": "@geoxp/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mezzo Forte GeoXp Core module",
   "homepage": "https://gitlab.com/mezzo-forte/geoxp#README",
   "bugs": {
@@ -48,7 +48,7 @@
     "typecheck": "tsc --emitDeclarationOnly"
   },
   "dependencies": {
-    "@geoxp/utils": "^1.0.0"
+    "@geoxp/utils": "^1.0.1"
   },
   "devDependencies": {
     "@geoxp/eslint-config": "*",
