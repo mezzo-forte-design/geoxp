@@ -1,12 +1,9 @@
 {
   "name": "example-geoxp-node",
   "version": "0.1.0",
+  "private": true,
   "description": "MezzoForte GeoXp example Node integration",
   "license": "Apache-2.0",
-  "private": true,
-  "scripts": {
-    "start": "ts-node index.ts"
-  },
   "contributors": [
     {
       "name": "Giuliano Buratti",
@@ -17,6 +14,9 @@
       "email": "francesco.cretti@gmail.com"
     }
   ],
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
   "dependencies": {
     "@geoxp/core": "*",
     "express": "^4.18.2",

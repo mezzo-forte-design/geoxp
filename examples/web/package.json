@@ -1,13 +1,9 @@
 {
   "name": "example-geoxp-web",
   "version": "0.1.0",
-  "description": "MezzoForte GeoXp example Web Application",
   "private": true,
-  "main": "app.js",
-  "scripts": {
-    "build": "rollup -c --bundleConfigAsCjs",
-    "dev": "SERVE=true rollup -c --bundleConfigAsCjs"
-  },
+  "description": "MezzoForte GeoXp example Web Application",
+  "license": "Apache-2.0",
   "contributors": [
     {
       "name": "Giuliano Buratti",
@@ -18,7 +14,11 @@
       "email": "francesco.cretti@gmail.com"
     }
   ],
-  "license": "Apache-2.0",
+  "main": "app.js",
+  "scripts": {
+    "build": "rollup -c --bundleConfigAsCjs",
+    "dev": "SERVE=true rollup -c --bundleConfigAsCjs"
+  },
   "dependencies": {
     "@geoxp/core": "*",
     "@geoxp/web-audio": "*",
