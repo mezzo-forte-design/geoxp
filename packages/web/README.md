@@ -3,7 +3,12 @@
 # **Mezzo Forte GeoXp Web**
 
 ## **Description**
-GeoXp Web is a library that unifies four essential packages — `Core`, `Web Audio`, `Web Geolocation`, and `Web Storage` — into a single, easy-to-use package. It is designed to simplify the initialization and management of these tools for developers working in web environments.
+**GeoXp Web** is a library that unifies four essential packages — `Core`, `Web Audio`, `Web Geolocation`, and `Web Storage` — into a single, easy-to-use package. 
+
+It is designed to simplify the initialization and management of these tools for developers working in web environments.
+
+## **Docs**
+**[Package docs](https://geoxp.mezzoforte.design/modules/geoxp_web)**
 
 ***
 
@@ -42,6 +47,43 @@ const config = {
 
 const geoXp = new GeoXpWeb(config);
 ```
+
+### Storage
+As default behavior, when GeoXp Web instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling storage package.
+To enable the storage package you can either pass `storage: true` to use default configuration or provide a custom config.
+See [Web Storage package docs](https://geoxp.mezzoforte.design/modules/web_persistent_storage_plugin) for further config details.
+
+```javascript
+// disabled storage
+const noStorageConfig = {
+  core: { },
+  audio: {  },
+  geolocation: { },
+};
+
+// enabled storage with default config
+const defaultStorageConfig = {
+  core: { },
+  audio: { },
+  geolocation: { },
+  storage: true,
+};
+
+// enabled storage with custom config
+const customStorageConfig = {
+  core: { },
+  audio: { },
+  geolocation: { },
+  storage: {
+    cookiePrefix: 'my-geoxp-experience',
+    deleteOnLastSpot: false, // clear storage when last spot is visited
+    deleteOnCompletion: true, // clear storage when all spots have been visited
+    expiration: 10, // expiration [minutes] - deafult 5
+  },
+};
+```
+> ❗ Please note that when cookies expire they are deleted, but no change is made runtime to the current geoXp visited spots.
+> To let the experience to restart, a reload or page refresh is needed.
 
 ### **Configuration**
 GeoXpWeb, once created, works without any external intervention. To provide this high level of automation, it has to be accurately configured according to the desired application.
@@ -93,7 +135,7 @@ To contribute to this project, fork the repository, work on a development branch
 ## Examples
 * Some configuration examples, for different kind of patterns, can be found inside the [examples/guides](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/guides).
 * A basic web application, with event usage, can be found inside the [examples/web](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web) folder.
-* An example of GeoXp usage in a Node environment, can be found in [examples/node](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/node)
+* An example of GeoXp Web package with TypeScript [examples/web-typescript](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web-typescript)
 
 ***
 

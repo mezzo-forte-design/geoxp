@@ -8,6 +8,9 @@ GeoXpWebStorage plugin provides persistent storage to GeoXpCore using cookies.
 
 It can be used in any web browser environment.
 
+## **Docs**
+**[Package docs](https://geoxp.mezzoforte.design/modules/web_persistent_storage_plugin)**
+
 ***
 
 ## **Installation**
@@ -59,9 +62,12 @@ config: {
   cookiePrefix: string // prefix to append to pattern cookie name
   deleteOnLastSpot: boolean // self delete when last spot is visited
   deleteOnCompletion: boolean // self delete when all spots have been visited
-  expiration: number // cookies expiration [minutes]
+  expiration: number // cookies expiration [minutes] - deafult 5 - set to 0 to exclude cookies
 }
 ```
+
+### **Expiration**
+`expiration` partams determines how long the cookies will be saved in the browser. Default is 5 minutes. Set this value to 0 if you want cookies to be deleted at each reload.
 
 ### **Reload and disposal**
 
@@ -79,7 +85,7 @@ geoXpWebStorage.clearAll();
 ```
 
 ### **API**
-All GeoXpWebStorage methods are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
+All GeoXpWebStorage methods are available in the [documentation page](https://geoxp.mezzoforte.design//GeoXp.html).
 
 ***
 
@@ -102,6 +108,7 @@ To contribute to this project, fork the repository, work on a development branch
 ## Examples
 * Some configuration examples, for different kind of patterns, can be found inside the [examples/guides](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/guides).
 * A basic web application, with event usage, can be found inside the [examples/web](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web) folder.
+* An example of GeoXp Web package with TypeScript [examples/web-typescript](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web-typescript)
 
 ***
 

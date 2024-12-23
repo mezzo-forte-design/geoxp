@@ -33,7 +33,7 @@ export default class GeoXpWeb {
   /**
    * Web Storage instance
    */
-  public readonly storage: GeoXpWebStorage;
+  public readonly storage?: GeoXpWebStorage;
 
   /**
    * Wheter to throw errors or just log
@@ -59,7 +59,15 @@ export default class GeoXpWeb {
     this.core = new GeoXpCore(config.core, options);
     this.audio = new GeoXpWebAudio(this.core, config.audio);
     this.geolocation = new GeoXpWebGeolocation(this.core, config.geolocation);
-    this.storage = new GeoXpWebStorage(this.core, config.storage);
+
+    if (config.storage === true) {
+      // if storage is just a boolean, use default config
+      this.storage = new GeoXpWebStorage(this.core);
+    } else if (config.storage !== undefined) {
+      // if valid config, use pass it to package
+      this.storage = new GeoXpWebStorage(this.core, config.storage);
+    }
+    // otherwise exclude storage package
   }
 
   /**
@@ -70,7 +78,12 @@ export default class GeoXpWeb {
     this.core.reload(config.core);
     this.audio.reload(config.audio);
     this.geolocation.reload(config.geolocation);
-    this.storage.reload(config.storage);
+
+    if (config.storage === true) {
+      this.storage?.reload();
+    } else if (config.storage !== undefined) {
+      this.storage?.reload(config.storage);
+    }
   }
 
   /**

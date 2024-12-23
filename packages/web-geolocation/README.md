@@ -8,6 +8,9 @@ GeoXpWebGeolocation plugin provides user geolocation based on navigator.geolocat
 
 It can be used in any web browser environment.
 
+## **Docs**
+**[Package docs](https://geoxp.mezzoforte.design/modules/web_geolocation_plugin)**
+
 ***
 
 ## **Installation**
@@ -101,7 +104,7 @@ geoXpWebGeolocation.on('location', location => { /* ... */ })
 User location has been updated.
 
 ### **API**
-All GeoXpWebAudio methods are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
+All GeoXpWebAudio methods are available in the [documentation page](https://geoxp.mezzoforte.design//GeoXp.html).
 
 ***
 
@@ -130,6 +133,7 @@ To contribute to this project, fork the repository, work on a development branch
 ## Examples
 * Some configuration examples, for different kind of patterns, can be found inside the [examples/guides](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/guides).
 * A basic web application, with event usage, can be found inside the [examples/web](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web) folder.
+* An example of GeoXp Web package with TypeScript [examples/web-typescript](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web-typescript)
 
 ***
 

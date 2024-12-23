@@ -1,0 +1,20 @@
+{
+  "name": "example-geoxp-web-typescript",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MezzoForte GeoXp example Web Application using Typescript",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@geoxp/web": "*"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.2",
+    "vite": "^6.0.3"
+  }
+}

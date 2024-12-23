@@ -12,5 +12,5 @@ export type GeoXpWebConfig = {
   core: GeoXpCoreConfig;
   audio: GeoXpWebAudioConfig;
   geolocation?: GeoXpWebGeolocationConfig;
-  storage?: GeoXpWebStorageConfig;
+  storage?: true | GeoXpWebStorageConfig;
 };

@@ -48,9 +48,10 @@
     "prepare:publish": "yarn prepare:commit && yarn test",
     "prettify": "lerna run prettify",
     "prettify:test": "lerna run prettify:test",
-    "release": "echo \"Releasing GeoXp v$npm_config_vers\" && npm run build && git add -f --all dist && git commit -m \"dist bundle\" && npm version $npm_config_vers && git push origin master --tags v$npm_config_vers && npm publish",
+    "publish": "yarn prepare:publish && lerna publish --no-private",
     "test": "lerna run test",
-    "typecheck": "lerna run typecheck"
+    "typecheck": "lerna run typecheck",
+    "version": "lerna version --no-private"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

@@ -1,6 +1,6 @@
 {
   "extends": ["../../typedoc.base.json"],
-  "name": "Web Environment Wrapper",
+  "name": "GeoXp Web",
   "entryPoints": ["./"],
   "entryPointStrategy": "expand",
   "tsconfig": "tsconfig.json"

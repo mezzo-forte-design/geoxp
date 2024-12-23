@@ -4,13 +4,14 @@
 
 ## **Description**
 
-Mezzo Forte GeoXpCore is a an event based js library that manages all the background features of a geolocated tour.
+Mezzo Forte **GeoXp Core** is a an event based js library that manages all the background features of a multimedia geolocated tour.
 
 It maps media control events to geographical locations based on configuration rules.
 
 It’s meant to be used in any js environment, front or back end, regardless of the js framework or platform.
 
-An API and methods documentation page is available [at this link](https://mezzo-forte.gitlab.io/mezzoforte-geoxp).
+## **Docs**
+**[Package docs](https://geoxp.mezzoforte.design/modules/geoxp_core)**
 
 ***
 
@@ -262,7 +263,7 @@ If you want to know if manual mode is available, just call the `canForceSpot(id)
 Forcing contents is always allowed for spots that does not have a geographic position associated: in this case the only way to reproduce the audio file is to invoke `forceSpot` method, and the rules described above are not applied.
 
 ## **API**
-All GeoXp core api are available in the [documentation page](https://mezzo-forte.gitlab.io/mezzoforte-geoxp/GeoXp.html).
+All GeoXp core api are available in the [documentation page](https://geoxp.mezzoforte.design//GeoXp.html).
 
 ## **Best practices**
 
@@ -310,6 +311,8 @@ To contribute to this project, fork the repository, work on a development branch
 * Some configuration examples, for different kind of patterns, can be found inside the [examples/guides](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/guides).
 * A basic web application, with event usage, can be found inside the [examples/web](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web) folder.
 * An example of GeoXp usage in a Node environment, can be found in [examples/node](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/node)
+* An example of GeoXp Web package with TypeScript [examples/web-typescript](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web-typescript)
+
 
 ***
 
