@@ -108,7 +108,7 @@ To contribute to this project, fork the repository, work on a development branch
 > * verify and test changes
 > * verify CHANGELOG.md has been updated
 > * merge MR in `main`
-> * publish a new version with `yarn publish`
+> * publish a new version with `yarn new-publish`
 > * create a new release in the release section
 
 ***

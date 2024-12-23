@@ -43,15 +43,15 @@
     "docs": "lerna run typecheck && typedoc --options typedoc.json",
     "lint": "lerna run lint",
     "lint:test": "lerna run lint:test",
+    "new-publish": "yarn prepare:publish && lerna publish --no-private",
+    "new-version": "lerna version --no-private",
     "prepare": "husky || true",
     "prepare:commit": "yarn typecheck && yarn prettify && yarn lint",
     "prepare:publish": "yarn prepare:commit && yarn test",
     "prettify": "lerna run prettify",
     "prettify:test": "lerna run prettify:test",
-    "publish": "yarn prepare:publish && lerna publish --no-private",
     "test": "lerna run test",
-    "typecheck": "lerna run typecheck",
-    "version": "lerna version --no-private"
+    "typecheck": "lerna run typecheck"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
