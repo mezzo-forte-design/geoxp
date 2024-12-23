@@ -106,9 +106,9 @@ To contribute to this project, fork the repository, work on a development branch
 > **For repo admins**
 > To release a new version, follow these steps:
 > * verify and test changes
-> * verify changelog has been updated
+> * verify CHANGELOG.md has been updated
 > * merge MR in `main`
-> * publish a new version
+> * publish a new version with `yarn publish`
 > * create a new release in the release section
 
 ***
