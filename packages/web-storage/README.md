@@ -59,9 +59,12 @@ config: {
   cookiePrefix: string // prefix to append to pattern cookie name
   deleteOnLastSpot: boolean // self delete when last spot is visited
   deleteOnCompletion: boolean // self delete when all spots have been visited
-  expiration: number // cookies expiration [minutes]
+  expiration: number // cookies expiration [minutes] - deafult 5 - set to 0 to exclude cookies
 }
 ```
+
+### **Expiration**
+`expiration` partams determines how long the cookies will be saved in the browser. Default is 5 minutes. Set this value to 0 if you want cookies to be deleted at each reload.
 
 ### **Reload and disposal**
 

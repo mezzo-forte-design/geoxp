@@ -43,6 +43,43 @@ const config = {
 const geoXp = new GeoXpWeb(config);
 ```
 
+### Storage
+As default behavior, when GeoXp Web instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling storage package.
+To enable the storage package you can either pass `storage: true` to use default configuration or provide a custom config.
+See WebStorage package for further config details.
+
+```javascript
+// disabled storage
+const noStorageConfig = {
+  core: { },
+  audio: {  },
+  geolocation: { },
+};
+
+// enabled storage with default config
+const defaultStorageConfig = {
+  core: { },
+  audio: { },
+  geolocation: { },
+  storage: true,
+};
+
+// enabled storage with custom config
+const customStorageConfig = {
+  core: { },
+  audio: { },
+  geolocation: { },
+  storage: {
+    cookiePrefix: 'my-geoxp-experience',
+    deleteOnLastSpot: false, // clear storage when last spot is visited
+    deleteOnCompletion: true, // clear storage when all spots have been visited
+    expiration: 10, // expiration [minutes] - deafult 5
+  },
+};
+```
+> ❗ Please note that when cookies expire they are deleted, but no change is made runtime to the current geoXp visited spots.
+> To let the experience to restart, a reload or page refresh is needed.
+
 ### **Configuration**
 GeoXpWeb, once created, works without any external intervention. To provide this high level of automation, it has to be accurately configured according to the desired application.
 The configuration respects each of the four packages specific configurations (see their docs for details).
