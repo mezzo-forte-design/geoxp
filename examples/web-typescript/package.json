@@ -1,6 +1,7 @@
 {
   "name": "example-geoxp-web-typescript",
   "version": "0.1.0",
+  "private": true,
   "description": "MezzoForte GeoXp example Web Application using Typescript",
   "license": "Apache-2.0",
   "type": "module",
