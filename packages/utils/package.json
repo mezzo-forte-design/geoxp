@@ -49,5 +49,8 @@
   "devDependencies": {
     "@geoxp/eslint-config": "*",
     "typescript": "^5.4.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
