@@ -22,21 +22,25 @@ export const sanitiseConfig = (config: GeoXpCoreConfig): SanitisedConfig => ({
       inputLabel: 'defaultRadius',
       inputValue: config.options?.defaultRadius,
       defaultValue: DEFAULT_RADIUS,
+      excludeZero: true,
     }),
     defaultDeadband: sanitiseNumber({
       inputLabel: 'defaultDeadband',
       inputValue: config.options?.defaultDeadband,
       defaultValue: DEFAULT_DEADBAND,
+      excludeZero: true,
     }),
     defaultFetch: sanitiseNumber({
       inputLabel: 'defaultFetch',
       inputValue: config.options?.defaultFetch,
       defaultValue: DEFAULT_FETCH,
+      excludeZero: true,
     }),
     accuracy: sanitiseNumber({
       inputLabel: 'accuracy',
       inputValue: config.options?.accuracy,
       defaultValue: DEFAULT_ACCURACY,
+      excludeZero: true,
     }),
     visitedFilter: sanitiseNumber({
       inputLabel: 'visitedFilter time',
