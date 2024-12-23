@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "ESlint shared config for GeoXp packages",
-  "homepage": "https://gitlab.com/mezzo-forte/geoxp#README",
+  "homepage": "https://github.com/mezzo-forte-design/geoxp",
   "bugs": {
-    "url": "https://gitlab.com/mezzo-forte/geoxp/-/issues"
+    "url": "https://github.com/mezzo-forte-design/geoxp/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/mezzo-forte/geoxp.git"
+    "url": "git+https://github.com/mezzo-forte-design/geoxp.git"
   },
   "license": "Apache-2.0",
   "contributors": [

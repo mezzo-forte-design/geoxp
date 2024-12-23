@@ -26,6 +26,17 @@
 
 [https://geoxp.mezzoforte.design](https://geoxp.mezzoforte.design/)
 
+
+## **How it works**
+
+Mezzo Forte GeoXp maps media contents to geographical locations and automatically reproduces them based on configuration rules.
+
+It’s meant to be used in any JS environment, front or back end, regardless of the JS framework or platform.
+
+The library is made of modules, with the main one being "core", while plugin modules are available to implement platform specific features.
+
+Plugins are not mandatory, you can use the core and develop your own code to provide gelocation and consume media events (such as audio/video players or anything else you have in mind!).
+
 ## Installation
 
 The library is made of modules, with the main one being "core", while plugin modules are available to implement platform specific features.
@@ -54,15 +65,6 @@ yarn add @geoxp/web
 
 Keep reading to understand better how this piece of software works :)
 
-## **Description**
-
-Mezzo Forte GeoXp maps media contents to geographical locations, and automatically reproduces them based on configuration rules.
-
-It’s meant to be used in any JS environment, front or back end, regardless of the JS framework or platform.
-
-The library is made of modules, with the main one being "core", while plugin modules are available to implement platform specific features.
-
-Plugins are not mandatory, one can use the core and develop its own code to provide gelocation and consume media events.
 
 ## **Resources**
 * [Docs](https://geoxp.mezzoforte.design/)
@@ -71,31 +73,33 @@ Plugins are not mandatory, one can use the core and develop its own code to prov
 
 
 ## **Main packages**
-### [**Core**](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/packages/core)
+### [**Core**](https://github.com/mezzo-forte-design/geoxp/tree/main/packages/core)
 GeoXpCore module is the heart of the GeoXp experience. It maps media management events based on set of rules.
 
 It's cross platform, cross environment, and can be used in any js based project, front end or backend.
 
-### [**Web Audio Plugin**](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/packages/web)
+### [**Web Audio Plugin**](https://github.com/mezzo-forte-design/geoxp/tree/main/packages/web-audio)
 GeoXpWebAudio plugin provides audio playback features to GeoXpCore module.
 
 Based on `howler.js`, it can be used in any web browser environment.
 
-### [**Web Geolocation Plugin**](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/packages/web-geolocation)
+### [**Web Geolocation Plugin**](https://github.com/mezzo-forte-design/geoxp/tree/main/packages/web-geolocation)
 GeoXpWebGeolocation plugin provides user geolocation based on navigator.geolocation API.
 
 It can be used in any web browser environment.
 
-### [**Web Storage Plugin**](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/packages/web-storage)
+### [**Web Storage Plugin**](https://github.com/mezzo-forte-design/geoxp/tree/main/packages/web-storage)
 GeoXpWebStorage plugin provides persistent storage to GeoXpCore using cookies.
 
 It can be used in any web browser environment.
 
-### Other packages
-#### [**Web Wrapper**](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/packages/web)
+***
+
+### Other packages:
+### [**Web**](https://github.com/mezzo-forte-design/geoxp/tree/main/packages/web)
 A wrapper intended to be used in a browser environment  that unifies four essential packages —`Core`, `Web Audio`, `Web Geolocation`, and `Web Storage` — into a single, easy-to-use package.
 
-#### **Utils** 
+### **Utils** 
 A collection of utilities shared by the packages.
 
 # Contributing
@@ -103,8 +107,8 @@ A collection of utilities shared by the packages.
 To contribute to this project, fork the repository, work on a development branch and open a MR.
 **Remember to update the changelog (CHANGELOG.md)!**
 
-> **For repo admins**
-> To release a new version, follow these steps:
+> **For repo admins:**
+> to release a new version, follow these steps:
 > * verify and test changes
 > * verify CHANGELOG.md has been updated
 > * merge MR in `main`
@@ -114,10 +118,10 @@ To contribute to this project, fork the repository, work on a development branch
 ***
 
 # Examples
-* Some configuration examples, for different kind of patterns, can be found inside the [examples/guides](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/guides).
-* A basic web application, with event usage, can be found inside the [examples/web](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web) folder.
-* An example of GeoXp usage in a Node environment, can be found in [examples/node](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/node)
-* An example of GeoXp Web package with TypeScript [examples/web-typescript](https://gitlab.com/mezzo-forte/geoxp/-/tree/main/examples/web-typescript)
+* Some configuration examples, for different kind of patterns: [examples/guides](https://github.com/mezzo-forte-design/geoxp/tree/main/examples/guides)
+* A basic web application, with event usage: [examples/web](https://github.com/mezzo-forte-design/geoxp/tree/main/examples/web)
+* An example of GeoXp usage in a Node environment: [examples/node](https://github.com/mezzo-forte-design/geoxp/tree/main/examples/node)
+* An example of GeoXp Web package usage in a TypeScript application: [examples/web-typescript](https://github.com/mezzo-forte-design/geoxp/tree/main/examples/web-typescript)
 
 ***
 

@@ -2,13 +2,13 @@
   "name": "@geoxp/web-audio",
   "version": "1.0.1",
   "description": "Mezzo Forte GeoXp Web Audio module",
-  "homepage": "https://gitlab.com/mezzo-forte/geoxp#README",
+  "homepage": "https://github.com/mezzo-forte-design/geoxp",
   "bugs": {
-    "url": "https://gitlab.com/mezzo-forte/geoxp/-/issues"
+    "url": "https://github.com/mezzo-forte-design/geoxp/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/mezzo-forte/geoxp.git"
+    "url": "git+https://github.com/mezzo-forte-design/geoxp.git"
   },
   "license": "Apache-2.0",
   "contributors": [
