@@ -4,7 +4,7 @@
   ],
   "tsconfig": "tsconfig.json",
   "name": "Mezzo Forte GeoXp Docs",
-  "out": "public",
+  "out": "docs",
   "entryPoints": [
     "packages/*"
   ],

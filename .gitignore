@@ -71,7 +71,7 @@ testApp
 
 
 # Typedoc
-public
+docs
 
 .rollup.cache
 output
