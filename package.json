@@ -48,7 +48,7 @@
     "prepare:publish": "yarn prepare:commit && yarn test",
     "prettify": "lerna run prettify",
     "prettify:test": "lerna run prettify:test",
-    "publish": "lerna publish --no-private",
+    "publish": "yarn prepare:publish && lerna publish --no-private",
     "test": "lerna run test",
     "typecheck": "lerna run typecheck",
     "version": "lerna version --no-private"
