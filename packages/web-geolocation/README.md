@@ -8,6 +8,9 @@ GeoXpWebGeolocation plugin provides user geolocation based on navigator.geolocat
 
 It can be used in any web browser environment.
 
+## **Docs**
+**[Package docs](https://geoxp.mezzoforte.design/modules/web_geolocation_plugin)**
+
 ***
 
 ## **Installation**

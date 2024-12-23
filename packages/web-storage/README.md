@@ -8,6 +8,9 @@ GeoXpWebStorage plugin provides persistent storage to GeoXpCore using cookies.
 
 It can be used in any web browser environment.
 
+## **Docs**
+**[Package docs](https://geoxp.mezzoforte.design/modules/web_persistent_storage_plugin)**
+
 ***
 
 ## **Installation**

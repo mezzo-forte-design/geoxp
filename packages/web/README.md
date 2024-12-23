@@ -3,7 +3,12 @@
 # **Mezzo Forte GeoXp Web**
 
 ## **Description**
-GeoXp Web is a library that unifies four essential packages — `Core`, `Web Audio`, `Web Geolocation`, and `Web Storage` — into a single, easy-to-use package. It is designed to simplify the initialization and management of these tools for developers working in web environments.
+**GeoXp Web** is a library that unifies four essential packages — `Core`, `Web Audio`, `Web Geolocation`, and `Web Storage` — into a single, easy-to-use package. 
+
+It is designed to simplify the initialization and management of these tools for developers working in web environments.
+
+## **Docs**
+**[Package docs](https://geoxp.mezzoforte.design/modules/geoxp_web)**
 
 ***
 
@@ -46,7 +51,7 @@ const geoXp = new GeoXpWeb(config);
 ### Storage
 As default behavior, when GeoXp Web instance is reloaded (eg: page refresh) exprience patterns memory of visited spots is cleared. This can be avoided enabling storage package.
 To enable the storage package you can either pass `storage: true` to use default configuration or provide a custom config.
-See WebStorage package for further config details.
+See [Web Storage package docs](https://geoxp.mezzoforte.design/modules/web_persistent_storage_plugin) for further config details.
 
 ```javascript
 // disabled storage
