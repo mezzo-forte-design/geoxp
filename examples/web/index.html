@@ -69,10 +69,28 @@
     .active {
       background-color: yellow;
     }
+
+    .caption {
+      margin-top: 10px;
+    }
+
+    #links {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 10px;
+      font-weight: 800;
+    }
   </style>
 </head>
 
 <body>
+
+  <div id="links">
+    <a href="https://geoxp.mezzoforte.design/" target="_blank">Docs</a>
+    <span>|</span>
+    <a href="https://github.com/mezzo-forte-design/geoxp" target="_blank">GitHub</a>
+  </div>
   <!-- button -->
   <div>
     <button id="test-button" type="button">Test audio</button>
@@ -86,7 +104,7 @@
   <div id="simulations">
     <div id="spot-simulation">
       <button id="simulate-spot">SIMULATE SPOT POSITION</button>
-      <button id="force-spot">FORCE SPOT</button>
+      <button id="force-spot">FORCE SPOT (manual mode)</button>
       <button id="unforce-spot">UNFORCE</button>
       <label for="spot-id-input">SPOT ID</label>
       <input id="spot-id-input" type="text" placeholder="e.g. s01" />
@@ -102,6 +120,11 @@
       <label for="position-acc-input">ACCURACY (m)</label>
       <input id="position-acc-input" type="number" placeholder="e.g. 10" />
     </div>
+  </div>
+  <div class="caption">
+    <small>
+      For rules about forcing spots in manual mode, see <a href="https://geoxp.mezzoforte.design/modules/geoxp_core#manual-mode" target="_blank">this paragraph</a>.
+    </small>
   </div>
   <br>
   <hr>
