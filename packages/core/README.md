@@ -35,7 +35,6 @@ yarn add @geoxp/core
   * [Content replay](#content-replay)
   * [Pattern cookie](#pattern-cookie)
   * [Content overlap](#content-overlap)
-  * [Manual mode](#manual-mode)
 
 * [Usage](#usage)
   * [Instance creation](#instance-creation)
@@ -49,8 +48,7 @@ yarn add @geoxp/core
     * [Pattern complete](#pattern-complete)
     * [Pattern last spot](#pattern-last-spot)
   * [Spots content replay](#spots-content-replay)
-  * [Forcing spot activation](#forcing-spot-activation)
-  * [API](#api)
+  * [Manual mode](#manual-mode)
   
 * [Best practices](#best-practices)
   * [Designing configuration for a specific use](#designing-configuration-for-a-specific-use)
@@ -112,16 +110,6 @@ This storage can be deleted with different strategies:
 * when all spots in a pattern are visited (core sends out a `completed` event).
 * when a specific spot, flagged with the “last” option is activated (core sends out a `last` event).
 * manually (depending on the storage method used).
-
-### **Manual mode**
-Sometimes geolocation data could be bad for unpredictable reasons, nearby buildings or trees could block part of the satellites communications, electromagnetic interference by power lines and so on, resulting in poor location accuracy.
-When accuracy is too low, manual spot activation mode becomes available.
-This mode overrides all experience playback rules, so geoXp enables it only for really low accuracy (greater than 100m), and only if user is not too far away from the intended spot playback position (in the case of slow location update time and the user has reached a new spot before an update).
-See [Forcing spots activation](#forcing-spots-activation) for details.
-
-**IMPORTANT - forcing a spot is a _plan B_ when something is not working properly (bad GPS or slow update time). It will interrupt all automatic experience management, until the forced content is finished. After that, all the experience logic will get back to work.**
-
-**IMPORTANT - if spot.position is not defined, all rules above don't apply and the spot can be forced at any time. This mechanism can be useful in case one wants to integrate a simpler media player (eg: along a geolocated experience, some spots need to be be triggered manually by the user).**
 
 ## **Usage**
 GeoXp Core is intended for usage as a singleton instance. It has to be created once the application starts, based on a configuration object.
@@ -256,14 +244,62 @@ The spot replay can be triggered calling the `replaySpot(id)` method, passing th
 Multiple spots could be linked to the same position, so multiple `visited` events could be fired at once. If you don't want to care about which spot is to be replayed, call the `replaySpot()` method with no argument, so all the spots linked to the current position are marked as unvisited, and replayed following the rules defined in configuration (eg: spot order).
 This behavior could be overridden using the `pattern.replay` option. If a pattern is set so, its spots will replay immediately, and no `visited` event is fired.
 
-## **Forcing spots activation**
-If GPS accuracy is low and user isn't too far away from a spot location, the spot can be activated manually using the `forceSpot(id)` method, passing the id of the spot to force.
-GeoXp then enters manual mode (internal geolocation updates are stopped, all other audio content is stopped) and activates the desired spot. When the playback is finished (or stopped), geoXp returns to automatic mode and the experience goes on as usual.
-If you want to know if manual mode is available, just call the `canForceSpot(id)` passing the id of the deisired spot. If rules for manual mode are not fulfilled, it returns and error string explaing the reason why it can't be forced. Otherwise it will return `undefined`.
-Forcing contents is always allowed for spots that does not have a geographic position associated: in this case the only way to reproduce the audio file is to invoke `forceSpot` method, and the rules described above are not applied.
+## **Manual mode**
+Manual mode enables GeoXp spots to be activated without relying on the user's actual geolocation.
 
-## **API**
-All GeoXp core api are available in the [documentation page](https://geoxp.mezzoforte.design//GeoXp.html).
+> **❗ Forcing a spot pauses all automatic experience management until the forced content finishes. Afterward, the experience logic resumes seamlessly.**
+
+### How to Use Manual Mode 
+Here are three key methods tied to this feature:
+* `canForceSpot(spotId)` - checks if manual mode is available for a specific spot. If manual mode isn’t allowed, it returns an error message explaining why. Otherwise, it returns `undefined`.
+* `forceSpot(spotId)` - activates playback for the selected spot in manual mode.
+* `stopForcedSpot()` - stops all forced spots and reverts to normal operations.
+
+When a spot is forced:
+1. GeoXp switches to manual mode. 🚫 Stops geolocation updates and other audio content.
+2. The desired spot is activated.
+3. Once playback finishes (or is stopped), GeoXp exits manual mode and resumes automatic operations.
+
+### When to Use Manual Mode?
+Manual mode is very useful in two scenarios: 
+
+#### **🔮 Special content**
+Manual mode is perfect for unique content that doesn’t fit standard geographical placement (e.g., extra features, warnings, or custom messages). This usage turns GeoXp into a simpler media player.
+
+Add a spot without a position (note that after/notAfter logics won’t apply because normal mechanisms are disabled) to your configuration file and call the `forceSpot(spotId)` method to trigger it directly.
+
+```javascript
+  spots: [
+    // manual spot
+    {
+      id: string,
+      label: string,
+    },
+    // normal spot
+    {
+      id: string, 
+      label: string,
+      after: string,
+      notAfter: string, 
+      position: {
+        lat: number,
+        lon: number,
+        radius: number,
+        deadband: number,
+        fetch: number,
+      }
+    }
+  ]
+```
+
+> In this scenario, `canForceSpot(id)` will always allow forcing the spot.
+
+#### **📡 Unreliable geolocation**
+Then GPS data becomes inaccurate due to environmental factors like nearby buildings, dense tree cover, satellite signal blockages, or electromagnetic interference from power lines, manual spot activation mode becomes accessible.
+
+In this case geoXp enables manual mode only for really low accuracy **(greater than 100m)**, and only if **user is not too far away from the intended spot playback position** (in the case of slow location update time and the user has reached a new spot before an update).
+
+> **Forcing a spot in this case is a _plan B_ when something is not working properly (bad GPS or slow update time).  In this case, forcing a spot ensures smooth playback but disrupts geolocation tracking temporarily.**
 
 ## **Best practices**
 
