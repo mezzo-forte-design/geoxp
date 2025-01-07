@@ -13,7 +13,7 @@ import {
   DEFAULT_FETCH,
   DEFAULT_ACCURACY,
 } from './constants';
-import { GeoXpGeolocation, GeoXpSpot } from './types/common';
+import { GeoXpGeolocation, GeoXpSpot, GeoXpSpotPosition } from './types/common';
 
 export const sanitiseConfig = (config: GeoXpCoreConfig): SanitisedConfig => ({
   ...config,
@@ -116,11 +116,9 @@ export const calcGeoDistance = (
 
 export const getSpotDistances = (
   location: GeoXpGeolocation,
-  spot: GeoXpSpot,
+  position: GeoXpSpotPosition,
   options: GeoXpCoreConfigOptions
 ) => {
-  const position = spot.position;
-
   // calc distance
   const distance = calcGeoDistance(location, position);
 

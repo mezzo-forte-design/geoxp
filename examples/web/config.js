@@ -28,6 +28,11 @@ const core = {
             lat: 46.216177,
             lon: 7.842615
           }
+        },
+        // manual spot test
+        {
+          id: 's04',
+          label: 'Spot 4!!!',
         }
       ]
     }
@@ -57,6 +62,11 @@ const audio = {
       id: 'a03',
       spotId: 's03',
       url: './audio/03.mp3'
+    },
+    {
+      id: 'a04',
+      spotId: 's04',
+      url: './audio/04.mp3'
     }
   ],
   options: {

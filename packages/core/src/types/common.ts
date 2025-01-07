@@ -45,7 +45,7 @@ export interface GeoXpSpot {
   label?: string;
 
   /** Spot position */
-  position: GeoXpSpotPosition;
+  position?: GeoXpSpotPosition;
 
   /** Spot can activacte only after this spot id has been visited */
   after?: string;

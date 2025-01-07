@@ -323,7 +323,7 @@ export default class GeoXpCore {
       return 'location update not received yet';
     }
 
-    const { distance, inside } = getSpotDistances(this.lastLocation, spot, this.config.options);
+    const { distance, inside } = getSpotDistances(this.lastLocation, spot.position, this.config.options);
 
     // checks for max allowed distance
     if (distance - this.lastLocation.accuracy > inside) {
@@ -474,7 +474,8 @@ export default class GeoXpCore {
 
     // deactivate spots
     forEachSpotInPatterns(this.patterns, (pattern, spot) => {
-      const { distance, outside } = getSpotDistances(location, spot, this.config?.options);
+      if (!spot.position) return;
+      const { distance, outside } = getSpotDistances(location, spot.position, this.config?.options);
 
       if (distance > outside) {
         // spot is outside
@@ -490,7 +491,8 @@ export default class GeoXpCore {
 
     // activate new spots, prefetch incoming spots
     forEachSpotInPatterns(this.patterns, (pattern, spot) => {
-      const { distance, inside, fetch } = getSpotDistances(location, spot, this.config?.options);
+      if (!spot.position) return;
+      const { distance, inside, fetch } = getSpotDistances(location, spot.position, this.config?.options);
 
       if (distance <= inside) {
         // first time inside (if user stays in the same location, content is not repeated)
@@ -519,7 +521,8 @@ export default class GeoXpCore {
 
     // activate spots to replay or visited
     forEachSpotInPatterns(this.patterns, (pattern, spot) => {
-      const { distance, inside } = getSpotDistances(location, spot, this.config?.options);
+      if (!spot.position) return;
+      const { distance, inside } = getSpotDistances(location, spot.position, this.config?.options);
 
       if (distance <= inside) {
         // first time inside (if user stays in the same location, content is not repeated)
@@ -541,7 +544,8 @@ export default class GeoXpCore {
 
     // sets spots first time inside (if user stays in the same location, content is not repeated)
     forEachSpotInPatterns(this.patterns, (pattern, spot) => {
-      const { distance, inside } = getSpotDistances(location, spot, this.config?.options);
+      if (!spot.position) return;
+      const { distance, inside } = getSpotDistances(location, spot.position, this.config?.options);
 
       if (distance <= inside) {
         // first time inside (if user stays in the same location, content is not repeated)
