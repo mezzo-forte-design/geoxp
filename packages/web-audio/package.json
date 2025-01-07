@@ -1,6 +1,6 @@
 {
   "name": "@geoxp/web-audio",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Mezzo Forte GeoXp Web Audio module",
   "homepage": "https://github.com/mezzo-forte-design/geoxp",
   "bugs": {
@@ -47,7 +47,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@geoxp/core": "^1.0.2",
+    "@geoxp/core": "^1.0.3",
     "@geoxp/utils": "^1.0.2",
     "howler": "^2.2.4"
   },
