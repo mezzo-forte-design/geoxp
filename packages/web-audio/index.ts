@@ -204,8 +204,8 @@ export default class GeoXpWebAudio {
           src: [soundCfg.url],
           html5: !USE_WEBAUDIO,
         }),
-        // expose autoplaySpots in the event payload for easier access by listeners
-        autoplaySpots: this.config.options.autoplaySpots,
+        // expose autoplaySounds in the event payload for easier access by listeners
+        autoplaySounds: this.config.options.autoplaySounds,
       };
 
       // sound id = spot id + cfg id
@@ -291,8 +291,8 @@ export default class GeoXpWebAudio {
       const canPlay = canOverlap && !sound.audio.playing();
 
       if (canPlay) {
-        const { autoplaySpots } = sound;
-        if (autoplaySpots) {
+        const { autoplaySounds } = sound;
+        if (autoplaySounds) {
           // play sound
           sound.audio.play();
         }

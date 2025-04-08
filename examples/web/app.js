@@ -115,8 +115,8 @@ window.onload = () => {
   geoXpWebAudio.on('ready', sound => {
     console.log('[EVENT] - Sound ready', sound);
     logger.message('[EVENT] - Sound ready', sound);
-    if (!sound.autoplaySpots) {
-      console.log('autoplaySpots is disabled in the config, skipping automatic playback');
+    if (!sound.autoplaySounds) {
+      console.log('autoplaySounds is disabled in the config, skipping automatic playback');
     }
   });
 

@@ -36,7 +36,7 @@ export type GeoXpWebAudioConfigOptions = {
   fadeOutTime?: number;
 
   /** autoplay spots when active */
-  autoplaySpots?: boolean;
+  autoplaySounds?: boolean;
 };
 
 /** GeoXpWebAudioConfig */

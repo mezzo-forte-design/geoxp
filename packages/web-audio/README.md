@@ -26,7 +26,7 @@ yarn add @geoxp/web-audio
 * [Usage](#usage)
   * [Instance creation](#instance-creation)
   * [Configuration](#configuration)
-    * [autoplaySpots](#autoplaySpots)
+    * [autoplaySounds](#autoplaySounds)
   * [Reload and disposal](#reload-and-disposal)
   * [Events subscription](#events-subscription)
     * [Audio playing](#audio-playing)
@@ -82,12 +82,12 @@ config: {
     silence: string // url for silence sound
     fadeInTime: number // fade in time [ms] - default value = 0 ms
     fadeOutTime: number // fade out time [ms] - default value = 1000 ms
-    autoplaySpots: boolean // whether sounds should begin playing automatically when they are ready (i.e., loaded and allowed to play) - default true
+    autoplaySounds: boolean // whether sounds should begin playing automatically when they are ready (i.e., loaded and allowed to play) - default true
   }
 }
 ```
 
-#### **`autoplaySpots`**
+#### **`autoplaySounds`**
 This configuration option controls whether sounds should begin playing automatically when they are ready (i.e., loaded and allowed to play).
  * `true` - sounds start playback immediately once all conditions are met.
  * `false` - sounds are prepared but do not start automatically — playback must be triggered manually (e.g., in response to the `ready` event).
@@ -150,7 +150,7 @@ Some audio content just ended (listened to the end).
 geoXp.on('ready', sound =>  { /* ... */ })
 ```
 
-Some audio content is ready for playback — either it has just started playing (if `autoplaySpots` is enabled), or it's fully prepared and awaiting manual start. This event is emitted after the sound is loaded, allowed to play (based on overlap rules), and determined to be ready.
+Some audio content is ready for playback — either it has just started playing (if `autoplaySounds` is enabled), or it's fully prepared and awaiting manual start. This event is emitted after the sound is loaded, allowed to play (based on overlap rules), and determined to be ready.
 Use it to track when a sound becomes available for playback, regardless of whether it starts automatically or not.
 
 ### **Audio interaction**

@@ -46,8 +46,8 @@ geoXp.on('ended', (sound: GeoXpWebAudioSound) => {
 
 geoXp.on('ready', (sound: GeoXpWebAudioSound) => {
   console.log('[GEOXP EVENT] - Sound ready', sound);
-  if (!sound.autoplaySpots) {
-    console.log('autoplaySpots is disabled in the config, skipping automatic playback');
+  if (!sound.autoplaySounds) {
+    console.log('autoplaySounds is disabled in the config, skipping automatic playback');
   }
 });
 
