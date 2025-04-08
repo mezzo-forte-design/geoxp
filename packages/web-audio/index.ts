@@ -291,7 +291,7 @@ export default class GeoXpWebAudio {
       const canPlay = canOverlap && !sound.audio.playing();
 
       if (canPlay) {
-        const { autoplaySpots } = this.config.options;
+        const { autoplaySpots } = sound;
         if (autoplaySpots) {
           // play sound
           sound.audio.play();
