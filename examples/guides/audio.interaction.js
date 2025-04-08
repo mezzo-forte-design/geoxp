@@ -40,7 +40,12 @@ geoXpWebAudio.on('playing', sound => {
   sound.stopAll();
 });
 
-// when audio playback is stopped / ended
+// when audio playback is stopped
 geoXp.on('stopped', sound => {
+  // do something cool...
+});
+
+// when audio content is ended
+geoXp.on('ended', sound => {
   // do something cool...
 });

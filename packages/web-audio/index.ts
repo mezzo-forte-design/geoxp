@@ -187,7 +187,7 @@ export default class GeoXpWebAudio {
    */
   public load(spotId: string, autoPlay: boolean = false, volume: number = 1, fadeIn?: number) {
     const soundsCfg = this.config.sounds.filter((e) => e.spotId === spotId);
-    if (!soundsCfg || soundsCfg.length === 0) {
+    if (soundsCfg.length === 0) {
       console.error('[GeoXpWebAudio.load] spot not found');
       return;
     }
@@ -204,6 +204,8 @@ export default class GeoXpWebAudio {
           src: [soundCfg.url],
           html5: !USE_WEBAUDIO,
         }),
+        // expose autoplaySpots in the event payload for easier access by listeners
+        autoplaySpots: this.config.options.autoplaySpots,
       };
 
       // sound id = spot id + cfg id
@@ -260,8 +262,8 @@ export default class GeoXpWebAudio {
    */
   public play(spotId: string, volume: number = 1, fadeIn?: number) {
     const soundsCfg = this.config.sounds.filter((e) => e.spotId === spotId);
-    if (!soundsCfg || soundsCfg.length === 0) {
-      console.error('[GeoXpWebAudio.load] spot not found');
+    if (soundsCfg.length === 0) {
+      console.error('[GeoXpWebAudio.play] spot not found');
       return;
     }
 
@@ -270,32 +272,37 @@ export default class GeoXpWebAudio {
       // sound id = spot id + cfg id
       const id = `${soundCfg.spotId}-${soundCfg.id}`;
 
-      // if audio isn't queued and loaded load()
       const sound = this.buffer.get(id);
+
+      // if audio isn't queued and loaded, call load() to load audio and play when ready
       if (!sound) {
-        // load audio and play when ready
         this.load(spotId, true, volume, fadeIn);
-      } else {
-        // if sounds are ready play(), else play when ready
-        if (sound.audio.state() === 'loaded') {
-          // check audio overlap rules
-          if (!this.isPlaying(true) || sound.cfg.overlap) {
-            // check if not already playing
-            if (!sound.audio.playing()) {
-              // play sound
-              sound.audio.play();
+        return;
+      }
 
-              // reset any states
-              sound.shouldStop = false;
-              sound.isFadingOut = false;
+      // if not loaded yet, play when ready
+      if (sound.audio.state() !== 'loaded') {
+        sound.shouldPlay = true;
+        return;
+      }
 
-              // fade in
-              const fadeTime = fadeIn ?? this.config.options.fadeInTime;
-              if (fadeTime > 0) sound.audio.volume(0);
-              else sound.audio.volume(volume);
-            }
-          }
-        } else sound.shouldPlay = true;
+      // if sounds are ready, audio can overlap and not already playing, invoke play()
+      const canOverlap = !this.isPlaying(true) || sound.cfg.overlap;
+      const canPlay = canOverlap && !sound.audio.playing();
+
+      if (canPlay) {
+        const { autoplaySpots } = this.config.options;
+        if (autoplaySpots) {
+          // play sound
+          sound.audio.play();
+        }
+
+        // send ready event
+        this.event.emit('ready', sound);
+
+        // reset any states
+        sound.shouldStop = false;
+        sound.isFadingOut = false;
       }
     });
   }
@@ -392,7 +399,7 @@ export default class GeoXpWebAudio {
 
   /**
    * Event wrapper on
-   * @param eventName 'playing' | 'stopped' | 'ended'
+   * @param eventName 'playing' | 'stopped' | 'ended' | 'ready'
    * @param listener event listener
    */
   public on<K>(eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {
@@ -406,7 +413,7 @@ export default class GeoXpWebAudio {
 
   /**
    * Event wrapper once
-   * @param eventName 'playing' | 'stopped' | 'ended'
+   * @param eventName 'playing' | 'stopped' | 'ended' | 'ready'
    * @param listener event listener
    */
   public once<K>(eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {

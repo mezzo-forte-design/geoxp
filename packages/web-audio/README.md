@@ -26,11 +26,13 @@ yarn add @geoxp/web-audio
 * [Usage](#usage)
   * [Instance creation](#instance-creation)
   * [Configuration](#configuration)
+    * [autoplaySpots](#autoplaySpots)
   * [Reload and disposal](#reload-and-disposal)
   * [Events subscription](#events-subscription)
     * [Audio playing](#audio-playing)
     * [Audio stopped](#audio-stopped)
     * [Audio ended](#audio-ended)
+    * [Audio ready](#audio-ready)
   * [Audio interaction](#audio-interaction)
   * [API](#api)
 * [Best practices](#best-practices)
@@ -80,9 +82,17 @@ config: {
     silence: string // url for silence sound
     fadeInTime: number // fade in time [ms] - default value = 0 ms
     fadeOutTime: number // fade out time [ms] - default value = 1000 ms
+    autoplaySpots: boolean // whether sounds should begin playing automatically when they are ready (i.e., loaded and allowed to play) - default true
   }
 }
 ```
+
+#### **`autoplaySpots`**
+This configuration option controls whether sounds should begin playing automatically when they are ready (i.e., loaded and allowed to play).
+ * `true` - sounds start playback immediately once all conditions are met.
+ * `false` - sounds are prepared but do not start automatically — playback must be triggered manually (e.g., in response to the `ready` event).
+
+This flag is useful when you want to delay playback based on user interaction, UI state, or other application logic.
 
 ### **Reload and disposal**
 
@@ -133,6 +143,15 @@ geoXp.on('ended', sound =>  { /* ... */ })
 ```
 
 Some audio content just ended (listened to the end).
+
+#### **Audio ready**
+
+```javascript
+geoXp.on('ready', sound =>  { /* ... */ })
+```
+
+Some audio content is ready for playback — either it has just started playing (if `autoplaySpots` is enabled), or it's fully prepared and awaiting manual start. This event is emitted after the sound is loaded, allowed to play (based on overlap rules), and determined to be ready.
+Use it to track when a sound becomes available for playback, regardless of whether it starts automatically or not.
 
 ### **Audio interaction**
 It’s possible to interact with audio when needed (eg: showing audio current seek, playing / pausing audio, etc.).

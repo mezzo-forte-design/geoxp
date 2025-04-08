@@ -12,9 +12,11 @@ export type GeoXpWebAudioSound = {
   shouldPlay: boolean;
   shouldStop: boolean;
   isFadingOut: boolean;
+  autoplaySpots: boolean;
 };
 
 export type GeoXpWebAudioEvent =
   | { playing: [GeoXpWebAudioSound] }
   | { stopped: [GeoXpWebAudioSound] }
-  | { ended: [GeoXpWebAudioSound] };
+  | { ended: [GeoXpWebAudioSound] }
+  | { ready: [GeoXpWebAudioSound] };
