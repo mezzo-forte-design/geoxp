@@ -29,7 +29,7 @@ yarn add @geoxp/web-audio
   * [Reload and disposal](#reload-and-disposal)
   * [Events subscription](#events-subscription)
     * [Audio playing](#audio-playing)
-    * [Audio playing](#audio-stopped)
+    * [Audio stopped](#audio-stopped)
     * [Audio ended](#audio-ended)
   * [Audio interaction](#audio-interaction)
   * [API](#api)
@@ -118,14 +118,6 @@ geoXpWebAudio.on('playing', sound => { /* ... */ })
 
 Some audio content just started playing.
 
-#### **Audio ended**
-
-```javascript
-geoXp.on('ended', sound =>  { /* ... */ })
-```
-
-Some audio content just ended (listened to the end).
-
 #### **Audio stopped**
 
 ```javascript
@@ -133,6 +125,14 @@ geoXp.on('stopped', sound =>  { /* ... */ })
 ```
 
 Some audio content just stopped (before its end).
+
+#### **Audio ended**
+
+```javascript
+geoXp.on('ended', sound =>  { /* ... */ })
+```
+
+Some audio content just ended (listened to the end).
 
 ### **Audio interaction**
 It’s possible to interact with audio when needed (eg: showing audio current seek, playing / pausing audio, etc.).

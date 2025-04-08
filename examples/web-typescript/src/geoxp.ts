@@ -40,6 +40,10 @@ geoXp.on('stopped', (sound: GeoXpWebAudioSound) => {
   console.log('[GEOXP EVENT] - Sound stopped', sound);
 });
 
+geoXp.on('ended', (sound: GeoXpWebAudioSound) => {
+  console.log('[GEOXP EVENT] - Sound ended', sound);
+});
+
 // web geolocation event listeners
 geoXp.on('location', (location: GeoXpGeolocation) => {
   console.log('[GEOXP EVENT] - Location update', location);
