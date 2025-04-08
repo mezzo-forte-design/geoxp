@@ -107,6 +107,19 @@ window.onload = () => {
     logger.message('[EVENT] - Sound stopped', sound);
   });
 
+  geoXpWebAudio.on('ended', sound => {
+    console.log('[EVENT] - Sound ended', sound);
+    logger.message('[EVENT] - Sound ended', sound);
+  });
+
+  geoXpWebAudio.on('ready', sound => {
+    console.log('[EVENT] - Sound ready', sound);
+    logger.message('[EVENT] - Sound ready', sound);
+    if (!sound.autoplaySounds) {
+      console.log('autoplaySounds is disabled in the config, skipping automatic playback');
+    }
+  });
+
   // web geolocation event listeners
   geoXpWebGeolocation.on('location', location => {
     console.log('[EVENT] - Location update', location);

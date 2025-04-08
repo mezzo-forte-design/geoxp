@@ -13,6 +13,7 @@ export const sanitiseConfig = (config: GeoXpWebAudioConfig): SanitisedConfig => 
   const defaultOptions = {
     test: defaultTestSound,
     silence: defaultSilenceSound,
+    autoplaySounds: true,
   };
 
   const sanitisedOptions = {

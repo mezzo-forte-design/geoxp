@@ -135,7 +135,7 @@ export default class GeoXpWeb {
 
   /**
    * Event wrapper on
-   * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete' | 'playing' | 'stopped' | 'ended' | 'location'
+   * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete' | 'playing' | 'stopped' | 'ended' | 'ready' | 'location'
    * @param listener event listener
    */
   public on<K>(eventName: Key<K, GeoXpWebEvent>, listener: Listener<K, GeoXpWebEvent>) {
@@ -167,7 +167,7 @@ export default class GeoXpWeb {
 
   /**
    * Event wrapper once
-   * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete' | 'playing' | 'stopped' | 'ended' | 'location'
+   * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete' | 'playing' | 'stopped' | 'ended' | 'ready' | 'location'
    * @param listener event listener
    */
   public once<K>(eventName: Key<K, GeoXpWebEvent>, listener: Listener<K, GeoXpWebEvent>) {
@@ -199,7 +199,7 @@ export default class GeoXpWeb {
 
   /**
    * Event wrapper off
-   * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete' | 'playing' | 'stopped' | 'ended' | 'location'
+   * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete' | 'playing' | 'stopped' | 'ended' | 'ready' | 'location'
    * @param listener event listener
    */
   public off<K>(eventName: Key<K, GeoXpWebEvent>, listener: Listener<K, GeoXpWebEvent>) {

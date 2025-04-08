@@ -70,8 +70,8 @@ const audio = {
     }
   ],
   options: {
-    fadeInTime: 5000,
-    fadeOutTime: 2000
+    fadeInTime: 10000,
+    fadeOutTime: 2000,
   }
 };
 
