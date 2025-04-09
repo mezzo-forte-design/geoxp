@@ -427,7 +427,7 @@ export default class GeoXpWebAudio {
 
   /**
    * Event wrapper off
-   * @param eventName 'playing' | 'stopped' | 'ended'
+   * @param eventName 'playing' | 'stopped' | 'ended' | 'ready'
    * @param listener event listener
    */
   public off<K>(eventName: Key<K, GeoXpWebAudioEvent>, listener: Listener<K, GeoXpWebAudioEvent>) {
