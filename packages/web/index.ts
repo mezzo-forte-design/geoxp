@@ -122,7 +122,12 @@ export default class GeoXpWeb {
       return 'core';
     }
 
-    if (eventName === 'playing' || eventName === 'stopped' || eventName === 'ended') {
+    if (
+      eventName === 'playing' ||
+      eventName === 'stopped' ||
+      eventName === 'ended' ||
+      eventName === 'ready'
+    ) {
       return 'audio';
     }
 
