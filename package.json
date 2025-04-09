@@ -47,7 +47,7 @@
     "new:version": "lerna version --no-private",
     "prepare": "husky || true",
     "prepare:commit": "yarn typecheck && yarn prettify && yarn lint",
-    "prepare:publish": "yarn prepare:commit && yarn test",
+    "prepare:publish": "yarn prepare:commit && yarn test && yarn build",
     "prettify": "lerna run prettify",
     "prettify:test": "lerna run prettify:test",
     "test": "lerna run test",
