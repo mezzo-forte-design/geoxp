@@ -141,15 +141,24 @@ export default class GeoXpWebGeolocation {
    * @param enabled enabled or disabled
    */
   public toggleUpdates(enabled: boolean) {
+    if (enabled && this.updatesEnabled && this.locationSubs.length > 0) {
+      // already enabled
+      console.warn('[GeoXpWebGeolocation.toggleUpdates] geolocation updates are already enabled');
+      return;
+    }
+
+    if (!enabled && !this.updatesEnabled && this.locationSubs.length === 0) {
+      // no watcher enabled
+      console.warn('[GeoXpWebGeolocation.toggleUpdates] geolocation updates are already disabled');
+      return;
+    }
+
     if (enabled) {
       const subId = navigator.geolocation.watchPosition(this.geoSuccess, this.geoError, this.config);
-
       this.locationSubs.push(subId);
-
       this.updatesEnabled = true;
     } else {
       this.unsubAll();
-
       this.updatesEnabled = false;
     }
   }
