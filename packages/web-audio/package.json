@@ -23,6 +23,19 @@
   ],
   "sideEffects": false,
   "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    }
+  },
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.js",
   "browser": "dist/geoxp-web-audio.min.js",
@@ -37,7 +50,7 @@
   "scripts": {
     "build": "npm run build:clear && rollup -c --bundleConfigAsCjs && npm run cjs && npm run esm",
     "build:clear": "rm -rf dist && rm -rf .rollup.cache",
-    "cjs": "cd dist && mkdir -p cjs && mv index.cjs index.cjs.map cjs/",
+    "cjs": "cd dist && mkdir -p cjs && mv index.cjs index.cjs.map cjs/ && cp index.d.ts cjs/index.d.cts",
     "esm": "cd dist && mkdir -p esm && mv index.js index.js.map index.d.ts src esm/",
     "lint": "eslint --fix index.ts ./src",
     "lint:test": "eslint index.ts ./src",
