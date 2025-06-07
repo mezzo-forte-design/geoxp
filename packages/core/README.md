@@ -39,7 +39,8 @@ yarn add @geoxp/core
 * [Usage](#usage)
   * [Instance creation](#instance-creation)
   * [Configuration](#configuration)
-  * [Reload and disposal](#reload-and-disposal)
+  * [Reload](#reload)
+  * [Enable or disable all](#enable-or-disable-all)
   * [Events subscription](#events-subscription)
     * [Spot incoming](#spot-incoming)
     * [Spot active](#spot-active)
@@ -177,6 +178,20 @@ const geoXpCore = new GeoXpCore(config);
 // Refreshes all geoXp state with the given configuration
 geoXpCore.reload(config);
 ```
+
+### **Enable or disable all**
+These methods provide a quick and handy way to enable or disable all GeoXp content patterns at once.  
+They are useful when you need to globally activate or deactivate content dynamically, without managing individual patterns manually.
+
+
+```javascript
+// Enables all patterns that are not disabled in the configuration
+geoXpCore.enablePatterns();
+
+// Disables all patterns in the configuration
+geoXpCore.disablePatterns();
+```
+
 
 > **NOTE** - If you are using the `Web Geolocation` module together with Core, make sure to reload it as well, to ensure that location updates will invoke the updated version of the Core methods.
 

@@ -624,6 +624,27 @@ export default class GeoXpCore {
   }
 
   /**
+   * Enables all patterns that are not marked as disabled in the configuration.
+   * Iterates through the list of patterns in the configuration and calls {@link enablePattern} on each enabled pattern.
+   */
+  public enablePatterns() {
+    this.config.patterns.forEach((pattern) => {
+      if (pattern.disabled) return;
+      this.enablePattern(pattern.id);
+    });
+  }
+
+  /**
+   * Disables all patterns in the configuration.
+   * Iterates through the list of patterns in the configuration and calls {@link disablePattern} on each one.
+   */
+  public disablePatterns() {
+    this.config.patterns.forEach((pattern) => {
+      this.disablePattern(pattern.id);
+    });
+  }
+
+  /**
    * Event wrapper on
    * @param eventName 'incoming' | 'active' | 'inactive' | 'visited' | 'last' | 'complete'
    * @param listener event listener
