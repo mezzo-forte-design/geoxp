@@ -178,6 +178,8 @@ const geoXpCore = new GeoXpCore(config);
 geoXpCore.reload(config);
 ```
 
+> **NOTE** - If you are using the `Web Geolocation` module together with Core, make sure to reload it as well, to ensure that location updates will invoke the updated version of the Core methods.
+
 ### **Events subscription**
 GeoXpCore is meant to work automatically based on its configuration, so most of the interaction with it is based on events.
 Its event dispatcher (`geoXpCore.event`) is based on [Node.js EventEmitter](https://nodejs.org/api/events.html) and is responsible for events notification to outside subscribers.

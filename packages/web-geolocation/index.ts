@@ -94,6 +94,10 @@ export default class GeoXpWebGeolocation {
     // clear prev GPS position watchers
     this.unsubAll();
 
+    // bind listeners
+    this.geoSuccess = this.geoSuccess.bind(this);
+    this.geoError = this.geoError.bind(this);
+
     if (this.updatesEnabled) {
       // unlocks geolocation api
       this.unlock();
