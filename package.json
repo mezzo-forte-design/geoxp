@@ -40,7 +40,7 @@
     "commitlint": "commitlint --edit",
     "dev": "lerna watch -- lerna run build --since",
     "dev:example-web": "concurrently \"yarn dev\" \"cd examples/web && yarn dev\"",
-    "docs": "typedoc --options typedoc.json",
+    "docs": "yarn build && lerna run typecheck && typedoc --options typedoc.json",
     "lint": "lerna run lint",
     "lint:test": "lerna run lint:test",
     "new:release": "yarn prepare:release && lerna publish --no-private",
