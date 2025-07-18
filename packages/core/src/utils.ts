@@ -15,40 +15,43 @@ import {
 } from './constants';
 import { GeoXpGeolocation, GeoXpSpot, GeoXpSpotPosition } from './types/common';
 
-export const sanitiseConfig = (config: GeoXpCoreConfig): SanitisedConfig => ({
-  ...config,
-  options: {
-    defaultRadius: sanitiseNumber({
-      inputLabel: 'defaultRadius',
-      inputValue: config.options?.defaultRadius,
-      defaultValue: DEFAULT_RADIUS,
-      excludeZero: true,
-    }),
-    defaultDeadband: sanitiseNumber({
-      inputLabel: 'defaultDeadband',
-      inputValue: config.options?.defaultDeadband,
-      defaultValue: DEFAULT_DEADBAND,
-      excludeZero: true,
-    }),
-    defaultFetch: sanitiseNumber({
-      inputLabel: 'defaultFetch',
-      inputValue: config.options?.defaultFetch,
-      defaultValue: DEFAULT_FETCH,
-      excludeZero: true,
-    }),
-    accuracy: sanitiseNumber({
-      inputLabel: 'accuracy',
-      inputValue: config.options?.accuracy,
-      defaultValue: DEFAULT_ACCURACY,
-      excludeZero: true,
-    }),
-    visitedFilter: sanitiseNumber({
-      inputLabel: 'visitedFilter time',
-      inputValue: config.options?.visitedFilter,
-      defaultValue: DEFAULT_VISITED_FILTER_TIME,
-    }),
-  },
-});
+export const sanitiseConfig = (config: GeoXpCoreConfig): SanitisedConfig => {
+  const clonedConfig = JSON.parse(JSON.stringify(config)) as GeoXpCoreConfig;
+  return {
+    ...clonedConfig,
+    options: {
+      defaultRadius: sanitiseNumber({
+        inputLabel: 'defaultRadius',
+        inputValue: clonedConfig.options?.defaultRadius,
+        defaultValue: DEFAULT_RADIUS,
+        excludeZero: true,
+      }),
+      defaultDeadband: sanitiseNumber({
+        inputLabel: 'defaultDeadband',
+        inputValue: clonedConfig.options?.defaultDeadband,
+        defaultValue: DEFAULT_DEADBAND,
+        excludeZero: true,
+      }),
+      defaultFetch: sanitiseNumber({
+        inputLabel: 'defaultFetch',
+        inputValue: clonedConfig.options?.defaultFetch,
+        defaultValue: DEFAULT_FETCH,
+        excludeZero: true,
+      }),
+      accuracy: sanitiseNumber({
+        inputLabel: 'accuracy',
+        inputValue: clonedConfig.options?.accuracy,
+        defaultValue: DEFAULT_ACCURACY,
+        excludeZero: true,
+      }),
+      visitedFilter: sanitiseNumber({
+        inputLabel: 'visitedFilter time',
+        inputValue: clonedConfig.options?.visitedFilter,
+        defaultValue: DEFAULT_VISITED_FILTER_TIME,
+      }),
+    },
+  };
+};
 
 export const getSpotFromRef = (
   patterns: Map<string, GeoXpCorePattern>,

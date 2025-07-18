@@ -8,7 +8,7 @@ import type { Listener, Key } from '@geoxp/utils';
 import { Howl, Howler } from 'howler';
 import { EventEmitter } from 'events';
 import { isIOS, hasWebAudio, sanitiseConfig } from './src/utils';
-import type { GeoXpWebAudioConfig, SanitisedConfig } from './src/types/config';
+import type { GeoXpWebAudioConfig, SanitisedConfig, GeoXpWebAudioConfigSound } from './src/types/config';
 import type { GeoXpWebAudioEvent, GeoXpWebAudioSound } from './src/types/module';
 
 // use webAudio instead of html5 audio only on iOS capable devices
@@ -194,14 +194,15 @@ export default class GeoXpWebAudio {
 
     // for each sound related to spot
     soundsCfg.forEach((soundCfg) => {
+      const clonedSoundCfg = JSON.parse(JSON.stringify(soundCfg)) as GeoXpWebAudioConfigSound;
       // creates new sound
       const sound = {
-        cfg: soundCfg,
+        cfg: clonedSoundCfg,
         shouldPlay: autoPlay,
         shouldStop: false,
         isFadingOut: false,
         audio: new Howl({
-          src: [soundCfg.url],
+          src: [clonedSoundCfg.url],
           html5: !USE_WEBAUDIO,
         }),
         // expose autoplaySounds in the event payload for easier access by listeners
@@ -209,7 +210,7 @@ export default class GeoXpWebAudio {
       };
 
       // sound id = spot id + cfg id
-      const id = `${soundCfg.spotId}-${soundCfg.id}`;
+      const id = `${clonedSoundCfg.spotId}-${clonedSoundCfg.id}`;
 
       // save reference to buffer
       this.buffer.set(id, sound);
