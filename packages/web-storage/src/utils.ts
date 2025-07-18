@@ -12,18 +12,25 @@ import {
 } from './constants';
 import { GeoXpWebStorageConfig, SanitisedConfig } from './types/config';
 
-export const sanitiseConfig = (config?: GeoXpWebStorageConfig): SanitisedConfig => ({
-  cookiePrefix: config?.cookiePrefix ?? DEFAULT_COOKIE_PREFIX,
-  expiration: sanitiseNumber({
-    inputLabel: 'cookie expiration (minutes)',
-    inputValue: config?.expiration,
-    defaultValue: DEFAULT_COOKIE_EXPIRATION,
-  }),
-  deleteOnLastSpot:
-    config?.deleteOnLastSpot !== undefined ? config.deleteOnLastSpot : DEFAULT_DELETE_ON_LAST_SPOT,
-  deleteOnCompletion:
-    config?.deleteOnCompletion !== undefined ? config.deleteOnCompletion : DEFAULT_DELETE_ON_COMPLETION,
-});
+export const sanitiseConfig = (config?: GeoXpWebStorageConfig): SanitisedConfig => {
+  const clonedConfig = JSON.parse(JSON.stringify(config)) as GeoXpWebStorageConfig;
+  return {
+    cookiePrefix: clonedConfig?.cookiePrefix ?? DEFAULT_COOKIE_PREFIX,
+    expiration: sanitiseNumber({
+      inputLabel: 'cookie expiration (minutes)',
+      inputValue: clonedConfig?.expiration,
+      defaultValue: DEFAULT_COOKIE_EXPIRATION,
+    }),
+    deleteOnLastSpot:
+      clonedConfig?.deleteOnLastSpot !== undefined
+        ? clonedConfig.deleteOnLastSpot
+        : DEFAULT_DELETE_ON_LAST_SPOT,
+    deleteOnCompletion:
+      clonedConfig?.deleteOnCompletion !== undefined
+        ? clonedConfig.deleteOnCompletion
+        : DEFAULT_DELETE_ON_COMPLETION,
+  };
+};
 
 export const setCookie = (name: string, value: unknown, expiration: number) => {
   try {
