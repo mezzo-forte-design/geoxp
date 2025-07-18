@@ -496,7 +496,7 @@ export default class GeoXpCore {
 
       if (distance <= inside) {
         // first time inside (if user stays in the same location, content is not repeated)
-        if (!pattern.inside.includes(spot.id)) {
+        if (!pattern.inside.includes(spot.id) || !pattern.visited.includes(spot.id)) {
           // check if not already visited, or auto-replay is active for pattern
           const notVisitedOrReplay = pattern.cfg.replay || !pattern.visited.includes(spot.id);
 
