@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## **v1.2.0** - 2025-07-22
+### ➕ Added
+* [core] `run()` and `pause()` methods to easily start or stop GeoXp operations globally.
+* [core] `running` getter to check the current operational state.
+* [core] `autoRun` option in the core constructor to control whether the instance starts automatically.
+
+### 🪛 Changed
+* deep copy config objects to avoid changes in original reference
+
+### 🩹 Fixed
+* [core] spots not reactivating upon replay request after visited
+* docs generation script
+
+### ➖ Removed
+* [core] Deprecated and buggy `enablePatterns` and `disablePatterns` methods → Use `run()` and `pause()` instead.
 
 ## **v1.1.4** - 2025-06-07
 ### ➕ Added
