@@ -48,6 +48,13 @@ export default class GeoXpCore {
   public setStoredVisitedSpots?: (patternId: string, visited: string[]) => Promise<void> | void;
 
   /**
+   * Whether the patterns are currently running
+   */
+  public get running(): boolean {
+    return this._running;
+  }
+
+  /**
    * Event emitter
    * @hidden
    */
@@ -84,16 +91,24 @@ export default class GeoXpCore {
   private readonly throwErrors: boolean;
 
   /**
+   * Whether the instance is running or paused
+   * @hidden
+   */
+  private _running: boolean;
+
+  /**
    * Constructor for GeoXpCore Class
    * @param config GeoXpCore configuration
    * @param options Options for GeoXpCore
    * @param options.throwErrors Whether errors should be throw or not. Throw is default behavior
+   * @param options.autoRun Whether to run patterns right away. Default is true
    * @returns GeoXpCore singleton instance
    */
   constructor(
     config: GeoXpCoreConfig,
     options?: {
       throwErrors?: boolean;
+      autoRun?: boolean;
     }
   ) {
     // wheter errors are thrown or not
@@ -101,6 +116,12 @@ export default class GeoXpCore {
 
     // inits config
     this.config = sanitiseConfig(config);
+
+    // whether to run patterns right away
+    const autoRun = options?.autoRun ?? true;
+
+    // keep track of running state
+    this._running = autoRun;
 
     // inits the instance based on config
     this.init();
@@ -307,6 +328,12 @@ export default class GeoXpCore {
    * @returns error
    */
   public canForceSpot(_spot: GeoXpSpot | string): null | string {
+    // if not running, stop here
+    if (!this._running) {
+      this.error('[GeoXpCore.canForceSpot] cannot force spot, not running');
+      return 'not running';
+    }
+
     const { spot, pattern } = getSpotFromRef(this.patterns, _spot);
 
     if (!spot || !pattern) {
@@ -444,6 +471,7 @@ export default class GeoXpCore {
    * @param location geolocation update
    */
   public geolocationUpdate(location: GeoXpGeolocation) {
+    // if no config, do nothing
     if (!this.config) return;
 
     // if forced ignore location update
@@ -465,6 +493,9 @@ export default class GeoXpCore {
       });
       return;
     }
+
+    // if not running, stop here
+    if (!this._running) return;
 
     // phased analysys
     // 1. deactivate spots
@@ -624,24 +655,17 @@ export default class GeoXpCore {
   }
 
   /**
-   * Enables all patterns that are not marked as disabled in the configuration.
-   * Iterates through the list of patterns in the configuration and calls {@link enablePattern} on each enabled pattern.
+   * Marks the instance as running, so spots are activated
    */
-  public enablePatterns() {
-    this.config.patterns.forEach((pattern) => {
-      if (pattern.disabled) return;
-      this.enablePattern(pattern.id);
-    });
+  public run() {
+    this._running = true;
   }
 
   /**
-   * Disables all patterns in the configuration.
-   * Iterates through the list of patterns in the configuration and calls {@link disablePattern} on each one.
+   * Marks the instance as paused, so no spots are activated
    */
-  public disablePatterns() {
-    this.config.patterns.forEach((pattern) => {
-      this.disablePattern(pattern.id);
-    });
+  public pause() {
+    this._running = false;
   }
 
   /**

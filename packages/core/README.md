@@ -40,7 +40,7 @@ yarn add @geoxp/core
   * [Instance creation](#instance-creation)
   * [Configuration](#configuration)
   * [Reload](#reload)
-  * [Enable or disable all](#enable-or-disable-all)
+  * [Run or pause GeoXp Core](#run-or-pause-geoxp-core)
   * [Events subscription](#events-subscription)
     * [Spot incoming](#spot-incoming)
     * [Spot active](#spot-active)
@@ -179,21 +179,21 @@ const geoXpCore = new GeoXpCore(config);
 geoXpCore.reload(config);
 ```
 
-### **Enable or disable all**
-These methods provide a quick and handy way to enable or disable all GeoXp content patterns at once.  
-They are useful when you need to globally activate or deactivate content dynamically, without managing individual patterns manually.
+### **Run or pause GeoXp Core**
+These methods offer a quick and convenient way to pause or resume GeoXp operations.
+They are especially useful when you need to enable or disable the core package globally, without having to manage individual patterns or spots manually.
+
+For example, you might want to temporarily pause the core package while performing other tasks in your UI — such as allowing the user to make a selection — so that no content starts playing in the background.
 
 
 ```javascript
-// Enables all patterns that are not disabled in the configuration
-geoXpCore.enablePatterns();
+// Temporarily stops all GeoXp activity globally.
+geoXpCore.pause();
 
-// Disables all patterns in the configuration
-geoXpCore.disablePatterns();
+// Reactivates GeoXp after it has been paused.
+geoXpCore.run();
+
 ```
-
-
-> **NOTE** - If you are using the `Web Geolocation` module together with Core, make sure to reload it as well, to ensure that location updates will invoke the updated version of the Core methods.
 
 ### **Events subscription**
 GeoXpCore is meant to work automatically based on its configuration, so most of the interaction with it is based on events.
