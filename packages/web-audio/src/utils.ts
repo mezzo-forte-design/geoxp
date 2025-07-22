@@ -10,6 +10,8 @@ import defaultTestSound from './audio/test.mp3';
 import { sanitiseNumber } from '@geoxp/utils';
 
 export const sanitiseConfig = (config: GeoXpWebAudioConfig): SanitisedConfig => {
+  const clonedConfig = JSON.parse(JSON.stringify(config)) as GeoXpWebAudioConfig;
+
   const defaultOptions = {
     test: defaultTestSound,
     silence: defaultSilenceSound,
@@ -18,21 +20,21 @@ export const sanitiseConfig = (config: GeoXpWebAudioConfig): SanitisedConfig => 
 
   const sanitisedOptions = {
     ...defaultOptions,
-    ...config.options,
+    ...clonedConfig.options,
     fadeInTime: sanitiseNumber({
       inputLabel: 'fadeInTime',
-      inputValue: config.options?.fadeInTime,
+      inputValue: clonedConfig.options?.fadeInTime,
       defaultValue: DEFAULT_FADE_IN_TIME,
     }),
     fadeOutTime: sanitiseNumber({
       inputLabel: 'fadeOutTime',
-      inputValue: config.options?.fadeOutTime,
+      inputValue: clonedConfig.options?.fadeOutTime,
       defaultValue: DEFAULT_FADE_OUT_TIME,
     }),
   };
 
   return {
-    ...config,
+    ...clonedConfig,
     options: sanitisedOptions,
   };
 };
