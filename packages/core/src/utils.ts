@@ -16,7 +16,7 @@ import {
 import { GeoXpGeolocation, GeoXpSpot, GeoXpSpotPosition } from './types/common';
 
 export const sanitiseConfig = (config: GeoXpCoreConfig): SanitisedConfig => {
-  const clonedConfig = JSON.parse(JSON.stringify(config)) as GeoXpCoreConfig;
+  const clonedConfig = config && (JSON.parse(JSON.stringify(config)) as GeoXpCoreConfig);
   return {
     ...clonedConfig,
     options: {

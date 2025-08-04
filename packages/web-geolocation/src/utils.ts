@@ -8,7 +8,7 @@ import { DEFAULT_HIGH_ACCURACY, DEFAULT_MAX_AGE, DEFAULT_TIMEOUT } from './const
 import { GeoXpWebGeolocationConfig, SanitisedConfig } from './types/config';
 
 export const sanitiseConfig = (config?: GeoXpWebGeolocationConfig): SanitisedConfig => {
-  const clonedConfig = JSON.parse(JSON.stringify(config)) as GeoXpWebGeolocationConfig;
+  const clonedConfig = config && (JSON.parse(JSON.stringify(config)) as GeoXpWebGeolocationConfig);
   const santised = {
     enableHighAccuracy: clonedConfig?.enableHighAccuracy ?? DEFAULT_HIGH_ACCURACY,
     maximumAge: sanitiseNumber({

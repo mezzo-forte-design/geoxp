@@ -194,7 +194,7 @@ export default class GeoXpWebAudio {
 
     // for each sound related to spot
     soundsCfg.forEach((soundCfg) => {
-      const clonedSoundCfg = JSON.parse(JSON.stringify(soundCfg)) as GeoXpWebAudioConfigSound;
+      const clonedSoundCfg = soundCfg && (JSON.parse(JSON.stringify(soundCfg)) as GeoXpWebAudioConfigSound);
       // creates new sound
       const sound = {
         cfg: clonedSoundCfg,

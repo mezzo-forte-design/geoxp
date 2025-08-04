@@ -10,7 +10,7 @@ import defaultTestSound from './audio/test.mp3';
 import { sanitiseNumber } from '@geoxp/utils';
 
 export const sanitiseConfig = (config: GeoXpWebAudioConfig): SanitisedConfig => {
-  const clonedConfig = JSON.parse(JSON.stringify(config)) as GeoXpWebAudioConfig;
+  const clonedConfig = config && (JSON.parse(JSON.stringify(config)) as GeoXpWebAudioConfig);
 
   const defaultOptions = {
     test: defaultTestSound,

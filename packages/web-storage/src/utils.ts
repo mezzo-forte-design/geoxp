@@ -13,7 +13,7 @@ import {
 import { GeoXpWebStorageConfig, SanitisedConfig } from './types/config';
 
 export const sanitiseConfig = (config?: GeoXpWebStorageConfig): SanitisedConfig => {
-  const clonedConfig = JSON.parse(JSON.stringify(config)) as GeoXpWebStorageConfig;
+  const clonedConfig = config && (JSON.parse(JSON.stringify(config)) as GeoXpWebStorageConfig);
   return {
     cookiePrefix: clonedConfig?.cookiePrefix ?? DEFAULT_COOKIE_PREFIX,
     expiration: sanitiseNumber({

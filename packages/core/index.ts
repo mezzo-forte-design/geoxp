@@ -170,7 +170,7 @@ export default class GeoXpCore {
 
       if (pattern) {
         // pattern alredy exists, change cfg info
-        pattern.cfg = JSON.parse(JSON.stringify(cfg)) as GeoXpCorePattern['cfg'];
+        pattern.cfg = cfg && (JSON.parse(JSON.stringify(cfg)) as GeoXpCorePattern['cfg']);
 
         // reload visited spots from storage
         if (this._getStoredVisitedSpots) {
