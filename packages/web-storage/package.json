@@ -1,6 +1,6 @@
 {
   "name": "@geoxp/web-storage",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Mezzo Forte GeoXp Web Storage module",
   "homepage": "https://github.com/mezzo-forte-design/geoxp",
   "bugs": {
@@ -59,7 +59,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@geoxp/core": "^1.2.0",
+    "@geoxp/core": "^1.2.1",
     "@geoxp/utils": "^1.1.3"
   },
   "devDependencies": {
