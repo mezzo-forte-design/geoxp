@@ -64,16 +64,13 @@ export const getSpotFromRef = (
   let spot: GeoXpSpot | undefined;
   let pattern: GeoXpCorePattern | undefined;
 
-  if (typeof _spot === 'string') {
-    patterns.forEach((_pattern) => {
-      spot = _pattern.cfg.spots.find((e) => e.id === _spot);
-      if (spot) pattern = _pattern;
-    });
-  } else {
-    patterns.forEach((_pattern) => {
-      spot = _pattern.cfg.spots.find((e) => e.id === _spot.id);
-      if (spot) pattern = _pattern;
-    });
+  const id = typeof _spot === 'string' ? _spot : _spot.id;
+  for (const [, _pattern] of patterns) {
+    spot = _pattern.cfg.spots.find((e) => e.id === id);
+    if (spot) {
+      pattern = _pattern;
+      break;
+    }
   }
   return { spot, pattern };
 };
