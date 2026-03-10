@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## **v1.2.2** - 2026-03-10
+### 🩹 Fixed
+* [core] `getSpotFromRef` not breaking after first match — `forEach` kept iterating and overwrote the found spot with `undefined` if subsequent patterns didn't contain it
+
+## **v1.2.1** - 2025-08-04
+### 🩹 Fixed
+* safely clone configuration objects only when defined, avoiding runtime errors
+
 ## **v1.2.0** - 2025-07-22
 ### ➕ Added
 * [core] `run()` and `pause()` methods to easily start or stop GeoXp operations globally.
